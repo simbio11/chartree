@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-verify_app.py — CLIN-7 진료 프로토콜 뷰 자동 검증 스크립트 (M0)
+verify_app.py — CLIN-7 진료 프로토콜 뷰 & 진화형 워크벤치 자동 검증 스크립트 (M0~M3 통합)
 
 검증 항목:
 1. build_tree.py --check 통과 확인 (exit 0)
 2. 127.0.0.1:8765 HTTP 서버 응답 확인 (이미 떠 있으면 재사용, 아니면 임시 기동)
 3. GET / (index.html), /app.js, /style.css, /tree.json, /manifest.json, /sw.js → HTTP 200
 4. tree.json 고정 계약(§2) 파싱 및 깨진 참조 0건 확인
-5. 외부 CDN·웹폰트·트래커 URL 참조 0건 확인
+5. M1~M3 + 진화형 워크벤치 핵심 UI 컴포넌트 존재 및 외부 CDN 0건 확인
 """
 
 from __future__ import annotations
@@ -88,7 +88,6 @@ def verify_tree_contract(tree_obj: dict[str, Any]) -> list[str]:
         if entry_id not in nodes:
             errors.append(f"[증상 {sym_code}] entry('{entry_id}')가 nodes에 존재하지 않습니다.")
 
-        # 깨진 참조 검사
         for nid, node in nodes.items():
             for req_field in ("id", "유형", "제목", "상태", "신뢰도", "본문", "파일"):
                 if req_field not in node:
@@ -105,7 +104,7 @@ def verify_tree_contract(tree_obj: dict[str, Any]) -> list[str]:
     return errors
 
 
-def verify_no_external_cdn() -> list[str]:
+def verify_no_external_cdn_and_features() -> list[str]:
     errors: list[str] = []
     forbidden_patterns = ("https://", "http://", "//cdn", "googleapis.com", "jsdelivr", "unpkg")
     for p in (WEB_DIR / "index.html", WEB_DIR / "style.css", WEB_DIR / "app.js"):
@@ -116,6 +115,26 @@ def verify_no_external_cdn() -> list[str]:
         for pat in forbidden_patterns:
             if pat in content:
                 errors.append(f"[{p.name}] 외부 URL/CDN 패턴('{pat}') 검출")
+
+    html_content = (WEB_DIR / "index.html").read_text(encoding="utf-8")
+    required_ids = (
+        "symptom-grid",
+        "tree-columns",
+        "node-detail-panel",
+        "pathway-bar",
+        "skill-add-form",
+        "case-record-form",
+        "node-editor-form",
+        "patient-teach-modal",
+    )
+    for req_id in required_ids:
+        if req_id not in html_content:
+            errors.append(f"[index.html] 필수 UI 컴포넌트 ID 누락: #{req_id}")
+
+    js_content = (WEB_DIR / "app.js").read_text(encoding="utf-8")
+    if "indexedDB" not in js_content:
+        errors.append("[app.js] IndexedDB 로컬 저장소 구현이 없습니다.")
+
     return errors
 
 
@@ -135,14 +154,14 @@ def main() -> int:
     else:
         print("[verify_app] 1/5 build_tree.py --check 통과 (exit 0)")
 
-    # 2. 정적 파일 및 PWA 파일 존재·외부 CDN 금지 확인
+    # 2. 정적 파일·PWA·M0~M3 기능 컴포넌트 및 외부 CDN 금지 확인
     for rel_path in ("web/index.html", "web/app.js", "web/style.css", "web/manifest.json", "web/sw.js", "tree.json"):
         full_path = WORKSPACE_ROOT / rel_path
         if not full_path.exists():
             errors.append(f"필수 파일이 존재하지 않습니다: {rel_path}")
-    errors.extend(verify_no_external_cdn())
+    errors.extend(verify_no_external_cdn_and_features())
     if not errors:
-        print("[verify_app] 2/5 정적 웹 파일 · PWA 파일 존재 및 외부 CDN 0건 확인")
+        print("[verify_app] 2/5 정적 웹 파일 · PWA · M0~M3(트리·스킬·케이스·가지치기·AI협업) UI 존재 및 외부 CDN 0건 확인")
 
     # 3. HTTP 서버 기동(또는 기존 서버 연결) 및 엔드포인트 200 검사
     temp_server: ThreadingHTTPServer | None = None
@@ -162,10 +181,6 @@ def main() -> int:
                     errors.append(f"GET {ep} 응답 본문이 비어 있습니다.")
                 if ep == "/tree.json" and status == 200:
                     tree_payload = json.loads(body.decode("utf-8"))
-                if ep == "/" and status == 200:
-                    html_text = body.decode("utf-8")
-                    if "symptom-grid" not in html_text:
-                        errors.append("GET / 응답에 증상 목록 컨테이너(#symptom-grid)가 없습니다.")
             except Exception as exc:
                 errors.append(f"GET {ep} 요청 실패: {exc}")
     finally:
@@ -191,7 +206,7 @@ def main() -> int:
             print(f"  - {err}", file=sys.stderr)
         return 1
 
-    print("[verify_app] 5/5 PASS — 모든 M0 검증 항목 통과")
+    print("[verify_app] 5/5 PASS — 모든 검증 항목 통과")
     return 0
 
 
