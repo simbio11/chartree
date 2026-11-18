@@ -3,203 +3,200 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0f172a">
-  <title>진료 프로토콜 나무 (CLIN-7)</title>
+  <meta name="theme-color" content="#0b1120">
+  <title>진료 프로토콜 나무 (CLIN-7 · Tactical Deck)</title>
   <link rel="manifest" href="/manifest.json">
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <!-- ==================== 상단 심플 헤더 & 2대 모드 스위치 ==================== -->
+  <!-- ==================== 상단 단일 통합 헤더 (깔끔한 1줄 구성) ==================== -->
   <header class="app-header">
     <div class="header-inner">
-      <div class="brand-area">
-        <span class="app-badge">CLIN-7</span>
-        <h1 class="app-title">진료 프로토콜 나무</h1>
+      <!-- 좌측: 브랜드 + 증상 덱 선택 알약 (#symptom-grid) -->
+      <div class="header-left">
+        <div class="brand-badge">
+          <span class="brand-icon">🎴</span>
+          <span class="brand-text">CLIN-7</span>
+        </div>
+        <!-- 증상 선택 칩 (#symptom-grid ID 유지) -->
+        <div id="symptom-grid" class="symptom-deck-tabs" role="list"></div>
+        <!-- 최근 사용 증상 (숨김/보조) -->
+        <div id="recent-section" hidden><div id="recent-list"></div></div>
       </div>
 
-      <!-- 핵심: 실제 진료 모드 vs 세팅·공부 모드 2분할 스위치 -->
+      <!-- 중앙: 2대 모드 전환 스위치 (실제 진료 보드 vs 카드·루틴 제작소) -->
       <div class="mode-switcher" role="tablist" aria-label="모드 전환">
         <button type="button" id="btn-mode-clinic" class="mode-btn active" data-mode="clinic">
-          🩺 실제 진료 모드
-          <span class="mode-sub">문진 가지 따라가기 · 치료 복사 · 환자 설명</span>
+          🩺 실제 진료 보드
         </button>
         <button type="button" id="btn-mode-setup" class="mode-btn" data-mode="setup">
-          🛠️ 세팅 · 공부 모드
-          <span class="mode-sub">가지치기 설계 · 내 루틴 · 스킬 숙련도 · AI 진화</span>
+          🛠️ 세팅 · 공부 (카드·루틴·스킬 제작소)
         </button>
       </div>
 
-      <div class="meta-group">
-        <span id="generated-time" class="meta-pill">준비 중…</span>
+      <!-- 우측: 빠른 검색 & 내 루틴 덱 서랍 토글 -->
+      <div class="header-right">
+        <div class="search-mini">
+          <input
+            type="search"
+            id="symptom-search"
+            placeholder="🔍 카드·경혈·진단 검색…"
+            autocomplete="off"
+          >
+          <span id="summary-stats" hidden></span>
+        </div>
+        <button type="button" id="btn-toggle-routine-drawer" class="btn-deck-drawer" title="짜놓은 진료 루틴 덱 열기">
+          ⚡ 내 루틴 덱 <span id="header-routine-count" class="count-dot">0</span>
+        </button>
+        <span id="generated-time" class="sr-only"></span>
+      </div>
+    </div>
+
+    <!-- 검색 결과 플로팅 팝오버 -->
+    <div id="node-search-results-section" class="search-popover" hidden>
+      <div class="search-popover-head">
+        <span>🔍 검색된 카드 (클릭 시 해당 카드로 즉시 이동)</span>
+        <button type="button" id="btn-close-search" class="btn-icon-close">✕</button>
+      </div>
+      <div id="node-search-results" class="search-card-grid"></div>
+    </div>
+
+    <!-- 내 루틴 덱 슬라이드 서랍 (평소엔 숨겨져 있어 화면이 깔끔함) -->
+    <div id="routine-deck-drawer" class="routine-deck-drawer" hidden>
+      <div class="drawer-inner">
+        <div class="drawer-head">
+          <div>
+            <strong>⚡ 내 진료 루틴 덱 (원클릭 카드 세팅)</strong>
+            <span class="drawer-sub">세팅 모드에서 조합해 둔 루틴입니다. 카드를 고르면 보드 위에 해당 루틴 경로가 한 번에 펼쳐집니다.</span>
+          </div>
+          <div class="drawer-head-actions">
+            <button type="button" id="btn-go-routine-builder" class="btn btn-sm btn-accent">+ 새 루틴 조합하기</button>
+            <button type="button" id="btn-close-routine-drawer" class="btn btn-sm btn-secondary">닫기 ✕</button>
+          </div>
+        </div>
+        <div id="clinic-routine-pills" class="routine-deck-cards"></div>
       </div>
     </div>
   </header>
 
   <main class="app-main">
     <!-- ========================================================================
-         MODE 1: 🩺 실제 진료 모드 (환자 앞에서 3클릭·10초 안에 쓰는 심플 흐름)
+         MODE 1: 🩺 실제 진료 보드 (가로 카드 보드 + 흐릿한 비선택지 + SVG 연결선 + 우측 인스펙터)
          ======================================================================== -->
     <div id="mode-clinic-container" class="mode-container">
-      <!-- 상단 빠른 증상 선택 & 통합 검색 바 -->
-      <section class="clinic-topbar">
-        <div class="symptom-quick-bar">
-          <span class="bar-label">주호소 선택:</span>
-          <!-- verify_app 호환용 #symptom-grid 유지 (증상 칩/카드로 표시) -->
-          <div id="symptom-grid" class="symptom-pill-grid" role="list"></div>
-          <div id="recent-section" class="recent-inline" hidden>
-            <span class="recent-label">최근:</span>
-            <div id="recent-list" class="recent-chips"></div>
-          </div>
+      <!-- 보드 상단 슬림 컨트롤 바 (걸어온 콤보 칩 + 뒤로/리셋만 아주 깔끔하게 한 줄로) -->
+      <div id="pathway-bar" class="board-control-strip">
+        <div class="combo-trail">
+          <span class="combo-label">선택한 카드 콤보:</span>
+          <div id="pathway-chips" class="combo-chips"></div>
         </div>
-
-        <div class="clinic-search-wrap">
-          <input
-            type="search"
-            id="symptom-search"
-            placeholder="🔍 빠른 검색 (증상·노드ID·경혈·질환명 검색 시 즉시 점프)…"
-            autocomplete="off"
-          >
-          <span id="summary-stats" class="summary-stats" hidden></span>
-        </div>
-      </section>
-
-      <!-- 검색어 입력 시 바로 뜨는 즉시 점프 결과 -->
-      <div id="node-search-results-section" class="quick-jump-drawer" hidden>
-        <div class="quick-jump-header">
-          <strong>검색 결과 (클릭하면 해당 단계로 바로 이동합니다)</strong>
-          <button type="button" id="btn-close-search" class="btn btn-sm btn-secondary">닫기</button>
-        </div>
-        <div id="node-search-results" class="quick-jump-grid"></div>
-      </div>
-
-      <!-- 상단 진행 경로(Pathway) & 내 진료 루틴 빠른 적용 바 -->
-      <section id="pathway-bar" class="clinic-pathway-bar">
-        <div class="pathway-flow-wrap">
-          <span class="bar-label">걸어온 가지:</span>
-          <div id="pathway-chips" class="pathway-chips"></div>
-        </div>
-        <div class="pathway-right-actions">
-          <button type="button" id="btn-path-undo" class="btn btn-sm btn-secondary">↩ 이전 질문</button>
-          <button type="button" id="btn-path-reset" class="btn btn-sm btn-secondary">🔄 처음부터</button>
-          <button type="button" id="btn-toggle-fullmap" class="btn btn-sm btn-outline">🗺️ 전체 트리 지도 보기</button>
-          <button type="button" id="btn-clinic-to-setup" class="btn btn-sm btn-accent">
-            🛠️ 이 위치에서 가지 추가/수정
+        <div class="board-actions">
+          <button type="button" id="btn-path-undo" class="btn-ctrl" title="직전 카드로 되돌리기">↩ 한 칸 뒤로</button>
+          <button type="button" id="btn-path-reset" class="btn-ctrl" title="처음 진입 카드로 초기화">🔄 판 리셋</button>
+          <button type="button" id="btn-clinic-to-setup" class="btn-ctrl btn-ctrl-accent">
+            + 현재 카드에서 새 가지 만들기
           </button>
         </div>
-      </section>
+      </div>
 
-      <!-- 내 맞춤 진료 루틴(프리셋) 원클릭 바 -->
-      <section class="routine-quick-strip">
-        <span class="bar-label">⚡ 내 진료 루틴 바로 불러오기:</span>
-        <div id="clinic-routine-pills" class="routine-pills"></div>
-      </section>
-
-      <!-- 실제 진료 메인 워크스페이스: 좌측 자연스러운 가지 흐름(타임라인) + 우측 현재 단계 집중 카드 -->
-      <div class="clinic-workspace">
-        <!-- 좌측: 문진 → 검사 → 진단 → 치료로 이어지는 자연스러운 가지(Branch) 흐름 -->
-        <div class="flow-stream-column">
-          <div class="stream-header">
-            <h2>🌿 문진 · 검사 · 치료 가지 흐름</h2>
-            <span class="stream-hint">위에서 아래로 선택하며 내려갑니다. 이전 단계를 클릭하면 거기로 돌아갑니다.</span>
+      <!-- 메인 가로 카드 테이블 + 우측 선택 카드 포커스 독 -->
+      <div class="tactical-board-layout">
+        <!-- 좌측/중앙: L0~L5 가로 카드 보드 (SVG 연결선 오버레이 포함) -->
+        <div id="board-scroll-viewport" class="board-scroll-viewport">
+          <div id="board-canvas" class="board-canvas">
+            <!-- 카드 간 가지 연결선을 그리는 SVG 레이어 -->
+            <svg id="branch-svg-layer" class="branch-svg-layer" aria-hidden="true"></svg>
+            <!-- L0 ~ L5 6개 가로 기둥 (#tree-columns ID 유지) -->
+            <div id="tree-columns" class="tree-columns" role="region" aria-label="L0~L5 프로토콜 카드 보드"></div>
           </div>
-          <!-- 지나온 단계 + 현재 단계 + 다음에 연결되는 가지가 자연스럽게 이어지는 컨테이너 -->
-          <div id="branch-flow-stream" class="branch-flow-stream"></div>
         </div>
 
-        <!-- 우측: 현재 선택된 노드의 큰 행동 카드 (질문/치료복사/환자티칭/3초 케이스 저장) -->
-        <aside id="node-detail-panel" class="focus-stage-panel" aria-label="현재 진료 단계">
-          <div id="node-detail-content" class="focus-stage-content"></div>
+        <!-- 우측: 현재 손에 쥔 카드 상세 & 액션 슬롯 (#node-detail-panel) -->
+        <aside id="node-detail-panel" class="active-card-dock" aria-label="선택된 카드 상세">
+          <div id="node-detail-content" class="active-card-content"></div>
 
-          <!-- 진료 마무리: 3초 케이스 피드백 & AI 3줄 점검 바 (진료 모드 하단에 심플하게 통합) -->
-          <div class="clinic-finish-box">
-            <div class="finish-box-header">
-              <strong>📝 진료 결과 3초 기록 (경로 자동 저장 → 진화 통계 반영)</strong>
-              <button type="button" id="btn-clinic-ai-prompt" class="btn btn-sm btn-accent">
-                🤖 지금 경로 AI 3줄 점검 복사
+          <!-- 하단 고정: 3초 케이스 피드백 슬롯 -->
+          <div class="dock-footer-case">
+            <div class="dock-footer-head">
+              <span>📝 이번 판(케이스) 결과 3초 기록</span>
+              <button type="button" id="btn-clinic-ai-prompt" class="btn-link-ai" title="현재 카드 조합을 AI에게 점검받기">
+                🤖 AI 3줄 점검 복사
               </button>
             </div>
-            <div class="quick-case-bar">
-              <div class="qc-field">
+            <div class="dock-case-inputs">
+              <div class="mini-input">
                 <label>전 NRS</label>
                 <input type="number" id="qc-nrs-before" min="0" max="10" value="7">
               </div>
-              <span class="qc-arrow">→</span>
-              <div class="qc-field">
+              <span class="mini-arrow">→</span>
+              <div class="mini-input">
                 <label>후 NRS</label>
                 <input type="number" id="qc-nrs-after" min="0" max="10" value="3">
               </div>
-              <div class="qc-field qc-wide">
-                <label>진단/한줄 메모 (비식별)</label>
-                <input type="text" id="qc-memo" placeholder="예: 경추성 두통 · 풍지 약침 반응 좋음">
-              </div>
-              <button type="button" id="btn-qc-save" class="btn btn-primary">
-                💾 케이스 저장 & md 복사
-              </button>
+              <input
+                type="text"
+                id="qc-memo"
+                class="mini-memo-input"
+                placeholder="한줄 메모 (예: 경추성 · 풍지 약침 유효)"
+              >
+              <button type="button" id="btn-qc-save" class="btn-save-case">💾 기록</button>
             </div>
           </div>
         </aside>
       </div>
-
-      <!-- 접이식 전체 트리 지도 (평소에는 숨겨두어 화면을 심플하게 유지, 버튼 클릭 시 L0~L5 전체 조감도 표시) -->
-      <section id="full-tree-map-drawer" class="full-tree-drawer" hidden>
-        <div class="drawer-header">
-          <h3>🗺️ L0~L5 전체 프로토콜 지도 (카드를 클릭하면 해당 가지로 바로 점프합니다)</h3>
-          <button type="button" id="btn-close-fullmap" class="btn btn-sm btn-secondary">지도 접기 ▲</button>
-        </div>
-        <div id="tree-columns" class="tree-columns"></div>
-      </section>
     </div>
 
     <!-- ========================================================================
-         MODE 2: 🛠️ 세팅 · 공부 모드 (프로토콜 가지치기 · 내 루틴 · 스킬 숙련도 · 진화)
+         MODE 2: 🛠️ 세팅 · 공부 모드 (카드 제작소 · 루틴 덱 빌더 · 스킬 도감 · 진화 연구소)
          ======================================================================== -->
     <div id="mode-setup-container" class="mode-container" hidden>
-      <!-- 세팅 모드 내부 4대 서브탭 -->
-      <div class="setup-subnav">
+      <!-- 세팅 모드 상단 4대 워크숍 탭 -->
+      <div class="workshop-nav">
         <button type="button" class="setup-tab active" data-subview="builder">
-          🌿 1. 가지치기 트리 설계 (문진·검사·치료 연결)
+          🃏 1. 프로토콜 카드 제작소 (문진·검사·치료 가지치기)
         </button>
         <button type="button" class="setup-tab" data-subview="routines">
-          ⚡ 2. 내 진료 루틴(세트) 짜기 <span id="badge-routine-count" class="nav-pill">0</span>
+          🎴 2. 루틴 덱 빌더 (카드를 골라 내 진료 루틴 조합) <span id="badge-routine-count" class="nav-pill">0</span>
         </button>
         <button type="button" class="setup-tab" data-subview="skills">
-          🎯 3. 내 진료 스킬 · 숙련도(Lv.0~5) <span id="nav-skill-count" class="nav-pill">0</span>
+          🎯 3. 내 스킬 도감 · 숙련도(Lv.0~5) <span id="nav-skill-count" class="nav-pill">0</span>
         </button>
         <button type="button" class="setup-tab" data-subview="evolution">
-          🧬 4. 케이스 진화 통계 · AI 협업 <span id="nav-case-count" class="nav-pill">0</span>
+          🧬 4. 진화 통계 · AI 협업 연구소 <span id="nav-case-count" class="nav-pill">0</span>
         </button>
       </div>
 
-      <!-- -------------------- SUBVIEW 1: 시각적 가지치기 트리 빌더 -------------------- -->
+      <!-- -------------------- WORKSHOP 1: 프로토콜 카드 제작소 -------------------- -->
       <section id="subview-builder" class="setup-subview">
-        <div class="builder-top-notice">
-          <div>
-            <strong>💡 공부하면서 가지치기 늘려가는 법:</strong>
-            왼쪽 트리에서 부모 노드를 고른 뒤 <code>[+ '예/양성' 가지 추가]</code> 또는 <code>[+ '아니오/음성' 가지 추가]</code>를 누르면 오른쪽에 바로 연결된 새 노드가 만들어집니다.
-          </div>
-          <div class="builder-sym-controls">
-            <label for="setup-symptom-select">편집 중인 증상:</label>
+        <div class="workshop-toolbar">
+          <div class="ws-left">
+            <label for="setup-symptom-select">편집할 증상 덱:</label>
             <select id="setup-symptom-select" class="select-input"></select>
+            <span class="ws-hint">💡 왼쪽 카드 트리에서 <code>[+ 예 가지]</code> / <code>[+ 아니오 가지]</code>를 누르면 새 카드가 바로 연결됩니다.</span>
+          </div>
+          <div class="ws-right">
+            <button type="button" id="btn-reset-editor" class="btn btn-sm btn-outline">+ 완전히 새로운 증상/루트 카드 만들기</button>
+            <button type="button" id="btn-export-custom-nodes-md" class="btn btn-sm btn-primary">
+              📋 내가 만든 카드 전체(<span id="custom-node-badge-count">0</span>) md 복사
+            </button>
+            <span id="nav-custom-count" hidden>0</span>
           </div>
         </div>
 
-        <div class="two-col-layout builder-layout">
-          <!-- 좌측: 현재 증상의 시각적 가지 트리 구조 (부모-자식 연결선과 빠른 가지 추가 버튼) -->
+        <div class="two-col-layout">
+          <!-- 좌측: 현재 증상 덱의 카드 가지 리스트 -->
           <div class="panel-card">
-            <div class="section-header-row">
-              <h2 class="panel-title">🌳 현재 증상 가지 구조 (클릭하여 수정 / 바로 가지 추가)</h2>
-              <button type="button" id="btn-reset-editor" class="btn btn-sm btn-outline">
-                + 새 증상 / 루트 노드 만들기
-              </button>
-            </div>
-            <div id="visual-tree-outline" class="visual-tree-outline"></div>
+            <h2 class="panel-title">🌳 현재 덱의 카드 연결 구조</h2>
+            <div id="visual-tree-outline" class="card-tree-list"></div>
           </div>
 
-          <!-- 우측: 직관적인 노드 편집 폼 -->
+          <!-- 우측: 라이브 카드 미리보기 + 카드 속성 편집기 -->
           <div class="panel-card">
             <div class="section-header-row">
-              <h2 id="editor-form-heading" class="panel-title">✏️ 선택한 노드 편집 / 새 가지 추가</h2>
-              <span class="meta-pill">커스텀 수정 <span id="nav-custom-count">0</span>건</span>
+              <h2 id="editor-form-heading" class="panel-title">🃏 카드 제작 / 수정</h2>
+              <button type="button" id="btn-clear-custom-nodes" class="btn btn-sm btn-danger-outline">
+                커스텀 수정 초기화
+              </button>
             </div>
 
             <form id="node-editor-form" class="case-form">
@@ -213,88 +210,84 @@
                   <input type="text" id="edit-sym-name" value="두통" required>
                 </div>
                 <div class="form-field">
-                  <label for="edit-node-id">노드 ID (자동 생성)</label>
+                  <label for="edit-node-id">카드 ID (자동 부여)</label>
                   <input type="text" id="edit-node-id" placeholder="예: HA-L1-03" required>
                 </div>
               </div>
 
-              <div class="branch-connection-banner">
+              <div class="branch-link-box">
                 <div class="form-row-2">
                   <div class="form-field">
-                    <label for="edit-node-parent">🌿 어느 노드에서 뻗어나오나요? (상위 부모 ID)</label>
-                    <input type="text" id="edit-node-parent" placeholder="예: HA-L1-02 (루트면 비워둠)">
+                    <label for="edit-node-parent">🌿 부모 카드 ID (어느 카드 뒤에 붙나요?)</label>
+                    <input type="text" id="edit-node-parent" placeholder="예: HA-L1-02">
                   </div>
                   <div class="form-field">
-                    <label for="edit-parent-branch">🔀 부모 노드의 어떤 답변/조건일 때 이리로 오나요?</label>
-                    <input type="text" id="edit-parent-branch" placeholder="예: 예, 아니오, 양성, 음성, 추가분기">
+                    <label for="edit-parent-branch">🔀 부모 카드에서 어떤 선택지를 눌렀을 때 오나요?</label>
+                    <input type="text" id="edit-parent-branch" placeholder="예: 예, 아니오, 양성, 음성">
                   </div>
                 </div>
               </div>
 
               <div class="form-row-2">
                 <div class="form-field">
-                  <label for="edit-node-type">이 단계의 역할 (유형)</label>
+                  <label for="edit-node-type">카드 종류 (클래스)</label>
                   <select id="edit-node-type">
-                    <option value="ask">❓ 문진 질문 (ask — 예/아니오로 분기)</option>
-                    <option value="test">🔬 이학적·임상 검사 (test — 양성/음성으로 분기)</option>
-                    <option value="dx">🩺 감별 진단 결론 (dx — 질환 노트 연결)</option>
-                    <option value="treat">💊 치료 세트·처방 (treat — 침·약침·한약·추나)</option>
-                    <option value="teach">🗣️ 환자 티칭·생활지도 (teach — 큰 글씨 교육화면)</option>
-                    <option value="outcome">📊 경과·결과 판정 (outcome)</option>
+                    <option value="ask">❓ 문진 카드 (ask — 예/아니오 분기)</option>
+                    <option value="test">🔬 이학적 검사 카드 (test — 양성/음성 분기)</option>
+                    <option value="dx">🩺 감별 진단 카드 (dx — 질환 링크)</option>
+                    <option value="treat">💊 치료 스킬 세트 카드 (treat — 침·약침·한약)</option>
+                    <option value="teach">🗣️ 환자 티칭 카드 (teach — 큰 글씨 설명)</option>
+                    <option value="outcome">📊 경과 판정 카드 (outcome)</option>
                   </select>
                 </div>
                 <div class="form-field">
-                  <label for="edit-node-title">단계 제목 (트리 카드에 표시될 짧은 이름)</label>
+                  <label for="edit-node-title">카드 이름</label>
                   <input type="text" id="edit-node-title" placeholder="예: 턱관절(TMJ) 잡음 및 이갈이 확인" required>
                 </div>
               </div>
 
               <div class="form-field">
-                <label id="label-edit-primary" for="edit-node-primary">
-                  핵심 내용 (진료 화면 중앙에 가장 크게 뜰 질문 / 검사법 / 치료세트 / 환자설명)
-                </label>
-                <textarea id="edit-node-primary" rows="2" placeholder="환자에게 물어볼 질문이나 시행할 치료 세트 내용을 적어주세요." required></textarea>
+                <label for="edit-node-primary">카드 전면 핵심 효과 (질문 / 검사법 / 치료 술기세트 / 환자 설명 3문장)</label>
+                <textarea id="edit-node-primary" rows="2" placeholder="진료 보드에서 카드에 가장 크게 적힐 핵심 질문이나 치료 오더를 적어주세요." required></textarea>
               </div>
 
               <div class="form-field">
-                <label id="label-edit-secondary" for="edit-node-secondary">
-                  임상 포인트 / 세부 방법 (왜 묻는가 / 자침점·용량·빈도 / 배제 질환 / 생활수칙)
-                </label>
-                <textarea id="edit-node-secondary" rows="2" placeholder="왜 이 질문/검사를 하는지, 혹은 구체적인 자침점·용량·빈도를 적어주세요."></textarea>
+                <label for="edit-node-secondary">카드 세부 스펙 (왜 묻는가 / 자침점·용량·빈도 / 배제 질환 / 생활지도)</label>
+                <textarea id="edit-node-secondary" rows="2" placeholder="임상적 이유나 구체적인 자침점·용량·빈도를 적어주세요."></textarea>
               </div>
 
               <div class="form-row-2">
                 <div class="form-field">
-                  <label for="edit-node-next">이 단계 다음에 이어질 가지 (예: <code>예:HA-L2-01, 아니오:HA-L2-02</code>)</label>
-                  <input type="text" id="edit-node-next" placeholder="예: 예:HA-L2-01, 아니오:HA-L2-02 또는 HA-L4-01">
+                  <label for="edit-node-next">이 카드 다음에 연결될 카드들 (예: <code>예:HA-L2-01, 아니오:HA-L2-02</code>)</label>
+                  <input type="text" id="edit-node-next" placeholder="예: 예:HA-L2-01, 아니오:HA-L2-02">
                 </div>
                 <div class="form-field">
-                  <label for="edit-node-cond">진입 조건 메모 (선택)</label>
-                  <input type="text" id="edit-node-cond" placeholder="예: 측두부 압통 양성 시">
+                  <label for="edit-node-cond">발동 조건 태그 (선택)</label>
+                  <input type="text" id="edit-node-cond" placeholder="예: 측두부 압통 양성">
                 </div>
               </div>
 
               <div class="form-row-3">
                 <div class="form-field">
-                  <label for="edit-node-prof">내 숙련도 (Lv.0~5)</label>
+                  <label for="edit-node-prof">내 숙련도 레벨 (Lv.0~5)</label>
                   <select id="edit-node-prof">
                     <option value="0">Lv.0 미경험 (⛔시행금지)</option>
-                    <option value="1">Lv.1 관찰·보조 (⚠️지도필요)</option>
-                    <option value="2">Lv.2 지도하 부분 (⚠️지도필요)</option>
-                    <option value="3">Lv.3 지도하 완수 (🔶가능)</option>
-                    <option value="4" selected>Lv.4 단독 시행 (✅숙련)</option>
-                    <option value="5">Lv.5 교육 가능 (🌟마스터)</option>
+                    <option value="1">Lv.1 관찰 (⚠️지도필요)</option>
+                    <option value="2">Lv.2 부분시행 (⚠️지도필요)</option>
+                    <option value="3">Lv.3 지도하완수 (🔶가능)</option>
+                    <option value="4" selected>Lv.4 단독숙련 (✅숙련)</option>
+                    <option value="5">Lv.5 마스터 (🌟교육가능)</option>
                   </select>
                 </div>
                 <div class="form-field">
-                  <label for="edit-node-redflag">🚨 레드플래그 여부</label>
+                  <label for="edit-node-redflag">🚨 레드플래그 카드 여부</label>
                   <select id="edit-node-redflag">
-                    <option value="false" selected>일반 단계</option>
-                    <option value="true">🚨 레드플래그 (양성 시 즉시 전원)</option>
+                    <option value="false" selected>일반 카드</option>
+                    <option value="true">🚨 레드플래그 (즉시 전원)</option>
                   </select>
                 </div>
                 <div class="form-field">
-                  <label for="edit-node-status">문서 상태 / 신뢰도</label>
+                  <label for="edit-node-status">등급 / 신뢰도</label>
                   <div style="display:flex; gap:0.35rem;">
                     <select id="edit-node-status" style="flex:1;">
                       <option value="초안">초안</option>
@@ -312,80 +305,86 @@
 
               <div class="form-row-2">
                 <div class="form-field">
-                  <label for="edit-node-referral">전원 기준 (언제 큰 병원으로 보낼 것인가)</label>
-                  <input type="text" id="edit-node-referral" placeholder="예: 2주 치료 무반응 또는 신경학적 결손 시 전원">
+                  <label for="edit-node-referral">전원 기준</label>
+                  <input type="text" id="edit-node-referral" placeholder="예: 2주 무반응 또는 신경학적 결손 시 전원">
                 </div>
                 <div class="form-field">
-                  <label for="edit-node-evidence">공부한 출처 / 가이드라인 / PMID</label>
-                  <input type="text" id="edit-node-evidence" placeholder="예: ICHD-3 또는 청강의감/논문 PMID">
+                  <label for="edit-node-evidence">학술 근거 / 출처 / PMID</label>
+                  <input type="text" id="edit-node-evidence" placeholder="예: ICHD-3 또는 PMID">
                 </div>
               </div>
 
               <div class="form-actions-spread">
-                <button type="submit" class="btn btn-primary">🌿 트리에 저장 & 즉시 반영</button>
-                <div class="btn-row">
-                  <button type="button" id="btn-copy-single-node-md" class="btn btn-secondary">
-                    📋 이 노드 md 복사
-                  </button>
-                  <button type="button" id="btn-export-custom-nodes-md" class="btn btn-outline">
-                    📋 수정한 노드 전체(<span id="custom-node-badge-count">0</span>) md 복사
-                  </button>
-                  <button type="button" id="btn-clear-custom-nodes" class="btn btn-sm btn-danger-outline">
-                    초기화
-                  </button>
-                </div>
+                <button type="submit" class="btn btn-primary">🃏 카드 저장 & 보드에 즉시 배치</button>
+                <button type="button" id="btn-copy-single-node-md" class="btn btn-secondary">
+                  📋 이 카드만 md 복사
+                </button>
               </div>
             </form>
           </div>
         </div>
       </section>
 
-      <!-- -------------------- SUBVIEW 2: 내 진료 루틴(세트) 메이커 -------------------- -->
+      <!-- -------------------- WORKSHOP 2: 카드게임식 루틴 덱 빌더 -------------------- -->
       <section id="subview-routines" class="setup-subview" hidden>
         <div class="two-col-layout">
+          <!-- 좌측: 카드 풀에서 클릭하여 내 루틴 덱 슬롯에 꽂기 -->
           <div class="panel-card">
-            <h2 class="panel-title">⚡ 내 진료 루틴(프로토콜 프리셋) 짜기</h2>
+            <h2 class="panel-title">🎴 루틴 덱 조합실 (카드를 클릭해 순서대로 덱에 담으세요)</h2>
             <p class="panel-subtitle">
-              진료실에서 자주 쓰는 <strong>[필수 문진 → 핵심 검사 → 내 주력 치료 세트 → 환자 티칭]</strong> 경로를 하나의 루틴으로 묶어두세요.
-              실제 진료 모드 상단에서 버튼 한 번만 누르면 그 루틴 경로와 차트 복사문이 한 번에 세팅됩니다.
+              아래 보유 카드 목록에서 <strong>[문진 카드 → 검사 카드 → 감별 카드 → 치료 카드 → 티칭 카드]</strong>를 클릭하면 내 루틴 덱 슬롯에 순서대로 꽂힙니다.
             </p>
 
             <form id="routine-add-form" class="case-form">
               <div class="form-row-2">
                 <div class="form-field">
-                  <label for="routine-sym-input">대상 증상</label>
+                  <label for="routine-sym-input">대상 증상 덱</label>
                   <select id="routine-sym-input" class="select-input"></select>
                 </div>
                 <div class="form-field">
-                  <label for="routine-name-input">루틴 이름</label>
-                  <input type="text" id="routine-name-input" placeholder="예: 경추성 두통 표준 침+후두하근 약침 루틴" required>
+                  <label for="routine-name-input">루틴 덱 이름</label>
+                  <input type="text" id="routine-name-input" placeholder="예: 경추성 두통 후두하근 약침+추나 고속 루틴" required>
                 </div>
               </div>
 
-              <div class="form-field">
-                <label for="routine-path-input">연결할 노드 ID 순서 (쉼표 구분 · 아래 버튼으로 현재 진료 경로 자동 입력 가능)</label>
-                <div style="display:flex; gap:0.5rem;">
-                  <input type="text" id="routine-path-input" style="flex:1;" placeholder="예: HA-L0-01, HA-L1-01, HA-L1-02, HA-L2-01, HA-L3-01, HA-L4-01, HA-L4-03" required>
-                  <button type="button" id="btn-fill-routine-from-path" class="btn btn-sm btn-secondary">
-                    현재 경로 가져오기
-                  </button>
+              <!-- 시각적 루틴 덱 슬롯 -->
+              <div class="deck-slots-box">
+                <div class="deck-slots-head">
+                  <strong>내가 조합한 카드 콤보 슬롯 (클릭하면 슬롯에서 제거)</strong>
+                  <div class="btn-row">
+                    <button type="button" id="btn-fill-routine-from-path" class="btn btn-sm btn-secondary">
+                      현재 진료 보드 경로 가져오기
+                    </button>
+                    <button type="button" id="btn-clear-routine-slots" class="btn btn-sm btn-danger-outline">
+                      슬롯 비우기
+                    </button>
+                  </div>
                 </div>
+                <div id="routine-visual-slots" class="routine-visual-slots"></div>
+                <input type="text" id="routine-path-input" class="sr-only" required>
+              </div>
+
+              <!-- 클릭해서 담을 수 있는 카드 풀 -->
+              <div class="form-field">
+                <label>보유 카드 풀 (카드를 클릭하면 위 덱 슬롯에 추가됩니다)</label>
+                <div id="routine-card-pool" class="routine-card-pool"></div>
               </div>
 
               <div class="form-field">
-                <label for="routine-order-input">나만의 루틴 오더 메모 (자침 순서·약침 용량·환자 당부 한줄 요약)</label>
-                <textarea id="routine-order-input" rows="3" placeholder="예: 1) CFRT 각도 먼저 체크 → 2) 풍지·천주 신바로약침 0.2cc → 3) 태양·합곡·태충 15분 유침 + 갈근탕 3일분"></textarea>
+                <label for="routine-order-input">나만의 루틴 오더 노트 (자침 순서·약침 용량·티칭 포인트)</label>
+                <textarea id="routine-order-input" rows="2" placeholder="예: 1) CFRT 각도 체크 → 2) 풍지·천주 신바로 0.2cc → 3) 태양·합곡 15분 유침 + 갈근탕"></textarea>
               </div>
 
-              <button type="submit" class="btn btn-primary">+ 내 진료 루틴으로 저장</button>
+              <button type="submit" class="btn btn-primary">🎴 이 카드 조합을 내 진료 루틴 덱으로 저장</button>
             </form>
           </div>
 
+          <!-- 우측: 완성된 내 루틴 덱 리스트 -->
           <div class="panel-card">
             <div class="section-header-row">
-              <h2 class="panel-title">📋 등록된 내 진료 루틴 목록</h2>
+              <h2 class="panel-title">⚡ 완성된 내 진료 루틴 덱 목록</h2>
               <button type="button" id="btn-export-routines-md" class="btn btn-sm btn-outline">
-                📋 전체 루틴 md 복사
+                📋 전체 루틴 덱 md 복사
               </button>
             </div>
             <div id="routine-list-container" class="routine-list-container"></div>
@@ -393,29 +392,20 @@
         </div>
       </section>
 
-      <!-- -------------------- SUBVIEW 3: 내 진료 스킬 & 숙련도(Lv.0~5) -------------------- -->
+      <!-- -------------------- WORKSHOP 3: 내 스킬 도감 & 숙련도(Lv.0~5) -------------------- -->
       <section id="subview-skills" class="setup-subview" hidden>
         <div class="panel-card">
           <div class="section-header-row">
             <div>
-              <h2 class="panel-title">🎯 내 진료 스킬 도감 & 숙련도 기록 (Lv.0 ~ Lv.5)</h2>
+              <h2 class="panel-title">🎯 내 치료·검사 스킬 도감 & 숙련도 레벨업 (Lv.0 ~ Lv.5)</h2>
               <p class="panel-subtitle">
-                새로 공부하거나 익힌 침법·약침·추나·이학적 검사를 스킬로 등록하고 시행 횟수와 숙련도를 올리세요.
-                <strong>숙련도가 Lv.0~2인 스킬이 연결된 치료 노드는 실제 진료 모드에서 자동으로 "⚠️ 지도 필요" 경고가 뜹니다.</strong>
+                새로 공부하거나 손에 익힌 술기(침법·약침·추나·검사)를 스킬 카드로 등록하고 <strong>시행 횟수(+1EXP)</strong>와 <strong>숙련도 레벨</strong>을 올리세요.
+                <strong>Lv.0~2 스킬이 연결된 치료 카드는 진료 보드에서 자동으로 "⚠️ 지도 필요" 배지가 붙습니다.</strong>
               </p>
             </div>
             <button type="button" id="btn-export-skills-md" class="btn btn-sm btn-primary">
-              📋 스킬 레지스트리 md 복사
+              📋 스킬 도감 md 복사
             </button>
-          </div>
-
-          <div class="proficiency-legend">
-            <span class="prof-chip prof-0">Lv.0 미경험(관찰만 · ⛔시행금지)</span>
-            <span class="prof-chip prof-1">Lv.1 관찰·보조(⚠️지도필요)</span>
-            <span class="prof-chip prof-2">Lv.2 지도하 부분시행(⚠️지도필요)</span>
-            <span class="prof-chip prof-3">Lv.3 지도하 완수(🔶가능)</span>
-            <span class="prof-chip prof-4">Lv.4 단독 시행(✅숙련)</span>
-            <span class="prof-chip prof-5">Lv.5 교육 가능(🌟마스터)</span>
           </div>
 
           <form id="skill-add-form" class="form-grid skill-form">
@@ -424,7 +414,7 @@
               <input type="text" id="skill-id-input" placeholder="예: SK-006" required>
             </div>
             <div class="form-field">
-              <label for="skill-category-input">분류</label>
+              <label for="skill-category-input">스킬 클래스</label>
               <select id="skill-category-input">
                 <option value="침·전침">침·전침</option>
                 <option value="약침·봉침">약침·봉침</option>
@@ -435,30 +425,30 @@
               </select>
             </div>
             <div class="form-field form-field-wide">
-              <label for="skill-name-input">술기·스킬명</label>
+              <label for="skill-name-input">스킬명</label>
               <input type="text" id="skill-name-input" placeholder="예: 상부 경추(풍지·후두하근) 심부 약침술" required>
             </div>
             <div class="form-field">
-              <label for="skill-level-input">내 숙련도 (0~5)</label>
+              <label for="skill-level-input">현재 숙련도 레벨</label>
               <select id="skill-level-input">
-                <option value="0">Lv.0 — 미경험 (관찰만)</option>
-                <option value="1">Lv.1 — 관찰·보조 경험</option>
-                <option value="2">Lv.2 — 지도하 부분 시행</option>
-                <option value="3" selected>Lv.3 — 지도하 끝까지 시행</option>
-                <option value="4">Lv.4 — 혼자 안전하게 시행</option>
-                <option value="5">Lv.5 — 남에게 가르칠 수 있음</option>
+                <option value="0">Lv.0 — 미경험 (관찰만 · ⛔)</option>
+                <option value="1">Lv.1 — 관찰·보조 (⚠️지도필요)</option>
+                <option value="2">Lv.2 — 지도하 부분시행 (⚠️지도필요)</option>
+                <option value="3" selected>Lv.3 — 지도하 완수 (🔶가능)</option>
+                <option value="4">Lv.4 — 단독 숙련 시행 (✅숙련)</option>
+                <option value="5">Lv.5 — 마스터·교육 가능 (🌟)</option>
               </select>
             </div>
             <div class="form-field">
-              <label for="skill-linked-nodes">연결할 치료/검사 노드 ID (쉼표 구분)</label>
+              <label for="skill-linked-nodes">장착할 프로토콜 카드 ID (쉼표 구분)</label>
               <input type="text" id="skill-linked-nodes" placeholder="예: HA-L4-02, SH-L4-02">
             </div>
             <div class="form-field form-field-wide">
-              <label for="skill-notes-input">내 손끝 노하우 · 적응증 · 금기 메모</label>
-              <input type="text" id="skill-notes-input" placeholder="예: 후두골 하연 깊이 확인 후 0.2cc 주입, 추골동맥 주행 주의">
+              <label for="skill-notes-input">손끝 노하우 · 자침 깊이 · 금기 메모</label>
+              <input type="text" id="skill-notes-input" placeholder="예: 후두골 하연 골면 확인 후 0.2cc 주입, 추골동맥 주행 주의">
             </div>
             <div class="form-actions">
-              <button type="submit" class="btn btn-primary">+ 스킬 등록 / 갱신</button>
+              <button type="submit" class="btn btn-primary">+ 스킬 도감에 등록</button>
             </div>
           </form>
 
@@ -466,16 +456,16 @@
         </div>
       </section>
 
-      <!-- -------------------- SUBVIEW 4: 케이스 진화 통계 & AI 협업 -------------------- -->
+      <!-- -------------------- WORKSHOP 4: 진화 통계 & AI 협업 연구소 -------------------- -->
       <section id="subview-evolution" class="setup-subview" hidden>
         <div class="two-col-layout">
-          <!-- 좌측: 누적 케이스 반응률 & 진화 신호 + 상세 케이스 기록 -->
           <div class="panel-card">
             <div class="section-header-row">
               <div>
-                <h2 class="panel-title">🧬 프로토콜 진화 엔진 (치료 반응률 & 개정 후보)</h2>
+                <h2 class="panel-title">🧬 카드별 실전 승률(치료 반응률) & 진화 시그널</h2>
                 <p class="panel-subtitle">
-                  케이스가 쌓이면 각 노드의 호전율(NRS 50%↓)을 자동 계산해 <strong>🌟 1차 선택 승격(70%↑, n≥5)</strong> 또는 <strong>🔧 분기 개정 후보(40%↓)</strong>를 알려줍니다.
+                  실전 케이스에서 NRS가 50% 이상 줄어든 비율을 카드별로 집계합니다.
+                  <strong>반응률 70%↑(n≥5) 카드는 🌟 1차 주력 카드로 승격</strong>되고, 40%↓ 카드는 🔧 개편 후보로 표시됩니다.
                 </p>
               </div>
               <button type="button" id="btn-seed-demo-cases" class="btn btn-sm btn-outline">
@@ -485,9 +475,9 @@
 
             <div id="evolution-signals" class="evolution-signals"></div>
 
-            <hr style="border:none; border-top:1px solid var(--border-light); margin:0.5rem 0;">
+            <hr style="border:none; border-top:1px solid var(--border); margin:0.5rem 0;">
 
-            <h3 class="subsection-heading">📝 상세 케이스 추가 기록 (비식별)</h3>
+            <h3 class="subsection-heading">📝 상세 케이스 기록 추가 (비식별)</h3>
             <form id="case-record-form" class="case-form">
               <div class="form-row-2">
                 <div class="form-field">
@@ -506,7 +496,7 @@
                 </div>
               </div>
               <div class="form-field">
-                <label for="case-path-input">지나온 가지 경로 (노드 ID)</label>
+                <label for="case-path-input">사용한 카드 콤보 경로</label>
                 <input type="text" id="case-path-input" required>
               </div>
               <div class="form-row-3">
@@ -524,8 +514,8 @@
                 </div>
               </div>
               <div class="form-field">
-                <label for="case-memo-input">임상 피드백 · 프로토콜 개정 아이디어</label>
-                <textarea id="case-memo-input" rows="2" placeholder="예: L1-02에 수면 베개 높이 질문 가지 추가 필요"></textarea>
+                <label for="case-memo-input">임상 피드백 · 새 카드 아이디어</label>
+                <textarea id="case-memo-input" rows="2" placeholder="예: L1-02에 수면 베개 높이 질문 카드 추가 필요"></textarea>
               </div>
               <div id="case-phi-warning" class="phi-warning" hidden></div>
               <div class="form-actions-spread">
@@ -539,34 +529,33 @@
             <div id="case-history-list" class="case-history-list"></div>
           </div>
 
-          <!-- 우측: AI(LLM Wiki) 공동 진화 브리프 & 마크다운 출력창 -->
           <div class="panel-card">
-            <h2 class="panel-title">🤖 AI와 함께 프로토콜 수정 · 진화시키기</h2>
+            <h2 class="panel-title">🤖 AI(LLM Wiki)와 함께 새 카드·덱 진화시키기</h2>
             <p class="panel-subtitle">
-              내가 진료하며 기록한 경로·숙련도·케이스 통계를 묶어 AI에게 주면, AI가 빠진 질문 가지나 새로운 치료 루틴을 볼트 규격(<code>00_스키마.md</code>) 그대로 설계해 줍니다.
+              내가 고른 카드 경로와 누적 승률(반응률) 데이터를 묶어 AI에게 주면, AI가 새로운 분기 카드나 업그레이드된 치료 세트를 볼트 규격(<code>00_스키마.md</code>) 그대로 만들어 줍니다.
             </p>
 
             <div class="export-action-cards">
               <div class="action-box">
-                <h3>① 진료 경로 AI 3줄 점검 브리프 복사</h3>
-                <p>현재 걸어온 가지에서 ① 아직 안 물어본 질문 ② 놓치면 위험한 감별 ③ 내 숙련도/금기 주의점을 AI에게 점검받습니다.</p>
+                <h3>① 현재 카드 콤보 AI 3줄 점검 브리프</h3>
+                <p>지금 진료 보드에서 고른 카드 경로만 컨텍스트로 묶어 ① 빠진 질문/검사 ② 위험 감별 ③ 숙련도/금기 위험을 점검받습니다.</p>
                 <button type="button" id="btn-gen-ai-consult" class="btn btn-accent">
-                  🤖 현재 경로 AI 점검 프롬프트 복사
+                  🤖 현재 카드 경로 AI 점검 프롬프트 복사
                 </button>
               </div>
 
               <div class="action-box">
-                <h3>② 케이스 반응률 기반 AI 새 가지 설계 요청서 복사</h3>
-                <p>반응률이 낮거나 개정 메모가 쌓인 노드를 AI와 함께 세분화·업그레이드하는 프롬프트를 복사합니다.</p>
+                <h3>② 케이스 승률 기반 AI 신규 카드 설계 요청서</h3>
+                <p>누적 케이스 반응률과 임상 메모를 바탕으로 AI와 함께 새 분기 카드를 설계하는 프롬프트를 복사합니다.</p>
                 <button type="button" id="btn-gen-ai-evolution" class="btn btn-outline">
-                  🧬 프로토콜 진화·개정 AI 프롬프트 복사
+                  🧬 프로토콜 진화·신규 카드 AI 프롬프트 복사
                 </button>
               </div>
             </div>
 
             <div class="form-field" style="margin-top: 0.75rem;">
               <label for="export-preview-textarea">📋 복사된 마크다운 / AI 프롬프트 미리보기</label>
-              <textarea id="export-preview-textarea" class="code-textarea" rows="14" readonly placeholder="어떤 복사 버튼이든 누르면 여기에 마크다운 원문이 표시되고 클립보드에 자동 복사됩니다."></textarea>
+              <textarea id="export-preview-textarea" class="code-textarea" rows="14" readonly placeholder="복사 버튼을 누르면 볼트 규격 마크다운 또는 AI 협업 프롬프트가 여기에 표시되고 클립보드에 자동 복사됩니다."></textarea>
             </div>
           </div>
         </div>
@@ -578,9 +567,9 @@
   <div id="patient-teach-modal" class="teach-modal" hidden role="dialog" aria-modal="true" aria-labelledby="teach-modal-title">
     <div class="teach-modal-inner">
       <div class="teach-modal-header">
-        <span class="teach-badge">환자 설명 화면</span>
+        <span class="teach-badge">환자 설명 카드</span>
         <button type="button" id="btn-close-teach-modal" class="btn btn-lg btn-primary">
-          ← 진료 화면으로 돌아가기
+          ← 진료 보드로 돌아가기
         </button>
       </div>
       <h2 id="teach-modal-title" class="teach-title"></h2>
