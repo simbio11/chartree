@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+  <title>진료 프로토콜 뷰 (CLIN-7)</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="title-group">
+        <span class="app-badge">CLIN-7 · M0</span>
+        <h1 class="app-title">진료 프로토콜 나무</h1>
+      </div>
+      <div class="meta-group">
+        <span id="generated-time" class="meta-pill">갱신 확인 중…</span>
+      </div>
+    </div>
+    <p class="safety-banner" role="note">
+      참고 도구입니다. 최종 임상 판단은 의사의 몫입니다. (레드플래그 양성 시 즉시 전원)
+    </p>
+  </header>
+
+  <main class="app-main">
+    <section class="toolbar-section" aria-label="증상 검색">
+      <div class="search-box">
+        <label for="symptom-search" class="sr-only">증상명·증상코드·노드ID·키워드 검색</label>
+        <input
+          type="search"
+          id="symptom-search"
+          placeholder="증상명, 증상코드(예: HA), 노드ID(예: HA-L1-01), 키워드 검색…"
+          autocomplete="off"
+        >
+      </div>
+      <div id="summary-stats" class="summary-stats" aria-live="polite"></div>
+    </section>
+
+    <section class="recent-section" id="recent-section" hidden aria-label="최근 사용 증상">
+      <h2 class="section-heading">최근 사용 (최대 3개)</h2>
+      <div id="recent-list" class="recent-chips"></div>
+    </section>
+
+    <section class="symptom-section" aria-label="증상 목록">
+      <h2 class="section-heading">증상 목록</h2>
+      <div id="symptom-grid" class="symptom-grid" role="list">
+        <p class="loading-text">tree.json을 불러오는 중입니다…</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
