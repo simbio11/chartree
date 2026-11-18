@@ -93,77 +93,77 @@
       name: "두경부·편두통·전정·요추 심부 표적 침술 (협척·신수·풍지·예풍)",
       level: 4,
       count: 42,
-      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01", "NP-L4-01"],
-      notes: "두경부는 0.25×30mm 득기, 요추 협척혈은 0.30×60mm 40~50mm 내측 심자. 낙침은 후계·낙침혈 원위 동기침+건측 이완.",
+      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01", "NP-L4-01", "KN-L4-01"],
+      notes: "두경부는 0.25×30mm 득기, 요추 협척혈은 0.30×60mm 40~50mm 내측 심자, 무릎은 독비·내슬안 심부 사자 1.2~1.5촌.",
       updated: "2026-11-19",
     },
     {
       id: "SK-002",
       category: "침·전침",
-      name: "경항부·요추 협착 2Hz / 급성 100Hz 저·고주파 전침술",
+      name: "경항부·요추 협착·슬관절 VMO 2Hz / 급성 100Hz 전침술",
       level: 4,
       count: 35,
-      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02", "NP-L4-02"],
-      notes: "협착증/만성 요통은 BL25-L4협척 2Hz 30분, 급성 좌섬·낙침은 100Hz 15분. 심장박동기 장착자 절대 금기.",
+      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02", "NP-L4-02", "KN-L4-02"],
+      notes: "협착증 BL25-L4협척 2Hz 30분, 무릎 혈해-양구(VMO) 2Hz 20분(2024 메타분석 전침>수기침). 심장박동기 장착자 절대 금기.",
       updated: "2026-11-19",
     },
     {
       id: "SK-003",
       category: "약침·봉침",
-      name: "경추 후관절·요추 신경근 심부 약침술 (신바로/봉약침/자하거)",
+      name: "경추 후관절·요추 신경근·슬관절낭 심부 약침술 (신바로/봉약침/자하거)",
       level: 3,
       count: 14,
-      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03", "NP-L4-03"],
-      notes: "추골동맥 및 혈관 주행 주의(반드시 역류 확인). 봉약침은 피부반응검사(Skin test) 음성 확인 후 시행.",
+      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03", "NP-L4-03", "KN-L4-03"],
+      notes: "추골동맥 역류 확인 및 관절강 무균 소독 철저. 화농/통풍(Hot swollen joint) 절대 금지, 봉약침 Skin test 필수.",
       updated: "2026-11-19",
     },
     {
       id: "SK-004",
       category: "추나·수기",
-      name: "Cox 굴곡-신연 감압 · 상경추·흉추 가동 추나 · MFR",
+      name: "Cox 굴곡-신연 · 상경추·흉추 · 슬관절/슬개골 가동 추나 · MFR",
       level: 3,
       count: 28,
-      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04", "NP-L4-04"],
-      notes: "척수증·VBI·급성 디스크·협착증·임신부에서 고속 회전/신전 스러스트(HVLA) 절대 금기.",
+      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04", "NP-L4-04", "KN-L4-04"],
+      notes: "척수증·VBI·급성 디스크·협착증 HVLA 금기; 슬관절 급성 잠김·혈관절증·DVT·SIFK 시 신연/도수 금지(OA는 운동 병행).",
       updated: "2026-11-19",
     },
     {
       id: "SK-005",
       category: "이학적검사",
-      name: "HINTS+ · Dix-Hallpike · SLR · Laslett SIJ · Wainner/Cook 정밀 진찰",
+      name: "HINTS+ · Dix-Hallpike · SLR · Laslett · Wainner/Cook · Lachman/McMurray",
       level: 4,
       count: 19,
-      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04", "NP-L2-02", "NP-L2-06"],
-      notes: "SLR은 무릎 아래 방사통+Braggard 병용, Wainner 3/4 양성 특이도 94%, Cook 척수증 클러스터로 도수 금기 선별.",
+      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04", "NP-L2-02", "NP-L2-06", "KN-L2-02"],
+      notes: "SLR은 Braggard 병용, Wainner 3/4 특이도 94%, Lachman ACL 특이도 94%·McMurray 반월판 평가.",
       updated: "2026-11-19",
     },
     {
       id: "SK-006",
       category: "한약처방",
-      name: "질환별 변증 한약 처방 (청상견통탕·반하백출천마탕·서근탕·독활기생탕·회수산)",
+      name: "질환별 변증 한약 처방 (청상견통탕·반하백출천마탕·서근탕·독활기생탕·방기황기탕)",
       level: 4,
       count: 54,
-      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06", "NP-L4-05"],
-      notes: "청강의감 & 한의CPG 기반 변증 처방. 임신부 활혈거어제(당귀수산 등) 금기, 고혈압 시 마황제 주의.",
+      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06", "NP-L4-05", "KN-L4-06"],
+      notes: "청강의감 & 한의CPG 기반 변증 처방. 임신부 활혈거어제 금기, 고령 NSAID/항응고제 병용 상호작용 확인.",
       updated: "2026-11-19",
     },
     {
       id: "SK-007",
       category: "추나·수기",
-      name: "WalkBack · McGill Big 3 · CCFT(Chin-Tuck) · CFT · GDR/HRV 재활",
+      name: "WalkBack · McGill Big 3 · CCFT · VMO/중둔근·태극권 · GDR/HRV 재활",
       level: 4,
       count: 15,
-      linkedNodes: ["HA-L4-06", "LBP-L4-07", "NP-L4-06"],
-      notes: "Lancet 2024 WalkBack 점진적 걷기(재발률 28%↓) 및 McGill Big 3 코어 안정화, HRV 호흡 재활.",
+      linkedNodes: ["HA-L4-06", "LBP-L4-07", "NP-L4-06", "KN-L4-07"],
+      notes: "Lancet 2024 WalkBack, ACR 강한권고 태극권 & 체중 10% 감량, 무릎 0~45° VMO/중둔근 강화.",
       updated: "2026-11-19",
     },
     {
       id: "SK-008",
       category: "도침·침도",
-      name: "견봉하 · 요추 극간인대·장골능 유착 박리 침도(도침) 시술",
+      name: "견봉하 · 요추 극간인대 · 슬개지대/거위발 유착 박리 침도 시술",
       level: 1,
       count: 2,
-      linkedNodes: ["SH-L4-05", "LBP-L4-05"],
+      linkedNodes: ["SH-L4-05", "LBP-L4-05", "KN-L4-05"],
       notes: "Lv.1 — 초음파 가이드/골면 접촉 필수. L1~L3 횡돌기 전방 신장/후복막 대혈관 손상 절대 주의.",
       updated: "2026-11-19",
     },
@@ -260,6 +260,27 @@
       name: "거북목·편타 회복 루틴 (흉추 가동 + CCFT/Chin-Tuck + 갈근탕/당귀수산)",
       path: ["NP-L0-06", "NP-L1-01", "NP-L1-06", "NP-L2-05", "NP-L3-05", "NP-L4-01", "NP-L4-04", "NP-L4-05", "NP-L4-06", "NP-L4-10"],
       orderMemo: "[추나] 흉추 T1-4 가동 & 후두하근 이완 + [한약] 갈근탕/당귀수산 + [재활] Chin-Tuck(CCFT) + [티칭] 셀프 목 꺾기 금지·척수증 경고",
+    },
+    {
+      id: "RT-14",
+      symptom: "KN",
+      name: "퇴행성 슬관절염 루틴 (혈해-양구 전침 + 신바로 + 독활기생탕 + 10%감량·운동)",
+      path: ["KN-L0-02", "KN-L1-01", "KN-L1-02", "KN-L2-01", "KN-L3-01", "KN-L4-02", "KN-L4-03", "KN-L4-06", "KN-L4-07", "KN-L4-08"],
+      orderMemo: "[전침] 혈해-양구 2Hz + [약침] 신바로 슬관절 + [한약] 독활기생탕/방기황기탕 + [재활] VMO/태극권 + [티칭] 초기 2~4주 적응통 & 체중 10% 감량",
+    },
+    {
+      id: "RT-15",
+      symptom: "KN",
+      name: "퇴행성 반월판 파열 루틴 (독비·내슬안 침 + 신바로 + 장축견인 + 풀스쿼트금지)",
+      path: ["KN-L0-03", "KN-L1-01", "KN-L1-03", "KN-L2-02", "KN-L3-02", "KN-L4-01", "KN-L4-03", "KN-L4-04", "KN-L4-06", "KN-L4-09"],
+      orderMemo: "[침] 독비·내슬안 심부 사자 + [약침] 신바로 + [추나] 20~30° 부드러운 장축 견인(잠김 금기) + [한약] 독활기생탕 + [티칭] 비수술 표준 & 풀스쿼트 금지",
+    },
+    {
+      id: "RT-16",
+      symptom: "KN",
+      name: "슬개대퇴(PFPS)·거위발 루틴 (침 + 슬개골 내측 가동 + 중둔근·VMO + 베개티칭)",
+      path: ["KN-L0-04", "KN-L1-01", "KN-L1-04", "KN-L2-03", "KN-L3-03", "KN-L4-01", "KN-L4-02", "KN-L4-04", "KN-L4-07", "KN-L4-09"],
+      orderMemo: "[침·전침] 혈해-양구 2Hz + [추나] 슬개골 내측 가동 & 외측지대 MFR + [재활] 중둔근/VMO(0~45°) + [티칭] 맥코넬 테이핑 & 계단 보행 요령",
     },
   ];
 
@@ -3185,7 +3206,7 @@
       dbGetAll("routines"),
     ]);
 
-    const seedFlag = localStorage.getItem("clin7_seed_v8");
+    const seedFlag = localStorage.getItem("clin7_seed_v9");
     if (savedSkills.length === 0 || seedFlag !== "done") {
       const skillMap = new Map(savedSkills.map((s) => [s.id, s]));
       for (const sk of DEFAULT_SKILLS) {
@@ -3210,7 +3231,7 @@
         }
       }
       routinesList = Array.from(rtMap.values());
-      localStorage.setItem("clin7_seed_v8", "done");
+      localStorage.setItem("clin7_seed_v9", "done");
     } else {
       routinesList = savedRoutines;
     }
