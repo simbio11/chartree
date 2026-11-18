@@ -64,8 +64,8 @@
       name: "두경부·편두통·전정·요추 심부 표적 침술 (협척·신수·풍지·예풍)",
       level: 4,
       count: 42,
-      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01"],
-      notes: "두경부는 0.25×30mm 득기, 요추 협척혈은 0.30×60mm 40~50mm 내측 심자. 어지럼은 와위 시술.",
+      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01", "NP-L4-01"],
+      notes: "두경부는 0.25×30mm 득기, 요추 협척혈은 0.30×60mm 40~50mm 내측 심자. 낙침은 후계·낙침혈 원위 동기침+건측 이완.",
       updated: "2026-11-19",
     },
     {
@@ -74,8 +74,8 @@
       name: "경항부·요추 협착 2Hz / 급성 100Hz 저·고주파 전침술",
       level: 4,
       count: 35,
-      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02"],
-      notes: "협착증/만성 요통은 BL25-L4협척 2Hz 30분, 급성 좌섬은 100Hz 15분. 심장박동기 장착자 절대 금기.",
+      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02", "NP-L4-02"],
+      notes: "협착증/만성 요통은 BL25-L4협척 2Hz 30분, 급성 좌섬·낙침은 100Hz 15분. 심장박동기 장착자 절대 금기.",
       updated: "2026-11-19",
     },
     {
@@ -84,47 +84,47 @@
       name: "경추 후관절·요추 신경근 심부 약침술 (신바로/봉약침/자하거)",
       level: 3,
       count: 14,
-      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03"],
+      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03", "NP-L4-03"],
       notes: "추골동맥 및 혈관 주행 주의(반드시 역류 확인). 봉약침은 피부반응검사(Skin test) 음성 확인 후 시행.",
       updated: "2026-11-19",
     },
     {
       id: "SK-004",
       category: "추나·수기",
-      name: "Cox 굴곡-신연 감압 · 상경추·견관절 가동 추나 · MFR",
+      name: "Cox 굴곡-신연 감압 · 상경추·흉추 가동 추나 · MFR",
       level: 3,
       count: 28,
-      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04"],
-      notes: "상경추 및 급성 디스크·협착증·임신부에서 고속 회전/신전 스러스트(HVLA) 절대 금기.",
+      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04", "NP-L4-04"],
+      notes: "척수증·VBI·급성 디스크·협착증·임신부에서 고속 회전/신전 스러스트(HVLA) 절대 금기.",
       updated: "2026-11-19",
     },
     {
       id: "SK-005",
       category: "이학적검사",
-      name: "HINTS+ · Dix-Hallpike · SLR · Laslett SIJ 정밀 진찰",
+      name: "HINTS+ · Dix-Hallpike · SLR · Laslett SIJ · Wainner/Cook 정밀 진찰",
       level: 4,
       count: 19,
-      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04"],
-      notes: "SLR은 무릎 아래 방사통+Braggard 병용, Laslett은 5종 중 3개↑ 양성 시 특이도 78%/민감도 94%.",
+      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04", "NP-L2-02", "NP-L2-06"],
+      notes: "SLR은 무릎 아래 방사통+Braggard 병용, Wainner 3/4 양성 특이도 94%, Cook 척수증 클러스터로 도수 금기 선별.",
       updated: "2026-11-19",
     },
     {
       id: "SK-006",
       category: "한약처방",
-      name: "질환별 변증 한약 처방 (청상견통탕·반하백출천마탕·서근탕·독활기생탕)",
+      name: "질환별 변증 한약 처방 (청상견통탕·반하백출천마탕·서근탕·독활기생탕·회수산)",
       level: 4,
       count: 54,
-      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06"],
+      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06", "NP-L4-05"],
       notes: "청강의감 & 한의CPG 기반 변증 처방. 임신부 활혈거어제(당귀수산 등) 금기, 고혈압 시 마황제 주의.",
       updated: "2026-11-19",
     },
     {
       id: "SK-007",
       category: "추나·수기",
-      name: "WalkBack · McGill Big 3 · CFT · GDR/HRV 운동 재활",
+      name: "WalkBack · McGill Big 3 · CCFT(Chin-Tuck) · CFT · GDR/HRV 재활",
       level: 4,
       count: 15,
-      linkedNodes: ["HA-L4-06", "LBP-L4-07"],
+      linkedNodes: ["HA-L4-06", "LBP-L4-07", "NP-L4-06"],
       notes: "Lancet 2024 WalkBack 점진적 걷기(재발률 28%↓) 및 McGill Big 3 코어 안정화, HRV 호흡 재활.",
       updated: "2026-11-19",
     },
@@ -210,6 +210,27 @@
       name: "비특이·만성 요통 루틴 (침 + QL/장요근 MFR + WalkBack·Big 3)",
       path: ["LBP-L0-06", "LBP-L1-01", "LBP-L1-06", "LBP-L2-05", "LBP-L3-05", "LBP-L4-01", "LBP-L4-04", "LBP-L4-06", "LBP-L4-07", "LBP-L4-09"],
       orderMemo: "[침] 협척·QL·BL40 + [추나] 측와위 장요근/QL MFR + [한약] 오적산/당귀수산 + [재활] WalkBack & McGill Big 3 + [티칭] 활동 유지·진통제 3단계 감량",
+    },
+    {
+      id: "RT-11",
+      symptom: "NP",
+      name: "급성 낙침 루틴 (후계 동기침 + 건측 MFR + 회수산/갈근탕 + 베개 티칭)",
+      path: ["NP-L0-02", "NP-L1-01", "NP-L1-02", "NP-L2-01", "NP-L3-01", "NP-L4-01", "NP-L4-04", "NP-L4-05", "NP-L4-07"],
+      orderMemo: "[침] 후계·낙침혈 동적 자침 + 건측 견갑거근/SCM + [추나] 건측 이완(HVLA 금지) + [한약] 회수산/갈근탕 + [티칭] 베개 6~8cm & 칼라 금지",
+    },
+    {
+      id: "RT-12",
+      symptom: "NP",
+      name: "목디스크·신경근병증 루틴 (C5-7 협척 전침 + 신바로 + 부드러운 신연)",
+      path: ["NP-L0-03", "NP-L1-01", "NP-L1-03", "NP-L2-02", "NP-L3-02", "NP-L4-01", "NP-L4-02", "NP-L4-03", "NP-L4-04", "NP-L4-08"],
+      orderMemo: "[침·전침] C5-7 협척 2Hz + [약침] 신바로 후관절 + [추나] 중립 부드러운 축성 신연(척수증 배제 필수) + [티칭] Bakody·눈높이 교정",
+    },
+    {
+      id: "RT-13",
+      symptom: "NP",
+      name: "거북목·편타 회복 루틴 (흉추 가동 + CCFT/Chin-Tuck + 갈근탕/당귀수산)",
+      path: ["NP-L0-06", "NP-L1-01", "NP-L1-06", "NP-L2-05", "NP-L3-05", "NP-L4-01", "NP-L4-04", "NP-L4-05", "NP-L4-06", "NP-L4-10"],
+      orderMemo: "[추나] 흉추 T1-4 가동 & 후두하근 이완 + [한약] 갈근탕/당귀수산 + [재활] Chin-Tuck(CCFT) + [티칭] 셀프 목 꺾기 금지·척수증 경고",
     },
   ];
 
@@ -2814,7 +2835,7 @@
       dbGetAll("routines"),
     ]);
 
-    const seedFlag = localStorage.getItem("clin7_seed_v7");
+    const seedFlag = localStorage.getItem("clin7_seed_v8");
     if (savedSkills.length === 0 || seedFlag !== "done") {
       const skillMap = new Map(savedSkills.map((s) => [s.id, s]));
       for (const sk of DEFAULT_SKILLS) {
@@ -2839,7 +2860,7 @@
         }
       }
       routinesList = Array.from(rtMap.values());
-      localStorage.setItem("clin7_seed_v7", "done");
+      localStorage.setItem("clin7_seed_v8", "done");
     } else {
       routinesList = savedRoutines;
     }
