@@ -110,11 +110,17 @@ def verify_tree_contract(tree_obj: dict[str, Any]) -> list[str]:
 def verify_no_external_cdn_and_features() -> list[str]:
     errors: list[str] = []
     forbidden_patterns = ("https://", "http://", "//cdn", "googleapis.com", "jsdelivr", "unpkg")
+    allowed_academic_urls = (
+        "https://pubmed.ncbi.nlm.nih.gov/",
+        "https://doi.org/",
+    )
     for p in (WEB_DIR / "index.html", WEB_DIR / "style.css", WEB_DIR / "app.js"):
         if not p.exists():
             errors.append(f"필수 정적 파일 누락: {p}")
             continue
         content = p.read_text(encoding="utf-8")
+        for allowed in allowed_academic_urls:
+            content = content.replace(allowed, "")
         for pat in forbidden_patterns:
             if pat in content:
                 errors.append(f"[{p.name}] 외부 URL/CDN 패턴('{pat}') 검출")

@@ -3049,6 +3049,392 @@ body {
   color: #ffffff;
 }
 
+/* ==================== 상단 임상 진행 타임라인 스테퍼 (Clinical Stepper Bar) ==================== */
+.stepper-lead-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background-color: #0f172a;
+  color: #f8fafc;
+  padding: 0.25rem 0.62rem;
+  border-radius: 7px;
+  flex-shrink: 0;
+}
+
+.stepper-lead-badge .combo-label {
+  color: #f8fafc;
+  font-size: 0.74rem;
+  letter-spacing: 0.02em;
+}
+
+.stepper-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background-color: #38bdf8;
+  box-shadow: 0 0 6px #38bdf8;
+}
+
+.clinical-stepper-track {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.32rem;
+}
+
+.stepper-node-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  background-color: #ffffff;
+  color: #1e293b;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 9px;
+  padding: 0.24rem 0.62rem 0.24rem 0.32rem;
+  cursor: pointer;
+  transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.stepper-node-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+}
+
+.step-layer-tag {
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 0.14rem 0.42rem;
+  border-radius: 6px;
+  background-color: #e2e8f0;
+  color: #0f172a;
+  white-space: nowrap;
+}
+
+.step-layer-l0 .step-layer-tag { background-color: #e0e7ff; color: #3730a3; }
+.step-layer-l1 .step-layer-tag { background-color: #e0f2fe; color: #075985; }
+.step-layer-l2 .step-layer-tag { background-color: #f3e8ff; color: #6b21a8; }
+.step-layer-l3 .step-layer-tag { background-color: #fef3c7; color: #92400e; }
+.step-layer-l4 .step-layer-tag { background-color: #ccfbf1; color: #115e59; }
+.step-layer-l5 .step-layer-tag { background-color: #f1f5f9; color: #334155; }
+
+.step-main-text {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.32rem;
+}
+
+.step-node-title {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #0f172a;
+  max-width: 190px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.step-node-id {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.stepper-node-card.active {
+  background: linear-gradient(135deg, #0f5288 0%, #0284c7 100%);
+  border-color: #0284c7;
+  color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.25), 0 4px 12px rgba(15, 82, 136, 0.22);
+}
+
+.stepper-node-card.active .step-node-title {
+  color: #ffffff;
+}
+
+.stepper-node-card.active .step-node-id {
+  color: #bae6fd;
+}
+
+.stepper-node-card.active .step-layer-tag {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.stepper-node-card.redflag {
+  border-color: #f87171;
+  background-color: #fff5f5;
+}
+
+.stepper-node-card.redflag.active {
+  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+  border-color: #dc2626;
+}
+
+.stepper-connector {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.16rem;
+  color: #94a3b8;
+  font-weight: 800;
+}
+
+.conn-dec-pill {
+  font-size: 0.67rem;
+  font-weight: 800;
+  padding: 0.08rem 0.38rem;
+  border-radius: 999px;
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.stepper-connector.conn-yes .conn-dec-pill {
+  background-color: #f0fdf4;
+  color: #15803d;
+  border-color: #86efac;
+}
+
+.stepper-connector.conn-no .conn-dec-pill {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+.conn-chevron {
+  font-size: 0.9rem;
+  line-height: 1;
+  color: #94a3b8;
+}
+
+.stepper-ghost-pill {
+  background-color: transparent;
+  color: #94a3b8;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 0.22rem 0.52rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.stepper-ghost-pill:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+  background-color: #f8fafc;
+}
+
+/* ==================== PubMed PMID 논문 직결 배지 링크 ==================== */
+.pmid-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  background-color: #eef2ff;
+  color: #3730a3;
+  border: 1px solid #c7d2fe;
+  border-radius: 5px;
+  padding: 0.06rem 0.42rem;
+  font-size: 0.74rem;
+  font-weight: 800;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  text-decoration: none;
+  margin: 0 0.12rem;
+  transition: all 0.14s ease;
+}
+
+.pmid-link:hover {
+  background-color: #4338ca;
+  color: #ffffff;
+  border-color: #4338ca;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(67, 56, 202, 0.25);
+}
+
+.redflag-alert-box .pmid-link {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.redflag-alert-box .pmid-link:hover {
+  background-color: #ffffff;
+  color: #b91c1c;
+}
+
+/* ==================== 우측 하단 표준 EMR 자동 차트 슬롯 & 모달 ==================== */
+.emr-dock-title {
+  color: #0f172a;
+  font-weight: 900;
+  font-size: 0.82rem;
+}
+
+.dock-emr-grid {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.mini-select {
+  padding: 0.28rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
+.btn-emr-generate {
+  width: 100%;
+  background: linear-gradient(135deg, #0f172a 0%, #0f5288 100%);
+  color: #ffffff;
+  border: 1px solid #1e3a8a;
+  border-radius: 8px;
+  padding: 0.58rem 0.85rem;
+  font-size: 0.84rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.16);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.btn-emr-generate:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #0f5288 0%, #0284c7 100%);
+  box-shadow: 0 6px 16px rgba(15, 82, 136, 0.28);
+}
+
+.emr-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.68);
+  backdrop-filter: blur(5px);
+  z-index: 115;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  overflow-y: auto;
+}
+
+.emr-modal-card {
+  width: 100%;
+  max-width: 880px;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-top: 5px solid var(--primary);
+  border-radius: 14px;
+  padding: 1.35rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  box-shadow: 0 24px 48px rgba(2, 6, 23, 0.4);
+  animation: motionEnter 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.emr-modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.emr-modal-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  color: var(--primary);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.emr-modal-title {
+  font-size: 1.18rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin-top: 0.15rem;
+}
+
+.emr-format-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  background-color: #f1f5f9;
+  padding: 0.35rem;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+}
+
+.emr-fmt-tab {
+  flex: 1 1 220px;
+  background: transparent;
+  color: #475569;
+  border: none;
+  border-radius: 7px;
+  padding: 0.48rem 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.emr-fmt-tab:hover {
+  color: #0f172a;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.emr-fmt-tab.active {
+  background-color: #0f172a;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.18);
+}
+
+.emr-chart-textarea {
+  width: 100%;
+  font-family: ui-monospace, SFMono-Regular, "Malgun Gothic", Consolas, monospace;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  padding: 0.95rem 1.05rem;
+  border-radius: 10px;
+  border: 1.5px solid #cbd5e1;
+  background-color: #f8fafc;
+  color: #0f172a;
+  resize: vertical;
+}
+
+.emr-chart-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.emr-modal-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.emr-foot-hint {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.emr-foot-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
 @media (max-width: 768px) {
   .mode-switcher {
     grid-template-columns: 1fr 1fr 1fr;
