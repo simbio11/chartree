@@ -3388,7 +3388,7 @@
       dbGetAll("routines"),
     ]);
 
-    const seedFlag = localStorage.getItem("clin7_seed_v10");
+    const seedFlag = localStorage.getItem("clin7_seed_v11");
     if (savedSkills.length === 0 || seedFlag !== "done") {
       const skillMap = new Map(savedSkills.map((s) => [s.id, s]));
       for (const sk of DEFAULT_SKILLS) {
@@ -3419,7 +3419,7 @@
         }
       }
       routinesList = Array.from(rtMap.values());
-      localStorage.setItem("clin7_seed_v10", "done");
+      localStorage.setItem("clin7_seed_v11", "done");
     } else {
       routinesList = savedRoutines;
     }
