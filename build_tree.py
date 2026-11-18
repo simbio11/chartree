@@ -466,6 +466,12 @@ def validate_nodes(
             if ref_id not in nodes_by_id:
                 errors.append(f"[{nid}] '다음'이 존재하지 않는 노드를 참조합니다: '{ref_id}'")
 
+        rec_id = node.get("추천문진")
+        if rec_id:
+            rid = str(rec_id).strip().strip("[]")
+            if rid not in nodes_by_id:
+                errors.append(f"[{nid}] '추천문진'이 존재하지 않는 노드를 참조합니다: '{rid}'")
+
     # 3. 증상별 레드플래그 ask 노드가 최소 1개 이상인지 확인
     for sym_code, rf_count in symptom_redflags.items():
         if rf_count < 1:

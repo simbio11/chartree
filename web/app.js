@@ -29,7 +29,7 @@
   const RRN_REGEX = /\b\d{6}-[1-4]\d{6}\b/;
 
   const LAYER_META = [
-    { key: "L0", title: "L0 · 시작" },
+    { key: "L0", title: "L0 · 호소 양상" },
     { key: "L1", title: "L1 · 문진" },
     { key: "L2", title: "L2 · 검사" },
     { key: "L3", title: "L3 · 감별" },
@@ -128,6 +128,16 @@
       notes: "약물과용(MOH)·만성 두통 환자에서 들숨4초-날숨6초(분당6회) 호흡 및 전방 75cm GDR 30시행 안내.",
       updated: "2026-11-18",
     },
+    {
+      id: "SK-008",
+      category: "도침·침도",
+      name: "견봉하·관절낭 유착 박리 침도(도침) 시술",
+      level: 1,
+      count: 2,
+      linkedNodes: ["SH-L4-05"],
+      notes: "Lv.1 — 초음파 가이드 및 숙련의 지도 하에만 시행. 관절강 내 자입·신경혈관 손상 주의.",
+      updated: "2026-11-18",
+    },
   ];
 
   const DEFAULT_ROUTINES = [
@@ -135,49 +145,49 @@
       id: "RT-01",
       symptom: "HA",
       name: "경추성 두통 루틴 (전침 + 추나 + 한약 + 목보호 티칭)",
-      path: ["HA-L0-01", "HA-L1-01", "HA-L1-03", "HA-L2-01", "HA-L3-01", "HA-L4-02", "HA-L4-04", "HA-L4-05", "HA-L4-09"],
+      path: ["HA-L0-02", "HA-L1-01", "HA-L1-03", "HA-L2-01", "HA-L3-01", "HA-L4-02", "HA-L4-04", "HA-L4-05", "HA-L4-09"],
       orderMemo: "[전침] 풍지-천주 2Hz 20분 + [추나] C0-C1 견인·후두하근 이완 + [한약] 청상견통탕/갈근탕 + [티칭] 베개 6~8cm & 온찜질",
     },
     {
       id: "RT-02",
       symptom: "HA",
       name: "긴장형 두통 루틴 (득기 침 + 전침 + 한약 + 자세 티칭)",
-      path: ["HA-L0-01", "HA-L1-01", "HA-L1-05", "HA-L2-02", "HA-L3-02", "HA-L4-01", "HA-L4-02", "HA-L4-05", "HA-L4-08"],
+      path: ["HA-L0-04", "HA-L1-01", "HA-L1-05", "HA-L2-02", "HA-L3-02", "HA-L4-01", "HA-L4-02", "HA-L4-05", "HA-L4-08"],
       orderMemo: "[침] 풍지·태양·백회·합곡·태충 득기 30분 + [전침] 승모근/후두하근 2Hz + [한약] 소요산가감 + [티칭] Chin-Tuck & 테니스공 이완",
     },
     {
       id: "RT-03",
       symptom: "HA",
       name: "편두통·MOH 루틴 (표적 침 + 변증 한약 + GDR/HRV + SEEDS)",
-      path: ["HA-L0-01", "HA-L1-01", "HA-L1-04", "HA-L2-03", "HA-L3-03", "HA-L4-01", "HA-L4-05", "HA-L4-06", "HA-L4-07"],
+      path: ["HA-L0-03", "HA-L1-01", "HA-L1-04", "HA-L2-03", "HA-L3-03", "HA-L4-01", "HA-L4-05", "HA-L4-06", "HA-L4-07"],
       orderMemo: "[침] 태양-솔곡 수평자침·족임읍·외관 + [한약] 천마구등음/천궁차조산 + [재활] HRV 호흡 + [티칭] SEEDS & 진통제 테이퍼링",
     },
     {
       id: "RT-04",
       symptom: "DZ",
       name: "이석증 (BPPV) 루틴 (이석정복 + 와위 침 + 한약 + 비타민D)",
-      path: ["DZ-L0-01", "DZ-L1-01", "DZ-L1-02", "DZ-L2-01", "DZ-L3-01", "DZ-L4-01", "DZ-L4-02", "DZ-L4-06", "DZ-L4-07"],
+      path: ["DZ-L0-02", "DZ-L1-01", "DZ-L1-02", "DZ-L2-01", "DZ-L3-01", "DZ-L4-01", "DZ-L4-02", "DZ-L4-06", "DZ-L4-07"],
       orderMemo: "[수기] Epley(단계별 60초 정지) + [침] 와위 예풍·풍지·내관 + [한약] 잔여 멍함에 반하백출천마탕 3~5일분 + [티칭] 전정억제제 중단·비타민D",
     },
     {
       id: "RT-05",
       symptom: "DZ",
       name: "전정신경염 루틴 (HINTS+ → 와위 침 + 한약 + 전정재활)",
-      path: ["DZ-L0-01", "DZ-L1-01", "DZ-L1-03", "DZ-L2-02", "DZ-L3-02", "DZ-L4-02", "DZ-L4-06", "DZ-L4-08"],
+      path: ["DZ-L0-03", "DZ-L1-01", "DZ-L1-03", "DZ-L2-02", "DZ-L3-02", "DZ-L4-02", "DZ-L4-06", "DZ-L4-08"],
       orderMemo: "[침] 와위 예풍·풍지·내관·족삼리 + [한약] 반하백출천마탕/건비이사탕 + [티칭] 시선고정 고개회전 전정재활운동",
     },
     {
       id: "RT-06",
       symptom: "DZ",
       name: "경추성 어지럼 루틴 (전침 + 후두하근 추나 + 한약 + 안전티칭)",
-      path: ["DZ-L0-01", "DZ-L1-01", "DZ-L1-04", "DZ-L2-03", "DZ-L3-04", "DZ-L4-03", "DZ-L4-05", "DZ-L4-06", "DZ-L4-10"],
+      path: ["DZ-L0-05", "DZ-L1-01", "DZ-L1-04", "DZ-L2-03", "DZ-L3-04", "DZ-L4-03", "DZ-L4-05", "DZ-L4-06", "DZ-L4-10"],
       orderMemo: "[전침] 풍지-천주 2Hz + [추나] 후두하근 억제 & C0-C1 가동(HVLA 금지) + [한약] 반하백출천마탕 + [티칭] 5D-3N 경고·기립주의",
     },
     {
       id: "RT-07",
       symptom: "SH",
       name: "오십견 루틴 (전침·침 + 견관절 추나 + 서근탕 + 스트레칭)",
-      path: ["SH-L0-01", "SH-L1-01", "SH-L1-02", "SH-L2-01", "SH-L3-01", "SH-L4-01", "SH-L4-03", "SH-L4-04", "SH-L4-05"],
+      path: ["SH-L0-02", "SH-L1-01", "SH-L1-02", "SH-L2-01", "SH-L3-01", "SH-L4-01", "SH-L4-03", "SH-L4-04", "SH-L4-06"],
       orderMemo: "[전침] 견우-견료 2Hz + [추나] 견관절 가동술 + [한약] 서근탕/양화이사탕 + [티칭] 시계추 운동 & 베개 받치기",
     },
   ];
@@ -467,6 +477,28 @@
     return out;
   }
 
+  function getEffectiveBranches(node, nodesMap) {
+    const branches = extractBranchesList(node);
+    if (!node || !String(node.id || "").endsWith("-L1-01")) return branches;
+    const startNode = nodesMap && currentPath.length > 0 ? nodesMap[currentPath[0]] : null;
+    const recId = startNode && startNode["추천문진"];
+    if (!recId || !nodesMap[recId] || recId === node.id) return branches;
+    return branches.map((b) =>
+      b.label.includes("아니오") ? { label: b.label, targetId: recId } : b
+    );
+  }
+
+  function isPositiveBranchLabel(label) {
+    const s = String(label || "");
+    return (
+      s.includes("예") ||
+      s.includes("양성") ||
+      s.includes("수동제한") ||
+      s.includes("진료 시작") ||
+      s.includes("안전 확인")
+    );
+  }
+
   /* ==================== 모드 & 서브탭 전환 ==================== */
   function switchMode(mode) {
     currentMode = mode;
@@ -621,12 +653,20 @@
     const visited = new Set();
     while (cur && nodesMap[cur] && !visited.has(cur)) {
       visited.add(cur);
+      if (getLayerFromNodeId(cur) === "L0") {
+        parentChain.unshift(cur === entryId ? cur : entryId);
+        break;
+      }
       parentChain.unshift(cur);
       if (cur === entryId) break;
       cur = nodesMap[cur]["상위"];
     }
     if (parentChain[0] !== entryId && nodesMap[entryId]) {
-      parentChain.unshift(entryId);
+      if (getLayerFromNodeId(parentChain[0]) === "L0") {
+        parentChain[0] = entryId;
+      } else {
+        parentChain.unshift(entryId);
+      }
     }
     return parentChain;
   }
@@ -701,7 +741,7 @@
 
   function renderHorizontalCardBoard(nodesMap) {
     const activeNode = nodesMap[activeNodeId];
-    const nextBranches = extractBranchesList(activeNode);
+    const nextBranches = getEffectiveBranches(activeNode, nodesMap);
     // { targetId: "예" } 매핑
     const nextDecisionMap = {};
     nextBranches.forEach(({ label, targetId }) => {
@@ -743,7 +783,8 @@
         const isInPath = pathSet.has(node.id);
         const decisionRibbonLabel = nextDecisionMap[node.id];
         const isPlayableNext = Boolean(decisionRibbonLabel);
-        const isDimmed = !isSelected && !isInPath && !isPlayableNext;
+        const isL0Choosing = currentPath.length <= 1 && key === "L0";
+        const isDimmed = !isSelected && !isInPath && !isPlayableNext && !isL0Choosing;
         const isRedflag = node["레드플래그"] === true;
         const ntype = node["유형"] || "ask";
         const prof = typeof node["내숙련도"] === "number" ? node["내숙련도"] : null;
@@ -766,11 +807,7 @@
         // 다음 선택 가능한 후보 카드면 상단에 "👉 [예] 선택 시" 리본 표시
         let ribbonHtml = "";
         if (isPlayableNext) {
-          const isYes =
-            decisionRibbonLabel.includes("예") ||
-            decisionRibbonLabel.includes("양성") ||
-            decisionRibbonLabel.includes("수동제한") ||
-            decisionRibbonLabel.includes("진료 시작");
+          const isYes = isPositiveBranchLabel(decisionRibbonLabel);
           const isDanger = activeNode && activeNode["레드플래그"] === true && isYes;
           const rCls = isDanger ? "ribbon-danger" : isYes ? "" : "ribbon-no";
           ribbonHtml = `<span class="next-decision-ribbon ${rCls}">👉 [${escapeHtml(
@@ -818,11 +855,7 @@
         if (isSelected && nextBranches.length > 0) {
           const btns = nextBranches
             .map(({ label, targetId }) => {
-              const isYes =
-                label.includes("예") ||
-                label.includes("양성") ||
-                label.includes("수동제한") ||
-                label.includes("진료 시작");
+              const isYes = isPositiveBranchLabel(label);
               const isDanger = isRedflag && isYes;
               const bCls = isDanger ? "inline-danger" : isYes ? "inline-yes" : "inline-no";
               return `<button type="button" class="btn-inline-choice ${bCls}" data-branch-label="${escapeHtml(
@@ -845,12 +878,13 @@
           )}">${isInPath ? "✔ 콤보 포함됨 (클릭해 제외)" : "+ 이 술기 콤보에 함께 담기"}</button>`;
         }
 
+        const displayTypeLabel = key === "L0" ? "🗣️ 호소 양상" : TYPE_KOREAN[ntype] || ntype;
         card.innerHTML = `
           ${ribbonHtml}
           <div class="node-card-top">
             <span class="node-id-badge">${escapeHtml(node.id)}</span>
             <span class="node-type-badge type-${escapeHtml(ntype)}">${escapeHtml(
-              TYPE_KOREAN[ntype] || ntype
+              displayTypeLabel
             )}</span>
           </div>
           <div class="node-card-title">${escapeHtml(node["제목"])}</div>
@@ -893,6 +927,11 @@
         card.addEventListener("click", () => {
           if (isPlayableNext) {
             playCardTransition(activeNodeId, decisionRibbonLabel, node.id);
+          } else if (getLayerFromNodeId(node.id) === "L0") {
+            activeNodeId = node.id;
+            currentPath = [node.id];
+            pathDecisions = {};
+            renderClinicBoardMode();
           } else {
             const idxInPath = currentPath.indexOf(node.id);
             if (idxInPath !== -1) {
@@ -900,7 +939,10 @@
               currentPath = currentPath.slice(0, idxInPath + 1);
             } else {
               // 흐릿한 비선택 카드를 클릭했을 때도 그 카드로 자연스럽게 경로 재구성
-              const entryId = mergedTreeData["증상"][activeSymptomCode].entry;
+              const entryId =
+                (currentPath.length > 0 && getLayerFromNodeId(currentPath[0]) === "L0"
+                  ? currentPath[0]
+                  : mergedTreeData["증상"][activeSymptomCode].entry);
               activeNodeId = node.id;
               currentPath = buildPathToNode(nodesMap, entryId, node.id);
             }
@@ -917,13 +959,28 @@
 
   function playCardTransition(fromId, decisionLabel, toId) {
     pathDecisions[fromId] = decisionLabel;
-    const existingIdx = currentPath.indexOf(toId);
+    let actualTarget = toId;
+    const symNodes =
+      mergedTreeData && mergedTreeData["증상"] && mergedTreeData["증상"][activeSymptomCode]
+        ? mergedTreeData["증상"][activeSymptomCode].nodes
+        : {};
+    if (String(fromId).endsWith("-L1-01") && String(decisionLabel).includes("아니오")) {
+      const startNode = currentPath.length > 0 ? symNodes[currentPath[0]] : null;
+      const recId = startNode && startNode["추천문진"];
+      if (recId && symNodes[recId] && recId !== fromId) {
+        actualTarget = recId;
+        if (actualTarget !== toId) {
+          showToast(`🎯 선택한 호소 양상에 맞춰 [${actualTarget}] 문진으로 연결되었습니다.`);
+        }
+      }
+    }
+    const existingIdx = currentPath.indexOf(actualTarget);
     if (existingIdx !== -1) {
       currentPath = currentPath.slice(0, existingIdx + 1);
     } else {
-      currentPath.push(toId);
+      currentPath.push(actualTarget);
     }
-    activeNodeId = toId;
+    activeNodeId = actualTarget;
     renderClinicBoardMode();
   }
 
@@ -943,7 +1000,7 @@
     // 다중 술기 콤보가 켜져 있을 때(예: L3→[전침, 추나, 한약]) 경로에 포함된 모든 부모→자식 연결선도 함께 점등
     Object.values(nodesMap).forEach((sn) => {
       if (!pathSet.has(sn.id)) return;
-      extractBranchesList(sn).forEach(({ targetId }) => {
+      getEffectiveBranches(sn, nodesMap).forEach(({ targetId }) => {
         if (pathSet.has(targetId)) {
           activeEdges.add(`${sn.id}->${targetId}`);
         }
@@ -951,7 +1008,7 @@
     });
 
     const activeNode = nodesMap[activeNodeId];
-    const nextBranches = extractBranchesList(activeNode);
+    const nextBranches = getEffectiveBranches(activeNode, nodesMap);
     const nextTargets = new Map();
     nextBranches.forEach(({ label, targetId }) => {
       nextTargets.set(`${activeNodeId}->${targetId}`, label);
@@ -966,7 +1023,7 @@
       const x1 = srcRect.right - canvasRect.left;
       const y1 = srcRect.top + srcRect.height / 2 - canvasRect.top;
 
-      const branches = extractBranchesList(srcNode);
+      const branches = getEffectiveBranches(srcNode, nodesMap);
       branches.forEach(({ targetId }) => {
         const dstEl = boardCanvas.querySelector(`[data-node-id="${targetId}"]`);
         if (!dstEl) return;
@@ -1007,8 +1064,9 @@
     nodeDetailPanel.classList.toggle("redflag-panel", isRedflag);
 
     const ntype = node["유형"] || "ask";
+    const isL0Node = getLayerFromNodeId(node.id) === "L0";
     const prof = typeof node["내숙련도"] === "number" ? node["내숙련도"] : 4;
-    const branches = extractBranchesList(node);
+    const branches = getEffectiveBranches(node, nodesMap);
     const evoStats = computeNodeEvolutionStats();
     const nodeStat = evoStats[node.id];
 
@@ -1018,7 +1076,7 @@
           <div style="display:flex; gap:0.35rem; align-items:center;">
             <span class="node-id-badge">${escapeHtml(node.id)}</span>
             <span class="node-type-badge type-${escapeHtml(ntype)}">${escapeHtml(
-              TYPE_KOREAN[ntype] || ntype
+              isL0Node ? "🗣️ 호소 양상" : TYPE_KOREAN[ntype] || ntype
             )}</span>
             <span class="mini-badge" style="background:#f1f5f9;">${escapeHtml(node["상태"] || "정본")}</span>
           </div>
@@ -1047,8 +1105,8 @@
     if (ntype === "ask") {
       html += `
         <div class="hero-question-box">
-          <div class="hero-question-text">Q. “${escapeHtml(node["질문"] || node["제목"])}”</div>
-          <div class="hero-why-text"><strong>💡 왜 묻는가:</strong> ${escapeHtml(
+          <div class="hero-question-text">${isL0Node ? "🗣️ 환자 호소:" : "Q."} “${escapeHtml(node["질문"] || node["제목"])}”</div>
+          <div class="hero-why-text"><strong>${isL0Node ? "🎯 임상 의미·타겟:" : "💡 왜 묻는가:"}</strong> ${escapeHtml(
             node["왜"] || "임상 분기 판정"
           )}</div>
         </div>
@@ -1137,11 +1195,7 @@
         .map(({ label, targetId }) => {
           const tNode = nodesMap[targetId];
           const tTitle = tNode ? tNode["제목"] : targetId;
-          const isYes =
-            label.includes("예") ||
-            label.includes("양성") ||
-            label.includes("수동제한") ||
-            label.includes("진료 시작");
+          const isYes = isPositiveBranchLabel(label);
           const cls = isRedflag && isYes ? "choice-danger" : isYes ? "choice-yes" : "choice-no";
           return `
             <button type="button" class="dock-choice-btn ${cls} btn-dock-branch" data-label="${escapeHtml(
@@ -2739,7 +2793,7 @@
       dbGetAll("routines"),
     ]);
 
-    const seedFlag = localStorage.getItem("clin7_seed_v4");
+    const seedFlag = localStorage.getItem("clin7_seed_v5");
     if (savedSkills.length === 0 || seedFlag !== "done") {
       const skillMap = new Map(savedSkills.map((s) => [s.id, s]));
       for (const sk of DEFAULT_SKILLS) {
@@ -2764,7 +2818,7 @@
         }
       }
       routinesList = Array.from(rtMap.values());
-      localStorage.setItem("clin7_seed_v4", "done");
+      localStorage.setItem("clin7_seed_v5", "done");
     } else {
       routinesList = savedRoutines;
     }
