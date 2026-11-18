@@ -93,68 +93,68 @@
       name: "두경부·편두통·전정·요추 심부 표적 침술 (협척·신수·풍지·예풍)",
       level: 4,
       count: 42,
-      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01", "NP-L4-01", "KN-L4-01", "AN-L4-01", "EL-L4-01", "HN-L4-01", "FTL-L4-01"],
-      notes: "두경부·사지·말초신경·족부 표적 자침. 당뇨 발 감각저하(LOPS)엔 화상성 뜸·사혈 금지, 신경/건 본간 직자 회피.",
+      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01", "NP-L4-01", "KN-L4-01", "AN-L4-01", "EL-L4-01", "HN-L4-01", "FTL-L4-01", "DY-L4-01"],
+      notes: "두경부·사지·말초신경·족부·위장/T6-10 배수혈 표적 자침. 당뇨 발 감각저하(LOPS) 화상성 뜸 금지, 흉추 배수혈 기흉 주의.",
       updated: "2026-11-19",
     },
     {
       id: "SK-002",
       category: "침·전침",
-      name: "경항부·협착·슬/족관절·상과염·DPN·족저 2Hz / 100Hz 전침술",
+      name: "경항부·협착·사지관절·DPN·족저·위장(족삼리-상거허) 2Hz / 100Hz 전침술",
       level: 4,
       count: 35,
-      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02", "NP-L4-02", "KN-L4-02", "AN-L4-02", "EL-L4-02", "HN-L4-02", "FTL-L4-02"],
-      notes: "DPN 족삼리-삼음교 / 족저 승산-곤륜·태계-조해 2/100Hz. 당뇨 LOPS 시 연축 확인하며 저출력, 심장박동기 절대 금기.",
+      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02", "NP-L4-02", "KN-L4-02", "AN-L4-02", "EL-L4-02", "HN-L4-02", "FTL-L4-02", "DY-L4-02"],
+      notes: "위마비·PDS엔 족삼리-상거허·내관-간사 2Hz. 심장을 가로지르는 복/흉부 전극 배치 및 심장박동기 절대 금기.",
       updated: "2026-11-19",
     },
     {
       id: "SK-003",
       category: "약침·봉침",
-      name: "척추·관절·상과·말초신경·족저근막 약침술 (신바로/홍화/자하거/봉약침)",
+      name: "척추·관절·신경·족부·배수혈(T3-T10) 약침술 (신바로/황련/자하거/봉약침)",
       level: 3,
       count: 14,
-      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03", "NP-L4-03", "KN-L4-03", "AN-L4-03", "EL-L4-03", "HN-L4-03", "FTL-L4-03"],
-      notes: "신경·아킬레스건 실질 내 직접 주사 절대 금지; 당뇨발 허혈/궤양 피부 금지; 스테로이드 주사 후 2주 심부 약침 유예.",
+      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03", "NP-L4-03", "KN-L4-03", "AN-L4-03", "EL-L4-03", "HN-L4-03", "FTL-L4-03", "DY-L4-03"],
+      notes: "흉추 협척 심부 늑간 진입(기흉) 및 신경·건 실질 내 직접 주사 절대 금지; 복강 내 장기 천공 주의.",
       updated: "2026-11-19",
     },
     {
       id: "SK-004",
       category: "추나·수기",
-      name: "Cox 감압 · 상경추·거골·거골하/Lisfranc 추나 · 신경활주 · Low-Dye 테이핑",
+      name: "Cox · 상경추·거골·족부 추나 · 흉추(T1-10)/횡격막/SCM MFR · 신경활주",
       level: 3,
       count: 28,
-      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04", "NP-L4-04", "KN-L4-04", "AN-L4-04", "EL-L4-04", "HN-L4-04", "FTL-L4-04"],
-      notes: "신경 슬라이더·족부 가동 추나 적용; 피로골절·건파열·척수증·뇌졸중·동맥 허혈 의심 시 추나·테이핑 절대 금기.",
+      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04", "NP-L4-04", "KN-L4-04", "AN-L4-04", "EL-L4-04", "HN-L4-04", "FTL-L4-04", "DY-L4-04"],
+      notes: "GERD·FD엔 흉추 신전 가동 & 횡격막·SCM 이완(식사 직후 복부 압박 금지). 급성 복증·대동맥류·골절 절대 금기.",
       updated: "2026-11-19",
     },
     {
       id: "SK-005",
       category: "이학적검사",
-      name: "HINTS+ · SLR · Wainner · Ottawa · Durkan/6축 · Windlass/Thompson/Mulder",
+      name: "HINTS+ · SLR · Ottawa · Durkan/6축 · Windlass/Thompson · 복진/Carnett/Murphy",
       level: 4,
       count: 19,
-      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04", "NP-L2-02", "NP-L2-06", "KN-L2-02", "AN-L2-01", "AN-L2-04", "EL-L2-01", "EL-L2-03", "HN-L2-01", "HN-L2-04", "HN-L2-06", "FTL-L2-01", "FTL-L2-02", "FTL-L2-04", "FTL-L2-05"],
-      notes: "Windlass(특이도 ~99%), Thompson(아킬레스 파열), Mulder(모턴), 10g 모노필라멘트 LOPS, Ottawa 중족부/종골 Squeeze.",
+      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04", "NP-L2-02", "NP-L2-06", "KN-L2-02", "AN-L2-01", "AN-L2-04", "EL-L2-01", "EL-L2-03", "HN-L2-01", "HN-L2-04", "HN-L2-06", "FTL-L2-01", "FTL-L2-02", "FTL-L2-04", "FTL-L2-05", "DY-L2-01", "DY-L2-02", "DY-L2-04", "DY-L2-05"],
+      notes: "복진(심하비경/진수음)·Carnett(복벽통)·Murphy(담낭염)·NSAIDs+SSRI/항응고제 약물 3축 및 40세↑ 내시경 기준 점검.",
       updated: "2026-11-19",
     },
     {
       id: "SK-006",
       category: "한약처방",
-      name: "변증 한약 (청상견통탕·독활기생탕·황기계지오물탕·서경탕·사묘산)",
+      name: "변증 한약 (독활기생탕·황기계지오물탕·평위산·반하사심탕·오패산·육군자탕)",
       level: 4,
       count: 54,
-      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06", "NP-L4-05", "KN-L4-06", "AN-L4-05", "EL-L4-06", "HN-L4-05", "FTL-L4-05"],
-      notes: "족저/건병증엔 독활기생탕·서경탕, 한랭 저림엔 당귀사역탕, 급성 통풍 습열엔 사묘산. 양방 요산저하제·신경병증약·항응고제 점검.",
+      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06", "NP-L4-05", "KN-L4-06", "AN-L4-05", "EL-L4-06", "HN-L4-05", "FTL-L4-05", "DY-L4-05"],
+      notes: "식상엔 보화환·평위산(후박), 속쓰림/GERD엔 반하사심탕·오패산, 기허 PDS엔 육군자탕. 항응고제·PPI·NSAIDs 상호작용 확인.",
       updated: "2026-11-19",
     },
     {
       id: "SK-007",
       category: "추나·수기",
-      name: "WalkBack · Big 3 · CCFT · VMO/SEBT · Rathleff·Alfredson·Short-Foot 재활",
+      name: "WalkBack · Big 3 · CCFT · VMO/SEBT · Rathleff·Alfredson · 횡격막 복식호흡",
       level: 4,
       count: 15,
-      linkedNodes: ["HA-L4-06", "LBP-L4-07", "NP-L4-06", "KN-L4-07", "AN-L4-06", "HN-L4-06", "FTL-L4-06"],
-      notes: "Rathleff(수건 밑 뒤꿈치 들기) 및 Alfredson 편심성 운동(부착부 건병증은 계단 과배굴 금기), 피로골절 시 로딩 절대 금기.",
+      linkedNodes: ["HA-L4-06", "LBP-L4-07", "NP-L4-06", "KN-L4-07", "AN-L4-06", "HN-L4-06", "FTL-L4-06", "DY-L4-06"],
+      notes: "GERD·FD엔 횡격막 복식호흡(LES 외인성 보강) + 식후 15분 산책 + 좌측와위 수면 자세.",
       updated: "2026-11-19",
     },
     {
@@ -366,6 +366,27 @@
       path: ["FTL-L0-05", "FTL-L1-01", "FTL-L1-05", "FTL-L2-04", "FTL-L3-04", "FTL-L4-01", "FTL-L4-02", "FTL-L4-04", "FTL-L4-05", "FTL-L4-08"],
       orderMemo: "[침·전침] 태계-조해 2Hz(LOPS 시 뜸·과전류 금지) + [추나] 경골신경 슬라이더 + 아치 지지 + [한약] 당귀사역탕/방기황기탕",
     },
+    {
+      id: "RT-29",
+      symptom: "DY",
+      name: "식후고통(PDS)·급체 루틴 (중완·족삼리·내관 + T6-10 + 평위산/육군자탕)",
+      path: ["DY-L0-02", "DY-L1-01", "DY-L1-02", "DY-L2-01", "DY-L3-01", "DY-L4-01", "DY-L4-02", "DY-L4-05", "DY-L4-06", "DY-L4-07"],
+      orderMemo: "[침·전침] 중완·족삼리-상거허·내관 2Hz + T6-10 협척 + [한약] 평위산(트림)·보화환(급체)·육군자탕(기허) + [티칭] 소량 꼭꼭 씹기·식후 산책",
+    },
+    {
+      id: "RT-30",
+      symptom: "DY",
+      name: "역류성 식도질환(GERD)·매핵기 루틴 (T3-7 약침 + 흉추/횡격막 추나 + 오패산·반하후박탕)",
+      path: ["DY-L0-04", "DY-L1-01", "DY-L1-04", "DY-L2-03", "DY-L3-03", "DY-L4-01", "DY-L4-03", "DY-L4-04", "DY-L4-05", "DY-L4-06", "DY-L4-07"],
+      orderMemo: "[약침·추나] T3-T7 협척(기흉주의) & 흉추신전·횡격막·SCM 이완 + [한약] 오패산·반하후박탕 + [티칭] 식후 3h 직립·상체 15cm 거상·좌측와위",
+    },
+    {
+      id: "RT-31",
+      symptom: "DY",
+      name: "속쓰림·EPS·약인성 위염 루틴 (약물3축/내시경 → 반하사심탕 + PPI 테이퍼링 티칭)",
+      path: ["DY-L0-03", "DY-L1-01", "DY-L1-03", "DY-L2-02", "DY-L2-05", "DY-L3-02", "DY-L4-01", "DY-L4-05", "DY-L4-08", "DY-L4-09"],
+      orderMemo: "[검사] Carnett 복벽배제 & NSAIDs+SSRI/항응고 점검 + [한약] 반하사심탕·오패산 + [티칭] 40세↑ 내시경·고위험 PPI 유지 vs 단순 반동 테이퍼링",
+    },
   ];
 
   // 상태 변수
@@ -418,6 +439,24 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
+  }
+
+  function linkifyCitationsHtml(str) {
+    const escaped = escapeHtml(str);
+    // PMID: 30587518 또는 PMID: 30587518, 24065011 형태를 모두 클릭 가능한 PubMed 링크 배지로 변환
+    return escaped.replace(/PMID\s*:?\s*(\d{5,9}(?:\s*[,/]\s*\d{5,9})*)/gi, (_full, group) => {
+      const nums = String(group)
+        .split(/[,/]/)
+        .map((x) => x.trim())
+        .filter((x) => /^\d{5,9}$/.test(x));
+      if (nums.length === 0) return _full;
+      return nums
+        .map(
+          (num) =>
+            `<a href="https://pubmed.ncbi.nlm.nih.gov/${num}/" target="_blank" rel="noopener noreferrer" class="pmid-link" onclick="event.stopPropagation()" title="PubMed 논문 원문 열기 (PMID: ${num})">🔗 PMID: ${num} ↗</a>`
+        )
+        .join(" ");
+    });
   }
 
   let toastTimer = null;
@@ -1486,31 +1525,102 @@
       comboBtn.textContent = `📋 선택 치료 콤보(${treatCount}종) 전체 복사`;
     }
 
+    const layerShortTitle = {
+      L0: "L0 호소",
+      L1: "L1 문진",
+      L2: "L2 검사",
+      L3: "L3 진단",
+      L4: "L4 처치",
+      L5: "L5 경과",
+    };
+
+    const visitedLayers = new Set();
+
     currentPath.forEach((nid, idx) => {
       const node = nodesMap[nid];
       if (!node) return;
+      const layer = getLayerFromNodeId(nid);
+      visitedLayers.add(layer);
+
       if (idx > 0) {
         const prevId = currentPath[idx - 1];
         const dec = pathDecisions[prevId];
-        const arrow = document.createElement("span");
-        arrow.className = "path-arrow";
-        arrow.textContent = dec ? `(${dec})→` : "→";
-        pathwayChips.appendChild(arrow);
+        const conn = document.createElement("span");
+        const isPos = dec ? isPositiveBranchLabel(dec) : false;
+        conn.className = `stepper-connector ${dec ? (isPos ? "conn-yes" : "conn-no") : ""}`;
+        let shortDec = dec || "";
+        if (shortDec.includes("안전 확인")) shortDec = "안전확인";
+        else if (shortDec.length > 8) shortDec = shortDec.slice(0, 8) + "…";
+        conn.innerHTML = shortDec
+          ? `<span class="conn-dec-pill">${escapeHtml(shortDec)}</span><span class="conn-chevron">›</span>`
+          : `<span class="conn-chevron">›</span>`;
+        pathwayChips.appendChild(conn);
       }
-      const chip = document.createElement("button");
-      chip.type = "button";
+
+      const stepBtn = document.createElement("button");
+      stepBtn.type = "button";
       const isRF = node["레드플래그"] === true;
-      chip.className = `path-chip ${nid === activeNodeId ? "active" : ""} ${isRF ? "redflag" : ""}`;
-      chip.textContent = `${node.id} ${node["제목"]}`;
-      chip.addEventListener("click", () => {
+      const isActive = nid === activeNodeId;
+      const ntype = node["유형"] || "ask";
+      const cleanTitle = String(node["제목"] || "").replace(/^\[호소\]\s*/, "");
+
+      stepBtn.className = [
+        "stepper-node-card",
+        `step-layer-${layer.toLowerCase()}`,
+        `step-type-${ntype}`,
+        isActive ? "active" : "",
+        isRF ? "redflag" : "",
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+      stepBtn.innerHTML = `
+        <span class="step-layer-tag">${escapeHtml(layerShortTitle[layer] || layer)}</span>
+        <span class="step-main-text">
+          <span class="step-node-title">${escapeHtml(cleanTitle)}</span>
+          <span class="step-node-id">${escapeHtml(node.id)}</span>
+        </span>
+      `;
+      stepBtn.addEventListener("click", () => {
         activeNodeId = nid;
-        // L4 다중 치료 콤보일 때는 칩 클릭만으로 선택 카드 포커스만 이동하고, L0~L3 클릭 시에는 그 지점으로 되돌림
         if (getLayerFromNodeId(nid) !== "L4") {
           currentPath = currentPath.slice(0, idx + 1);
         }
         renderClinicBoardMode();
       });
-      pathwayChips.appendChild(chip);
+      pathwayChips.appendChild(stepBtn);
+    });
+
+    // 아직 도달하지 않은 향후 임상 단계(L1~L4)를 은은한 가이드 스테퍼로 우측에 표시
+    const futureOrder = [
+      { key: "L1", label: "L1 문진" },
+      { key: "L2", label: "L2 검사" },
+      { key: "L3", label: "L3 감별진단" },
+      { key: "L4", label: "L4 치료·티칭" },
+    ];
+    const maxReachedNum = Array.from(visitedLayers).reduce((acc, ly) => {
+      const n = Number(String(ly).replace("L", ""));
+      return Number.isNaN(n) ? acc : Math.max(acc, n);
+    }, 0);
+
+    futureOrder.forEach(({ key, label }) => {
+      const lyNum = Number(key.replace("L", ""));
+      if (lyNum > maxReachedNum) {
+        const arrow = document.createElement("span");
+        arrow.className = "stepper-connector conn-ghost";
+        arrow.innerHTML = `<span class="conn-chevron">›</span>`;
+        pathwayChips.appendChild(arrow);
+
+        const ghost = document.createElement("button");
+        ghost.type = "button";
+        ghost.className = "stepper-ghost-pill";
+        ghost.textContent = label;
+        ghost.title = `${label} 열로 보드 스크롤`;
+        ghost.addEventListener("click", () => {
+          scrollBoardToLayer(key);
+        });
+        pathwayChips.appendChild(ghost);
+      }
     });
   }
 
@@ -1940,7 +2050,7 @@
           isRedflag
             ? `<div class="redflag-alert-box">
                 🚨 [레드플래그 — 즉시 전원] 양성 소견 시 원내 모든 시술을 보류하고 즉시 응급실/상급병원으로 전원하십시오.<br>
-                • 전원 기준: ${escapeHtml(node["전원기준"] || "양성 시 지체 없이 응급 전원")}
+                • 전원 기준: ${linkifyCitationsHtml(node["전원기준"] || "양성 시 지체 없이 응급 전원")}
                </div>`
             : ""
         }
@@ -1961,7 +2071,7 @@
       html += `
         <div class="hero-question-box">
           <div class="hero-question-text">${isL0Node ? "🗣️ 환자 호소:" : "Q."} “${escapeHtml(node["질문"] || node["제목"])}”</div>
-          <div class="hero-why-text"><strong>${isL0Node ? "🎯 임상 의미·타겟:" : "💡 왜 묻는가:"}</strong> ${escapeHtml(
+          <div class="hero-why-text"><strong>${isL0Node ? "🎯 임상 의미·타겟:" : "💡 왜 묻는가:"}</strong> ${linkifyCitationsHtml(
             node["왜"] || "임상 분기 판정"
           )}</div>
         </div>
@@ -1998,7 +2108,7 @@
           <div class="hero-question-text" style="color:#4c1d95;">🔬 ${escapeHtml(
             node["검사명"] || node["제목"]
           )}</div>
-          <div class="hero-why-text"><strong>🎯 배제 대상:</strong> ${escapeHtml(
+          <div class="hero-why-text"><strong>🎯 배제 대상:</strong> ${linkifyCitationsHtml(
             node["배제대상"] || "-"
           )}</div>
           ${
@@ -2020,7 +2130,7 @@
           </div>
           ${
             node["위험감별"]
-              ? `<div class="hero-why-text" style="color:#dc2626; font-weight:700;">🚨 위험 감별: ${escapeHtml(
+              ? `<div class="hero-why-text" style="color:#dc2626; font-weight:700;">🚨 위험 감별: ${linkifyCitationsHtml(
                   node["위험감별"]
                 )}</div>`
               : ""
@@ -2125,7 +2235,7 @@
         html += `
           <div class="detail-kv-item">
             <span class="detail-kv-label">${escapeHtml(k)}:</span>
-            <span>${escapeHtml(v)}</span>
+            <span>${linkifyCitationsHtml(v)}</span>
           </div>
         `;
       });
@@ -3154,67 +3264,333 @@
     return lines.join("\n");
   }
 
-  /* ==================== 차트(SOAP) 요약 생성 & L0 최우선 통합 검색 ==================== */
-  function generateSoapChartSummary() {
-    if (!mergedTreeData || !mergedTreeData["증상"][activeSymptomCode]) return "";
+  /* ==================== 한방병원·한의원 표준 EMR 자동 의무기록 생성기 ==================== */
+  let currentEmrFormat = "hospital";
+
+  function collectConsultContextForEmr() {
+    if (!mergedTreeData || !mergedTreeData["증상"][activeSymptomCode]) return null;
     const sym = mergedTreeData["증상"][activeSymptomCode];
     const nodesMap = sym.nodes || {};
-    const sLines = [];
-    const oLines = [];
-    const aLines = [];
-    const pLines = [];
 
-    currentPath.forEach((nid) => {
-      const n = nodesMap[nid];
-      if (!n) return;
-      const layer = getLayerFromNodeId(nid);
-      const t = n["유형"] || "ask";
-      const dec = pathDecisions[nid] ? ` → [${pathDecisions[nid]}]` : "";
+    const visitTypeEl = document.getElementById("qc-visit-type");
+    const nrsBeforeEl = document.getElementById("qc-nrs-before");
+    const nrsAfterEl = document.getElementById("qc-nrs-after");
+    const memoEl = document.getElementById("qc-memo");
 
-      if (layer === "L0") {
-        sLines.push(`• [주호소 (${nid})] ${String(n["제목"] || "").replace(/^\[호소\]\s*/, "")}`);
-        if (n["질문"]) sLines.push(`  - 환자 표현: “${n["질문"]}”`);
-      } else if (t === "ask") {
-        sLines.push(`• [문진 (${nid})] ${n["제목"]}${dec}`);
-        if (n["질문"]) sLines.push(`  - 확인: ${n["질문"]}`);
-      } else if (t === "test") {
-        oLines.push(`• [검사 (${nid})] ${n["검사명"] || n["제목"]}${dec}`);
-        if (n["배제대상"]) oLines.push(`  - 배제/목적: ${n["배제대상"]}`);
-      } else if (t === "dx") {
-        const cands = Array.isArray(n["후보"]) ? n["후보"].join(", ") : n["제목"];
-        aLines.push(`• [감별 (${nid})] ${n["제목"]} (${cands})`);
-        if (n["올리는소견"]) aLines.push(`  - 부합 소견: ${n["올리는소견"]}`);
-      } else if (t === "treat") {
-        pLines.push(`• [치료 (${nid})] ${n["제목"]}`);
-        if (n["술기세트"]) pLines.push(`  - 술기: ${n["술기세트"]}`);
-        if (n["자침점용량"]) pLines.push(`  - 자침점·용량: ${n["자침점용량"]}`);
-        if (n["빈도"] || n["기간"]) pLines.push(`  - 빈도·기간: ${n["빈도"] || "-"} / ${n["기간"] || "-"}`);
-      } else if (t === "teach") {
-        pLines.push(`• [티칭 (${nid})] ${n["제목"]}`);
-        if (n["환자설명"]) pLines.push(`  - 설명: ${n["환자설명"]}`);
-        if (n["생활지도"]) pLines.push(`  - 생활지도: ${n["생활지도"]}`);
-      } else if (t === "outcome") {
-        pLines.push(`• [경과/전원 (${nid})] ${n["제목"]} (${n["측정지표"] || "-"})`);
+    const visitType = visitTypeEl ? visitTypeEl.value : "초진";
+    const nrsBefore = nrsBeforeEl ? Number(nrsBeforeEl.value) : 7;
+    const nrsAfter = nrsAfterEl ? Number(nrsAfterEl.value) : 3;
+    const memo = memoEl ? memoEl.value.trim() : "";
+
+    const pathNodes = currentPath.map((nid) => nodesMap[nid]).filter(Boolean);
+    const l0Nodes = pathNodes.filter((n) => getLayerFromNodeId(n.id) === "L0");
+    const l1Nodes = pathNodes.filter((n) => getLayerFromNodeId(n.id) !== "L0" && n["유형"] === "ask");
+    const l2Nodes = pathNodes.filter((n) => n["유형"] === "test");
+    const l3Nodes = pathNodes.filter((n) => n["유형"] === "dx");
+    const l4TreatNodes = pathNodes.filter((n) => n["유형"] === "treat");
+    const l4TeachNodes = pathNodes.filter((n) => n["유형"] === "teach");
+    const l5Nodes = pathNodes.filter((n) => n["유형"] === "outcome");
+
+    // 아직 L3나 L4까지 클릭하지 않은 상태에서 차트 생성을 눌렀을 때도 연결된 추천 감별·치료 카드를 자동 보완
+    let inferredDx = l3Nodes.slice();
+    let inferredTreats = l4TreatNodes.slice();
+    let inferredTeaches = l4TeachNodes.slice();
+
+    if (inferredDx.length === 0 || inferredTreats.length === 0) {
+      const visitedIds = new Set(currentPath);
+      const queue = [activeNodeId];
+      while (queue.length > 0 && (inferredDx.length === 0 || inferredTreats.length < 2)) {
+        const curId = queue.shift();
+        const curNode = nodesMap[curId];
+        if (!curNode) continue;
+        const brs = getEffectiveBranches(curNode, nodesMap);
+        brs.forEach(({ label, targetId }) => {
+          if (visitedIds.has(targetId)) return;
+          // 레드플래그 응급 전원 분기는 자동 추론에서 제외
+          if (curNode["레드플래그"] === true && isPositiveBranchLabel(label)) return;
+          visitedIds.add(targetId);
+          const tn = nodesMap[targetId];
+          if (!tn) return;
+          if (tn["유형"] === "dx" && inferredDx.length === 0) inferredDx.push(tn);
+          else if (tn["유형"] === "treat" && inferredTreats.length < 3) inferredTreats.push(tn);
+          else if (tn["유형"] === "teach" && inferredTeaches.length < 1) inferredTeaches.push(tn);
+          queue.push(targetId);
+        });
       }
+    }
+
+    const primaryDxNode = inferredDx[0] || null;
+    const primaryDxTitle = primaryDxNode
+      ? String(primaryDxNode["제목"] || "").replace(/\s*감별$/, "")
+      : `${sym.name} 상세불명`;
+
+    return {
+      sym,
+      nodesMap,
+      visitType,
+      nrsBefore,
+      nrsAfter,
+      memo,
+      l0Nodes,
+      l1Nodes,
+      l2Nodes,
+      l3Nodes: inferredDx,
+      l4TreatNodes: inferredTreats,
+      l4TeachNodes: inferredTeaches,
+      l5Nodes,
+      primaryDxTitle,
+      isAutoInferredTreat: l4TreatNodes.length === 0 && inferredTreats.length > 0,
+    };
+  }
+
+  function generateStandardEmrChart(formatType = "hospital") {
+    const ctx = collectConsultContextForEmr();
+    if (!ctx) return "";
+    const today = new Date().toISOString().slice(0, 10);
+    const {
+      sym,
+      visitType,
+      nrsBefore,
+      nrsAfter,
+      memo,
+      l0Nodes,
+      l1Nodes,
+      l2Nodes,
+      l3Nodes,
+      l4TreatNodes,
+      l4TeachNodes,
+      l5Nodes,
+      primaryDxTitle,
+      isAutoInferredTreat,
+    } = ctx;
+
+    const ccNode = l0Nodes[0] || null;
+    const ccTitle = ccNode ? String(ccNode["제목"] || "").replace(/^\[호소\]\s*/, "") : sym.name;
+    const ccQuote = ccNode && ccNode["질문"] ? `“${ccNode["질문"]}”` : ccTitle;
+
+    // 1) 한방병원 표준 외래 의무기록지 (Full Hospital EMR)
+    if (formatType === "hospital") {
+      const lines = [
+        "================================================================",
+        `[한방병원·한의원 표준 외래 의무기록지 (${visitType})]`,
+        `작성일자: ${today} | 진료분야: 한방내과·침구의학과 | 프로토콜: ${sym.name}(${activeSymptomCode})`,
+        `임상경로: ${currentPath.join(" → ")}`,
+        "================================================================",
+        "",
+        "■ 1. C.C (Chief Complaint · 주소증)",
+        `  • 주호소: ${ccTitle} ${ccNode ? `[${ccNode.id}]` : ""}`,
+        `  • 환자 진술: ${ccQuote}`,
+        `  • 통증/증상 강도(NRS): 내원 시 NRS ${nrsBefore} / 10 → 시술 후(목표) NRS ${nrsAfter} / 10`,
+        "",
+        "■ 2. P.I & R.O.S (Present Illness & Red Flag Screening · 현병력 및 문진)",
+      ];
+
+      if (l1Nodes.length === 0) {
+        lines.push(`  • [초기 호소 평가] ${ccNode && ccNode["왜"] ? ccNode["왜"] : "주호소 양상 확인"}`);
+      } else {
+        l1Nodes.forEach((n) => {
+          const dec = pathDecisions[n.id] || "확인";
+          const tag = n["레드플래그"] ? "[Red Flag 배제]" : "[감별 문진]";
+          lines.push(`  • ${tag} ${n["제목"]} [${n.id}] → 판정: ${dec}`);
+          if (n["질문"]) lines.push(`    - 문진 내용: ${n["질문"]}`);
+        });
+      }
+      if (memo) {
+        lines.push(`  • [임상·변증 특이소견] ${memo}`);
+      }
+
+      lines.push("", "■ 3. P.E (Physical Examination · 이학적 검사 및 진찰 소견)");
+      if (l2Nodes.length === 0) {
+        lines.push("  • 이학적 검사: 국소 압통·관절가동범위(ROM) 및 신경학적 기본 진찰 시행");
+      } else {
+        l2Nodes.forEach((n) => {
+          const dec = pathDecisions[n.id] || "시행";
+          const acc = n["민감도"] ? ` (민감도 ${n["민감도"]} / 특이도 ${n["특이도"] || "-"} / LR+ ${n["LR+"] || "-"})` : "";
+          lines.push(`  • [${n.id}] ${n["검사명"] || n["제목"]} → 결과: ${dec}${acc}`);
+          if (n["배제대상"]) lines.push(`    - 임상 의의: ${n["배제대상"]}`);
+        });
+      }
+
+      lines.push("", "■ 4. Assessment (임상 추정 진단 · 감별진단 · 변증)");
+      lines.push(`  • 주진단(추정): ${primaryDxTitle}`);
+      l3Nodes.forEach((n) => {
+        const cands = Array.isArray(n["후보"]) ? n["후보"].join(", ") : n["제목"];
+        lines.push(`  • 감별 후보군 [${n.id}]: ${cands}`);
+        if (n["올리는소견"]) lines.push(`    - 부합 소견(+): ${n["올리는소견"]}`);
+        if (n["위험감별"]) lines.push(`    - 배제 필수 위험감별(!): ${n["위험감별"]}`);
+      });
+      if (memo) {
+        lines.push(`  • 한의 변증/진찰 메모: ${memo}`);
+      }
+
+      lines.push(
+        "",
+        `■ 5. Plan & Order (한방 처치·시술 오더 및 환자 지도)${isAutoInferredTreat ? " [경로 기반 추천 오더]" : ""}`
+      );
+      if (l4TreatNodes.length === 0) {
+        lines.push("  • [처치 오더] 경혈 침구치료 및 변증 약물·이학요법 시행");
+      } else {
+        l4TreatNodes.forEach((n, idx) => {
+          const mod = n["술기구분"] ? `[${n["술기구분"]}] ` : "";
+          lines.push(`  ${idx + 1}. ${mod}${n["제목"]} [${n.id}]`);
+          if (n["술기세트"]) lines.push(`     - 술기 프로토콜: ${n["술기세트"]}`);
+          if (n["자침점용량"]) lines.push(`     - 자침점·용량·규격: ${n["자침점용량"]}`);
+          if (n["빈도"] || n["기간"]) lines.push(`     - 시술 빈도·기간: ${n["빈도"] || "-"} / ${n["기간"] || "-"}`);
+          if (n["금기"]) lines.push(`     - 금기 및 주의: ${n["금기"]}`);
+        });
+      }
+
+      if (l4TeachNodes.length > 0) {
+        lines.push("", "■ 6. Patient Education & Follow-up (환자 교육 · 재평가 · 전원 기준)");
+        l4TeachNodes.forEach((n) => {
+          lines.push(`  • [환자 티칭 (${n.id})] ${n["제목"]}`);
+          if (n["환자설명"]) lines.push(`    - 환자 설명: ${n["환자설명"]}`);
+          if (n["생활지도"]) lines.push(`    - 생활 수칙: ${n["생활지도"]}`);
+        });
+      }
+
+      const refCriteria =
+        (l4TreatNodes[0] && l4TreatNodes[0]["전원기준"]) ||
+        (l1Nodes[0] && l1Nodes[0]["전원기준"]) ||
+        "신경학적 결손 진행 또는 보존적 치료 무반응 시 상급병원 전원";
+      const reEval =
+        (l4TreatNodes[0] && l4TreatNodes[0]["재평가시점"]) ||
+        (l5Nodes[0] && l5Nodes[0]["측정지점"]) ||
+        "시술 직후 및 1~2주 후 NRS·기능지표 재평가";
+      lines.push(`  • [재평가 계획] ${reEval}`);
+      lines.push(`  • [전원 기준] ${refCriteria}`);
+      lines.push("================================================================");
+      return lines.join("\n");
+    }
+
+    // 2) 로컬 한의원 차트 (한의맥 · OK차트 붙여넣기용 간결한 SOAP 서식)
+    if (formatType === "clinic") {
+      const sBullets = [
+        `[${visitType}] C/C: ${ccTitle} (${ccQuote})`,
+        `• 통증 척도: NRS ${nrsBefore} → ${nrsAfter}`,
+      ];
+      l1Nodes.forEach((n) => {
+        const dec = pathDecisions[n.id] || "확인";
+        sBullets.push(`• ${n["레드플래그"] ? "[RF배제]" : "[문진]"} ${n["제목"]}: ${dec}`);
+      });
+      if (memo) sBullets.push(`• 변증/특이사항: ${memo}`);
+
+      const oBullets =
+        l2Nodes.length > 0
+          ? l2Nodes.map((n) => `• ${n["검사명"] || n["제목"]}: ${pathDecisions[n.id] || "양성/확인"} (${n["배제대상"] || "-"})`)
+          : ["• 국소 압통 및 가동범위(ROM) 평가 시행"];
+
+      const aBullets = [`• 추정 진단: ${primaryDxTitle}`];
+      l3Nodes.forEach((n) => {
+        const cands = Array.isArray(n["후보"]) ? n["후보"].join(", ") : n["제목"];
+        aBullets.push(`• 감별: ${cands}`);
+      });
+
+      const pBullets = [];
+      l4TreatNodes.forEach((n) => {
+        const mod = n["술기구분"] ? `[${n["술기구분"]}]` : "[처치]";
+        pBullets.push(`• ${mod} ${n["제목"]}: ${n["자침점용량"] || n["술기세트"] || "-"} (${n["빈도"] || "주 2~3회"})`);
+      });
+      l4TeachNodes.forEach((n) => {
+        pBullets.push(`• [생활지도] ${n["생활지도"] || n["환자설명"] || n["제목"]}`);
+      });
+
+      return [
+        `[S]`,
+        sBullets.join("\n"),
+        "",
+        `[O]`,
+        oBullets.join("\n"),
+        "",
+        `[A]`,
+        aBullets.join("\n"),
+        "",
+        `[P]`,
+        pBullets.length > 0 ? pBullets.join("\n") : "• 침구치료 및 경과 관찰",
+      ].join("\n");
+    }
+
+    // 3) 처치·시술 오더 및 환자 안내문 요약 (Order Sheet)
+    const orderLines = [
+      `# [${sym.name} (${activeSymptomCode}) 처치 오더 & 환자 티칭 시트] · ${today}`,
+      `• 추정 진단: ${primaryDxTitle} | NRS ${nrsBefore} → ${nrsAfter}`,
+      "",
+      "## 1. 시술 · 처방 오더",
+    ];
+    if (l4TreatNodes.length === 0) {
+      orderLines.push("- 선택된 L4 치료 카드가 없습니다.");
+    } else {
+      l4TreatNodes.forEach((n, idx) => {
+        orderLines.push(`${idx + 1}) [${n["술기구분"] || "치료"} · ${n.id}] ${n["제목"]}`);
+        orderLines.push(`   - 술기 세트: ${n["술기세트"] || "-"}`);
+        orderLines.push(`   - 자침점·용량: ${n["자침점용량"] || "-"}`);
+        orderLines.push(`   - 빈도·기간: ${n["빈도"] || "-"} / ${n["기간"] || "-"}`);
+        orderLines.push(`   - 주의/금기: ${n["금기"] || "-"}`);
+      });
+    }
+    orderLines.push("", "## 2. 환자 설명 및 생활 수칙");
+    if (l4TeachNodes.length === 0) {
+      const fallbackExplain = (l4TreatNodes[0] && l4TreatNodes[0]["환자설명"]) || "꾸준한 침구·한약 치료와 바른 생활 습관이 중요합니다.";
+      orderLines.push(`- ${fallbackExplain}`);
+    } else {
+      l4TeachNodes.forEach((n) => {
+        orderLines.push(`- [${n.id} ${n["제목"]}] ${n["환자설명"] || ""}`);
+        if (n["생활지도"]) orderLines.push(`  • 생활 수칙: ${n["생활지도"]}`);
+      });
+    }
+    return orderLines.join("\n");
+  }
+
+  function openEmrChartModal(defaultFmt = "hospital") {
+    const memoEl = document.getElementById("qc-memo");
+    const memo = memoEl ? memoEl.value.trim() : "";
+    if (PHONE_REGEX.test(memo) || RRN_REGEX.test(memo)) {
+      showToast("⛔ 전화번호·주민번호 등 환자 식별정보는 입력할 수 없습니다.");
+      return;
+    }
+
+    currentEmrFormat = defaultFmt;
+    const modal = document.getElementById("emr-chart-modal");
+    const textarea = document.getElementById("emr-chart-textarea");
+    if (!modal || !textarea) return;
+
+    document.querySelectorAll(".emr-fmt-tab").forEach((btn) => {
+      btn.classList.toggle("active", btn.getAttribute("data-emr-fmt") === currentEmrFormat);
     });
 
-    const today = new Date().toISOString().slice(0, 10);
-    return [
-      `# [차트나무 임상 진료 요약 (SOAP)] ${sym.name}(${activeSymptomCode}) · ${today}`,
-      `- 진행 경로: ${currentPath.join(" → ")}`,
-      "",
-      `[S · 주관적 호소 및 문진]`,
-      sLines.length > 0 ? sLines.join("\n") : "• (선택된 문진 없음)",
-      "",
-      `[O · 이학적 검사 소견]`,
-      oLines.length > 0 ? oLines.join("\n") : "• (선택된 검사 없음)",
-      "",
-      `[A · 감별 진단 평가]`,
-      aLines.length > 0 ? aLines.join("\n") : "• (선택된 감별 카드 없음)",
-      "",
-      `[P · 치료 오더 및 환자 교육]`,
-      pLines.length > 0 ? pLines.join("\n") : "• (선택된 치료/티칭 카드 없음)",
-    ].join("\n");
+    const chartText = generateStandardEmrChart(currentEmrFormat);
+    textarea.value = chartText;
+    modal.hidden = false;
+    copyToClipboard(chartText, "한방병원·한의원 표준 EMR 의무기록");
+  }
+
+  async function saveCurrentConsultToCaseLog() {
+    const ctx = collectConsultContextForEmr();
+    if (!ctx) return;
+    const { nrsBefore, nrsAfter, memo, primaryDxTitle } = ctx;
+    if (PHONE_REGEX.test(memo) || RRN_REGEX.test(memo)) {
+      showToast("⛔ 전화번호·주민번호 등 환자 식별정보는 저장할 수 없습니다.");
+      return;
+    }
+
+    const caseId = `C-${String(casesList.length + 1).padStart(4, "0")}`;
+    const caseObj = {
+      caseId,
+      date: new Date().toISOString().slice(0, 10),
+      symptom: activeSymptomCode,
+      path: currentPath.slice(),
+      nrsBefore,
+      nrsAfter,
+      timepoint: "1주",
+      finalDx: primaryDxTitle,
+      memo,
+    };
+
+    casesList.push(caseObj);
+    await dbPut("cases", caseObj);
+    updateBadges();
+    renderClinicBoardMode();
+    showToast(`📈 ${caseId} (${primaryDxTitle}, NRS ${nrsBefore}→${nrsAfter}) 케이스가 진화 통계에 기록되었습니다.`);
   }
 
   function searchNodesWithL0Priority(rawQuery) {
@@ -3464,12 +3840,11 @@
       });
     });
 
-    // SOAP 차트 요약 복사 버튼
+    // 표준 EMR 차트 모달 열기 버튼 (상단 컨트롤 바)
     const soapBtn = document.getElementById("btn-copy-soap-summary");
     if (soapBtn) {
       soapBtn.addEventListener("click", () => {
-        const summary = generateSoapChartSummary();
-        if (summary) copyToClipboard(summary, "현재 진료 경로 SOAP 차트 요약");
+        openEmrChartModal("hospital");
       });
     }
 
@@ -3557,50 +3932,51 @@
       }
     });
 
-    // 3초 케이스 기록 & AI 점검
+    // 표준 EMR 의무기록 자동 작성 & 모달 이벤트
     document.getElementById("btn-clinic-ai-prompt").addEventListener("click", () => {
       copyToClipboard(generateAiPathConsultBrief(), "현재 카드 콤보 AI 3줄 점검 프롬프트");
     });
 
-    document.getElementById("btn-qc-save").addEventListener("click", async () => {
-      const nrsBefore = Number(document.getElementById("qc-nrs-before").value);
-      const nrsAfter = Number(document.getElementById("qc-nrs-after").value);
-      const memo = document.getElementById("qc-memo").value.trim();
-
-      if (PHONE_REGEX.test(memo) || RRN_REGEX.test(memo)) {
-        showToast("⛔ 전화번호·주민번호 등 식별정보는 입력할 수 없습니다.");
-        return;
-      }
-
-      const sym = mergedTreeData["증상"][activeSymptomCode];
-      const nodesMap = sym ? sym.nodes || {} : {};
-      const dxNodeId = currentPath.find((id) => nodesMap[id] && nodesMap[id]["유형"] === "dx");
-      const autoDx = dxNodeId
-        ? nodesMap[dxNodeId]["제목"].replace(" 감별", "")
-        : sym
-        ? sym.name
-        : activeSymptomCode;
-
-      const caseId = `C-${String(casesList.length + 1).padStart(4, "0")}`;
-      const caseObj = {
-        caseId,
-        date: new Date().toISOString().slice(0, 10),
-        symptom: activeSymptomCode,
-        path: currentPath.slice(),
-        nrsBefore,
-        nrsAfter,
-        timepoint: "1주",
-        finalDx: autoDx,
-        memo,
-      };
-
-      casesList.push(caseObj);
-      await dbPut("cases", caseObj);
-      updateBadges();
-      document.getElementById("qc-memo").value = "";
-      renderClinicBoardMode();
-      await copyToClipboard(formatCaseToMarkdown(caseObj), `${caseId} 케이스 기록 & md 복사`);
+    document.getElementById("btn-qc-save").addEventListener("click", () => {
+      openEmrChartModal("hospital");
     });
+
+    const emrModal = document.getElementById("emr-chart-modal");
+    const emrTextarea = document.getElementById("emr-chart-textarea");
+    const btnCloseEmr = document.getElementById("btn-close-emr-modal");
+    const btnEmrCopy = document.getElementById("btn-emr-copy");
+    const btnEmrSaveCase = document.getElementById("btn-emr-save-case");
+
+    if (btnCloseEmr && emrModal) {
+      btnCloseEmr.addEventListener("click", () => {
+        emrModal.hidden = true;
+      });
+    }
+    if (emrModal) {
+      emrModal.addEventListener("click", (ev) => {
+        if (ev.target === emrModal) emrModal.hidden = true;
+      });
+    }
+    document.querySelectorAll(".emr-fmt-tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        currentEmrFormat = tab.getAttribute("data-emr-fmt") || "hospital";
+        document.querySelectorAll(".emr-fmt-tab").forEach((t) => t.classList.remove("active"));
+        tab.classList.add("active");
+        const txt = generateStandardEmrChart(currentEmrFormat);
+        if (emrTextarea) emrTextarea.value = txt;
+        copyToClipboard(txt, "선택한 EMR 차트 양식");
+      });
+    });
+    if (btnEmrCopy && emrTextarea) {
+      btnEmrCopy.addEventListener("click", () => {
+        copyToClipboard(emrTextarea.value, "편집된 EMR 의무기록");
+      });
+    }
+    if (btnEmrSaveCase) {
+      btnEmrSaveCase.addEventListener("click", async () => {
+        await saveCurrentConsultToCaseLog();
+      });
+    }
 
     // 환자 교육 모달 닫기
     document.getElementById("btn-close-teach-modal").addEventListener("click", () => {
@@ -4027,7 +4403,7 @@
       dbGetAll("routines"),
     ]);
 
-    const seedFlag = localStorage.getItem("clin7_seed_v14");
+    const seedFlag = localStorage.getItem("clin7_seed_v15");
     if (savedSkills.length === 0 || seedFlag !== "done") {
       const skillMap = new Map(savedSkills.map((s) => [s.id, s]));
       for (const sk of DEFAULT_SKILLS) {
@@ -4058,7 +4434,7 @@
         }
       }
       routinesList = Array.from(rtMap.values());
-      localStorage.setItem("clin7_seed_v14", "done");
+      localStorage.setItem("clin7_seed_v15", "done");
     } else {
       routinesList = savedRoutines;
     }
