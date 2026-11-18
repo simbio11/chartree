@@ -737,10 +737,30 @@
     renderComboTrailBar(nodesMap);
     renderHorizontalCardBoard(nodesMap);
     renderActiveCardDock(nodesMap[activeNodeId], nodesMap);
+    syncMobileLayerJump();
 
     // 레이아웃 렌더링 직후 SVG 가지 연결선 그리기
     requestAnimationFrame(() => {
       drawSvgBranchLines(nodesMap);
+    });
+  }
+
+  function syncMobileLayerJump() {
+    const jumpBar = document.getElementById("mobile-layer-jump");
+    if (!jumpBar) return;
+    const activeLayer = getLayerFromNodeId(activeNodeId);
+    jumpBar.querySelectorAll(".layer-jump-btn").forEach((btn) => {
+      btn.classList.toggle("active", btn.getAttribute("data-jump-layer") === activeLayer);
+    });
+  }
+
+  function scrollBoardToLayer(layerKey) {
+    const viewport = document.getElementById("board-scroll-viewport");
+    const colEl = treeColumnsEl ? treeColumnsEl.querySelector(`.layer-column[data-layer="${layerKey}"]`) : null;
+    if (!viewport || !colEl) return;
+    viewport.scrollTo({
+      left: Math.max(0, colEl.offsetLeft - 8),
+      behavior: "smooth",
     });
   }
 
@@ -813,6 +833,7 @@
 
       const colEl = document.createElement("div");
       colEl.className = "layer-column";
+      colEl.setAttribute("data-layer", key);
       colEl.innerHTML = `
         <div class="layer-header">
           <span class="layer-title">${escapeHtml(title)}</span>
@@ -989,6 +1010,9 @@
               currentPath = buildPathToNode(nodesMap, entryId, node.id);
             }
             renderClinicBoardMode();
+          }
+          if (window.innerWidth <= 768 && nodeDetailPanel) {
+            nodeDetailPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
           }
         });
 
@@ -2271,7 +2295,7 @@
       .join("\n");
 
     return [
-      `# [CLIN-7 진료 카드 콤보 AI 3줄 점검 요청]`,
+      `# [차트나무 진료 카드 콤보 AI 3줄 점검 요청]`,
       `- 증상: ${sym.name} (${activeSymptomCode})`,
       `- 선택한 카드 경로: ${currentPath.join(" → ")}`,
       "",
@@ -2288,7 +2312,7 @@
   function generateAiEvolutionBrief() {
     const stats = computeNodeEvolutionStats();
     const lines = [
-      `# [CLIN-7 프로토콜 진화 & 신규 카드 공동 설계 브리프]`,
+      `# [차트나무 프로토콜 진화 & 신규 카드 공동 설계 브리프]`,
       `- 대상 증상: ${activeSymptomCode}`,
       `- 누적 케이스: ${casesList.length}건`,
       "",
@@ -2821,6 +2845,71 @@
 
     document.getElementById("btn-gen-ai-evolution").addEventListener("click", () => {
       copyToClipboard(generateAiEvolutionBrief(), "프로토콜 진화·신규 카드 AI 프롬프트");
+    });
+
+    // 모바일 층별 빠른 이동 버튼
+    const layerJumpBar = document.getElementById("mobile-layer-jump");
+    if (layerJumpBar) {
+      layerJumpBar.querySelectorAll(".layer-jump-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const targetLayer = btn.getAttribute("data-jump-layer");
+          layerJumpBar.querySelectorAll(".layer-jump-btn").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          scrollBoardToLayer(targetLayer);
+        });
+      });
+    }
+
+    setupPwaInstall();
+  }
+
+  function setupPwaInstall() {
+    const installBtn = document.getElementById("btn-install-pwa");
+    if (!installBtn) return;
+
+    const isStandalone =
+      window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+    if (isStandalone) {
+      installBtn.hidden = true;
+      return;
+    }
+
+    let deferredPrompt = null;
+    const ua = navigator.userAgent || "";
+    const isMobileUa = /Android|iPhone|iPad|iPod/i.test(ua);
+    const isIos = /iPhone|iPad|iPod/i.test(ua);
+
+    if (isMobileUa) {
+      installBtn.hidden = false;
+    }
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.hidden = false;
+    });
+
+    installBtn.addEventListener("click", async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const result = await deferredPrompt.userChoice;
+        if (result && result.outcome === "accepted") {
+          installBtn.hidden = true;
+        }
+        deferredPrompt = null;
+        return;
+      }
+      if (isIos) {
+        showToast("📱 Safari 하단 [공유 □↑] → [홈 화면에 추가]로 차트나무를 설치하세요.");
+      } else {
+        showToast("📲 브라우저 메뉴(⋮) → [홈 화면에 추가 / 앱 설치]를 선택하세요.");
+      }
+    });
+
+    window.addEventListener("appinstalled", () => {
+      deferredPrompt = null;
+      installBtn.hidden = true;
+      showToast("✅ 차트나무 앱이 홈 화면에 설치되었습니다!");
     });
   }
 
