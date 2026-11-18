@@ -51,31 +51,31 @@
     {
       id: "SK-001",
       category: "침·전침",
-      name: "두경부·견항부 표준 경혈 자침 (풍지·백회·태양·합곡·태충)",
+      name: "두경부·편두통 표적 자침 (풍지·태양-솔곡 수평자침·득기 30분)",
       level: 4,
       count: 42,
-      linkedNodes: ["HA-L4-01", "DZ-L4-01"],
-      notes: "0.25×30mm 직자/사자 10~15mm, 15분 유침. 항응고제 복용자 지혈 확인.",
+      linkedNodes: ["HA-L4-01", "HA-L4-04", "DZ-L4-02"],
+      notes: "0.25×30mm 득기 유도 후 20~30분 유침. 풍지는 반대측 안구 방향으로 0.8~1.2촌 사자.",
       updated: "2026-11-18",
     },
     {
       id: "SK-002",
       category: "약침·봉침",
-      name: "상부 경추(풍지·천주·후두하근) 심부 약침술",
+      name: "상부 경추(풍지·천주·후두하근) 심부 약침술 (신바로/오공/자하거)",
       level: 2,
       count: 6,
-      linkedNodes: ["HA-L4-02"],
-      notes: "추골동맥 주행 주의. 30G×25mm 바늘로 후두골 하연 지표 확인 후 포인트당 0.1~0.2cc 주입.",
+      linkedNodes: ["HA-L4-02", "DZ-L4-05"],
+      notes: "추골동맥 주행 주의. 30G×25mm로 후두골 하연 확인 후 반드시 혈액 역류(Regurgitation) 체크 뒤 0.2~0.3cc 주입.",
       updated: "2026-11-18",
     },
     {
       id: "SK-003",
       category: "추나·수기",
-      name: "상부 경추 굴곡-회전 검사(CFRT) 및 경추 가동 추나",
+      name: "상부 경추 굴곡-회전 검사(CFRT) 및 C0-C1/C1-C2 가동 추나",
       level: 4,
       count: 28,
-      linkedNodes: ["HA-L2-01", "HA-L4-02"],
-      notes: "최대 굴곡 상태에서 C1-C2 회전 각도 비교(정상 44도 이상). 추골동맥 부전이나 불안정성 금기.",
+      linkedNodes: ["HA-L2-01", "HA-L4-03"],
+      notes: "턱을 쇄골에 닿게 최대 굴곡 후 C1-C2 회전 비교(<32° 양성). 추골동맥 보호를 위해 상경추 HVLA 회전 thrust 금기.",
       updated: "2026-11-18",
     },
     {
@@ -91,11 +91,21 @@
     {
       id: "SK-005",
       category: "이학적검사",
-      name: "두위충격검사(Head Impulse Test) 및 HINTS 안진 판독",
+      name: "HINTS+ (두부충동·안진·사위편향 + 청력) & Dix-Hallpike / Epley 정복술",
+      level: 4,
+      count: 19,
+      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01"],
+      notes: "HINTS+는 자발안진 있는 s-AVS에서만 사용. Epley는 각 단계 30~60초씩 충분히 정지해 이석을 굴려내려야 성공함.",
+      updated: "2026-11-18",
+    },
+    {
+      id: "SK-006",
+      category: "추나·수기",
+      name: "시선방향인지(GDR) & HRV 바이오피드백 비약물 재활 훈련",
       level: 3,
-      count: 14,
-      linkedNodes: ["DZ-L2-01"],
-      notes: "지속성 현훈에서 HIT 정상이거나 방향전환 안진·수직사시 출현 시 즉시 뇌졸중 전원.",
+      count: 9,
+      linkedNodes: ["HA-L4-06"],
+      notes: "약물과용(MOH)·만성 두통 환자에서 들숨4초-날숨6초(분당6회) 호흡 및 전방 75cm GDR 30시행 안내.",
       updated: "2026-11-18",
     },
   ];
@@ -104,30 +114,44 @@
     {
       id: "RT-01",
       symptom: "HA",
-      name: "경추성 두통 표준 침·부항·천궁다조산 덱",
-      path: ["HA-L0-01", "HA-L1-01", "HA-L1-02", "HA-L2-01", "HA-L3-01", "HA-L4-01"],
-      orderMemo: "1) SNOOP4 레드플래그 배제 → 2) CFRT 회전제한 확인 → 3) 풍지·태양·합곡·후두하근 아시혈 15분 유침 + 건식부항 + 천궁다조산 3일분",
+      name: "경추성 두통 (눈 뒤 방산) 2Hz 전침+청상견통탕+목보호 덱",
+      path: ["HA-L0-01", "HA-L1-01", "HA-L1-03", "HA-L2-01", "HA-L3-01", "HA-L4-03", "HA-L4-09"],
+      orderMemo: "1) SNNOOP10 배제 → 2) CFRT(<32°) 및 C2 외측 1.5cm 눈뒤 방산 확인 → 3) 풍지-천주 2Hz 전침 20분 + 청상견통탕/갈근탕 → 4) 베개 6~8cm & 온찜질 티칭",
     },
     {
       id: "RT-02",
       symptom: "HA",
-      name: "긴장형 두통 두개주위 근막이완 + 생활티칭 덱",
-      path: ["HA-L0-01", "HA-L1-01", "HA-L1-02", "HA-L2-02", "HA-L3-02", "HA-L4-01", "HA-L4-03"],
-      orderMemo: "1) 측두근·승모근 압통 확인 → 2) 백회·태양·풍지·합곡·태충 자침 → 3) 진통제 과용 주의 및 스마트폰 목 스트레칭 티칭",
+      name: "긴장형 두통 (CPG A등급) 득기 30분 침+자세교정 덱",
+      path: ["HA-L0-01", "HA-L1-01", "HA-L1-05", "HA-L2-02", "HA-L3-02", "HA-L4-01", "HA-L4-08"],
+      orderMemo: "1) 두개주위 근막 압통 확인 → 2) 풍지·태양·백회·합곡·태충 득기 후 30분 유침(10분 간격 재자극) + 소요산가감 → 3) Chin-Tuck 10초×15회 & 테니스공 이완 티칭",
     },
     {
       id: "RT-03",
-      symptom: "SH",
-      name: "오십견(유착성 관절낭염) 야간통 완화 침·서근탕 덱",
-      path: ["SH-L0-01", "SH-L1-01", "SH-L1-02", "SH-L2-01", "SH-L3-01", "SH-L4-01", "SH-L4-03"],
-      orderMemo: "1) 수동 외회전(PROM) 제한 확인 → 2) 견우·견료·천종·곡지 전침 15분 + 서근탕 → 3) 수면 시 아픈 어깨 아래 낮은 베개 받치기 티칭",
+      symptom: "HA",
+      name: "편두통 (무조짐·월경편두통) CGRP 표적침+변증한약+SEEDS 덱",
+      path: ["HA-L0-01", "HA-L1-01", "HA-L1-04", "HA-L2-03", "HA-L3-03", "HA-L4-04", "HA-L4-05", "HA-L4-07"],
+      orderMemo: "1) HIT-6 & 두피 이질통 확인 → 2) 태양-솔곡 수평자침 + 족임읍·외관 → 3) 천마구등음/천궁차조산/가미소요산 → 4) SEEDS & 두통일기(8~12주 예방) 티칭",
     },
     {
       id: "RT-04",
       symptom: "DZ",
-      name: "말초성 어지럼(전정신경염) 침·반하백출천마탕 덱",
-      path: ["DZ-L0-01", "DZ-L1-01", "DZ-L1-02", "DZ-L2-01", "DZ-L3-01", "DZ-L4-01", "DZ-L4-02"],
-      orderMemo: "1) HINTS 중추성 배제 → 2) 백회·풍지·예풍·내관·족삼리 자침 + 반하백출천마탕 → 3) 시선 고정 고개 회전 전정재활운동 티칭",
+      name: "이석증 (BPPV) Epley 정복술 + 잔여어지럼 침/반하백출천마탕 + 비타민D 덱",
+      path: ["DZ-L0-01", "DZ-L1-01", "DZ-L1-02", "DZ-L2-01", "DZ-L3-01", "DZ-L4-01", "DZ-L4-03", "DZ-L4-07"],
+      orderMemo: "1) 양측 Dix-Hallpike 확인 → 2) Epley(단계별 60초 정지) → 3) 잔여 멍함에 반하백출천마탕 3~5일분 → 4) 과도한 목고정 금지·전정억제제 중단·비타민D 티칭",
+    },
+    {
+      id: "RT-05",
+      symptom: "DZ",
+      name: "전정신경염 (s-AVS) HINTS+ 감별 → 와위 침구+전정재활운동 덱",
+      path: ["DZ-L0-01", "DZ-L1-01", "DZ-L1-03", "DZ-L2-02", "DZ-L3-02", "DZ-L4-02", "DZ-L4-08"],
+      orderMemo: "1) HINTS+ 말초성 & 청력정상 확인 → 2) 와위 예풍·풍지·내관·족삼리 자침 → 3) 누워만 있지 말고 시선고정 고개회전 전정재활운동 티칭",
+    },
+    {
+      id: "RT-06",
+      symptom: "SH",
+      name: "오십견(유착성 관절낭염) 야간통 완화 침·서근탕 덱",
+      path: ["SH-L0-01", "SH-L1-01", "SH-L1-02", "SH-L2-01", "SH-L3-01", "SH-L4-01", "SH-L4-03"],
+      orderMemo: "1) 수동 외회전(PROM) 제한 확인 → 2) 견우·견료·천종·곡지 전침 15분 + 서근탕 → 3) 수면 시 아픈 어깨 아래 낮은 베개 받치기 티칭",
     },
   ];
 
@@ -2327,16 +2351,32 @@
       dbGetAll("routines"),
     ]);
 
-    if (savedSkills.length === 0) {
-      skillsList = DEFAULT_SKILLS.slice();
-      for (const sk of skillsList) await dbPut("skills", sk);
+    const seedFlag = localStorage.getItem("clin7_seed_v3");
+    if (savedSkills.length === 0 || seedFlag !== "done") {
+      const skillMap = new Map(savedSkills.map((s) => [s.id, s]));
+      for (const sk of DEFAULT_SKILLS) {
+        if (!skillMap.has(sk.id) || seedFlag !== "done") {
+          const prevCount = skillMap.has(sk.id) ? skillMap.get(sk.id).count : sk.count;
+          const mergedSk = Object.assign({}, sk, { count: prevCount });
+          skillMap.set(sk.id, mergedSk);
+          await dbPut("skills", mergedSk);
+        }
+      }
+      skillsList = Array.from(skillMap.values());
     } else {
       skillsList = savedSkills;
     }
 
-    if (savedRoutines.length === 0) {
-      routinesList = DEFAULT_ROUTINES.slice();
-      for (const rt of routinesList) await dbPut("routines", rt);
+    if (savedRoutines.length === 0 || seedFlag !== "done") {
+      const rtMap = new Map(savedRoutines.map((r) => [r.id, r]));
+      for (const rt of DEFAULT_ROUTINES) {
+        if (!rtMap.has(rt.id) || seedFlag !== "done") {
+          rtMap.set(rt.id, rt);
+          await dbPut("routines", rt);
+        }
+      }
+      routinesList = Array.from(rtMap.values());
+      localStorage.setItem("clin7_seed_v3", "done");
     } else {
       routinesList = savedRoutines;
     }

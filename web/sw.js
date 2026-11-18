@@ -1,4 +1,4 @@
-const CACHE_NAME = "clin7-protocol-shell-v1";
+const CACHE_NAME = "clin7-protocol-shell-v3";
 const ASSETS = ["/", "/index.html", "/style.css", "/app.js", "/manifest.json", "/tree.json"];
 
 self.addEventListener("install", (event) => {
