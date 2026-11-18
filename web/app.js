@@ -2869,7 +2869,7 @@
     customNodesList = savedCustomNodes;
 
     try {
-      const res = await fetch("/tree.json", { cache: "no-store" });
+      const res = await fetch("./tree.json", { cache: "no-store" });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       baseTreeData = await res.json();
       rebuildMergedTree();
@@ -2888,7 +2888,7 @@
     }
 
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").catch(() => {});
+      navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(() => {});
     }
   }
 

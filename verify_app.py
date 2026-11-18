@@ -8,6 +8,7 @@ verify_app.py — CLIN-7 진료 프로토콜 뷰 & 진화형 워크벤치 자동
 3. GET / (index.html), /app.js, /style.css, /tree.json, /manifest.json, /sw.js → HTTP 200
 4. tree.json 고정 계약(§2) 파싱 및 깨진 참조 0건 확인
 5. M1~M3 + 진화형 워크벤치 핵심 UI 컴포넌트 존재 및 외부 CDN 0건 확인
+6. manifest.json 아이콘 3종 존재 · Pillow 실측 크기 일치 · 192px 이상 존재 확인
 """
 
 from __future__ import annotations
@@ -22,6 +23,8 @@ import threading
 import time
 from typing import Any
 from urllib.request import urlopen
+
+from PIL import Image
 
 import build_tree
 import serve
@@ -138,6 +141,76 @@ def verify_no_external_cdn_and_features() -> list[str]:
     return errors
 
 
+def verify_pwa_icons() -> tuple[list[str], list[str]]:
+    """manifest.json 아이콘 배열·실제 PNG 파일·Pillow 크기·192px 이상 조건을 검사한다."""
+    errors: list[str] = []
+    icon_paths: list[str] = []
+    manifest_path = WEB_DIR / "manifest.json"
+    if not manifest_path.exists():
+        return ["web/manifest.json이 존재하지 않습니다."], icon_paths
+
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return [f"manifest.json 파싱 실패: {exc}"], icon_paths
+
+    icons = manifest.get("icons")
+    if not isinstance(icons, list) or len(icons) == 0:
+        errors.append("manifest.json의 'icons' 배열이 비어 있습니다.")
+        return errors, icon_paths
+
+    has_192_plus = False
+    for idx, icon in enumerate(icons):
+        if not isinstance(icon, dict):
+            errors.append(f"manifest.icons[{idx}]가 객체가 아닙니다.")
+            continue
+        src = str(icon.get("src") or "").strip()
+        sizes_str = str(icon.get("sizes") or "").strip()
+        if not src:
+            errors.append(f"manifest.icons[{idx}]의 'src'가 비어 있습니다.")
+            continue
+
+        rel_src = src.lstrip("/")
+        if rel_src.startswith("./"):
+            rel_src = rel_src[2:]
+        icon_file = WEB_DIR / rel_src
+        icon_paths.append("/" + rel_src)
+
+        if not icon_file.exists() or not icon_file.is_file():
+            errors.append(f"아이콘 파일이 존재하지 않습니다: {icon_file}")
+            continue
+
+        if "x" not in sizes_str:
+            errors.append(f"[{src}] 잘못된 sizes 형식: '{sizes_str}'")
+            continue
+
+        try:
+            decl_w_s, decl_h_s = sizes_str.lower().split("x", 1)
+            decl_w, decl_h = int(decl_w_s), int(decl_h_s)
+        except ValueError:
+            errors.append(f"[{src}] sizes 정수 변환 실패: '{sizes_str}'")
+            continue
+
+        try:
+            with Image.open(icon_file) as im:
+                actual_w, actual_h = im.size
+        except Exception as exc:
+            errors.append(f"[{src}] Pillow 이미지 열기 실패: {exc}")
+            continue
+
+        if (actual_w, actual_h) != (decl_w, decl_h):
+            errors.append(
+                f"[{src}] 크기 불일치: 선언={decl_w}x{decl_h}, 실제={actual_w}x{actual_h}"
+            )
+        if actual_w >= 192 and actual_h >= 192:
+            has_192_plus = True
+
+    if not has_192_plus:
+        errors.append("192x192 이상 크기의 PWA 아이콘이 최소 1개 필요합니다.")
+
+    return errors, icon_paths
+
+
 def main() -> int:
     errors: list[str] = []
 
@@ -152,7 +225,7 @@ def main() -> int:
     if proc.returncode != 0:
         errors.append(f"build_tree.py --check 실패 (exit {proc.returncode}):\n{proc.stderr.strip()}")
     else:
-        print("[verify_app] 1/5 build_tree.py --check 통과 (exit 0)")
+        print("[verify_app] 1/6 build_tree.py --check 통과 (exit 0)")
 
     # 2. 정적 파일·PWA·M0~M3 기능 컴포넌트 및 외부 CDN 금지 확인
     for rel_path in ("web/index.html", "web/app.js", "web/style.css", "web/manifest.json", "web/sw.js", "tree.json"):
@@ -161,17 +234,23 @@ def main() -> int:
             errors.append(f"필수 파일이 존재하지 않습니다: {rel_path}")
     errors.extend(verify_no_external_cdn_and_features())
     if not errors:
-        print("[verify_app] 2/5 정적 웹 파일 · PWA · M0~M3(트리·스킬·케이스·가지치기·AI협업) UI 존재 및 외부 CDN 0건 확인")
+        print("[verify_app] 2/6 정적 웹 파일 · PWA · M0~M3(트리·스킬·케이스·가지치기·AI협업) UI 존재 및 외부 CDN 0건 확인")
 
-    # 3. HTTP 서버 기동(또는 기존 서버 연결) 및 엔드포인트 200 검사
+    # 3. PWA 아이콘 3종 존재 · Pillow 크기 일치 확인
+    icon_errors, icon_endpoints = verify_pwa_icons()
+    errors.extend(icon_errors)
+    if not icon_errors:
+        print(f"[verify_app] 3/6 PWA manifest icons 검증 통과 ({len(icon_endpoints)}종, Pillow 실측 일치)")
+
+    # 4. HTTP 서버 기동(또는 기존 서버 연결) 및 엔드포인트 200 검사
     temp_server: ThreadingHTTPServer | None = None
     already_running = is_port_open(HOST, PORT)
     if not already_running:
         temp_server = start_temp_server()
 
     tree_payload: dict[str, Any] = {}
+    endpoints = ["/", "/index.html", "/app.js", "/style.css", "/manifest.json", "/sw.js", "/tree.json", *icon_endpoints]
     try:
-        endpoints = ["/", "/index.html", "/app.js", "/style.css", "/manifest.json", "/sw.js", "/tree.json"]
         for ep in endpoints:
             try:
                 status, body = fetch_endpoint(ep)
@@ -189,24 +268,24 @@ def main() -> int:
             temp_server.server_close()
 
     if not errors:
-        print(f"[verify_app] 3/5 HTTP {BASE_URL} 엔드포인트 7종 모두 HTTP 200 확인")
+        print(f"[verify_app] 4/6 HTTP {BASE_URL} 엔드포인트 {len(endpoints)}종 모두 HTTP 200 확인")
 
-    # 4. tree.json 계약 및 깨진 참조 0건 확인
+    # 5. tree.json 계약 및 깨진 참조 0건 확인
     contract_errors = verify_tree_contract(tree_payload)
     errors.extend(contract_errors)
     if not contract_errors:
         sym_codes = list(tree_payload.get("증상", {}).keys())
         total_nodes = sum(len(v.get("nodes", {})) for v in tree_payload.get("증상", {}).values())
-        print(f"[verify_app] 4/5 tree.json 파싱 및 계약 검증 통과 (증상={sym_codes}, 총 노드={total_nodes}개, 깨진 참조=0건)")
+        print(f"[verify_app] 5/6 tree.json 파싱 및 계약 검증 통과 (증상={sym_codes}, 총 노드={total_nodes}개, 깨진 참조=0건)")
 
-    # 5. 최종 결과 출력
+    # 6. 최종 결과 출력
     if errors:
         print(f"[verify_app] FAIL — 총 {len(errors)}건 실패:", file=sys.stderr)
         for err in errors:
             print(f"  - {err}", file=sys.stderr)
         return 1
 
-    print("[verify_app] 5/5 PASS — 모든 검증 항목 통과")
+    print("[verify_app] 6/6 PASS — 모든 검증 항목 통과")
     return 0
 
 
