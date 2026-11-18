@@ -1359,6 +1359,102 @@ body {
   margin-right: 0.35rem;
 }
 
+.dock-equip-all-btn {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.72rem 0.9rem;
+  border-radius: 10px;
+  border: 1.5px solid #4f46e5;
+  background: linear-gradient(135deg, #312e81 0%, #4338ca 100%);
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.18rem;
+  box-shadow: 0 6px 16px rgba(67, 56, 202, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dock-equip-all-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(67, 56, 202, 0.34);
+}
+
+.dock-equip-all-sub {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #e0e7ff;
+}
+
+.l4-combo-switcher-box {
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.l4-combo-switcher-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  font-size: 0.77rem;
+  font-weight: 900;
+  color: #1e293b;
+}
+
+.l4-combo-switcher-sub {
+  font-size: 0.71rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.l4-sibling-pill-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.l4-sibling-pill {
+  background-color: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.14s ease;
+}
+
+.l4-sibling-pill.in-combo {
+  background-color: #ecfdf5;
+  color: #065f46;
+  border-color: #6ee7b7;
+}
+
+.l4-sibling-pill.is-current {
+  background-color: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+}
+
+.l4-sib-id {
+  font-size: 0.68rem;
+  opacity: 0.8;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
 /* 하단 3초 케이스 저장 슬롯 */
 .dock-footer-case {
   background-color: #f8fafc;
@@ -2337,38 +2433,40 @@ body {
   color: #f8fafc;
   border: 1px solid #293e66;
   border-radius: 16px;
-  padding: 2.1rem 2rem 1.85rem;
+  padding: 1.25rem 1.5rem 1.35rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 0.65rem;
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16);
+  gap: 0.45rem;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.14);
 }
 
-.home-hero-eyebrow {
-  font-size: 0.73rem;
-  font-weight: 800;
-  letter-spacing: 0.09em;
-  color: #93c5fd;
-  background-color: rgba(15, 23, 42, 0.48);
-  border: 1px solid rgba(147, 197, 253, 0.28);
-  padding: 0.24rem 0.75rem;
-  border-radius: 999px;
+.home-hero-head-compact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.home-hero-divider {
+  color: #64748b;
+  font-weight: 900;
 }
 
 .home-hero-title {
-  font-size: 1.75rem;
+  font-size: 1.35rem;
   font-weight: 900;
   letter-spacing: -0.02em;
   color: #ffffff;
 }
 
 .home-hero-subtitle {
-  max-width: 760px;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
+  font-weight: 700;
   color: #cbd5e1;
-  line-height: 1.55;
+  line-height: 1.4;
 }
 
 .home-search-box {

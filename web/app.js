@@ -783,15 +783,75 @@
     return out;
   }
 
+  function formatSemanticBranchLabel(rawLabel, targetId, nodesMap) {
+    const tNode = nodesMap && nodesMap[targetId] ? nodesMap[targetId] : null;
+    if (rawLabel && rawLabel !== "다음") return rawLabel;
+    if (!tNode) return rawLabel || "다음";
+    const tType = tNode["유형"];
+    const tLayer = getLayerFromNodeId(targetId);
+    if (tType === "treat") {
+      const mod = tNode["술기구분"];
+      const modText = mod ? MODALITY_ICONS[mod] || `💊 ${mod}` : "💊 치료";
+      return `${modText} 선택`;
+    }
+    if (tType === "teach") return "🗣️ 환자 티칭";
+    if (tType === "outcome" || tLayer === "L5") return "📊 경과·재평가";
+    if (tType === "dx" || tLayer === "L3") return "🩺 감별 진단";
+    if (tType === "test" || tLayer === "L2") return "🔬 이학적 검사";
+    return rawLabel || "다음";
+  }
+
   function getEffectiveBranches(node, nodesMap) {
-    const branches = extractBranchesList(node);
-    if (!node || !String(node.id || "").endsWith("-L1-01")) return branches;
+    const rawBranches = extractBranchesList(node);
+    if (!node || rawBranches.length === 0) return [];
+
+    const isL1Redflag = String(node.id || "").endsWith("-L1-01");
     const startNode = nodesMap && currentPath.length > 0 ? nodesMap[currentPath[0]] : null;
     const recId = startNode && startNode["추천문진"];
-    if (!recId || !nodesMap[recId] || recId === node.id) return branches;
-    return branches.map((b) =>
-      b.label.includes("아니오") ? { label: b.label, targetId: recId } : b
-    );
+    const hasValidRec = Boolean(isL1Redflag && recId && nodesMap && nodesMap[recId] && recId !== node.id);
+
+    const mapped = [];
+    let seenNoBranchOnRedflag = false;
+    const seenTargets = new Set();
+
+    rawBranches.forEach((b) => {
+      let label = String(b.label || "다음").trim();
+      let targetId = String(b.targetId || "").trim();
+      if (!targetId) return;
+
+      if (isL1Redflag && label.includes("아니오")) {
+        if (seenNoBranchOnRedflag) return;
+        seenNoBranchOnRedflag = true;
+        if (hasValidRec) {
+          targetId = recId;
+        }
+      }
+
+      label = formatSemanticBranchLabel(label, targetId, nodesMap);
+      if (seenTargets.has(targetId)) return;
+      seenTargets.add(targetId);
+      mapped.push({ label, targetId });
+    });
+
+    // 동일 라벨이 2개 이상 존재할 경우(예: 같은 술기구분 2개 또는 다중 타겟) 타겟 제목/ID로 자동 구분
+    const labelCounts = {};
+    mapped.forEach((b) => {
+      labelCounts[b.label] = (labelCounts[b.label] || 0) + 1;
+    });
+
+    return mapped.map((b) => {
+      if (labelCounts[b.label] <= 1) return b;
+      const tNode = nodesMap && nodesMap[b.targetId] ? nodesMap[b.targetId] : null;
+      const shortHint = tNode
+        ? String(tNode["술기구분"] || tNode["제목"] || b.targetId)
+            .replace(/^\[[^\]]+\]\s*/, "")
+            .slice(0, 10)
+        : b.targetId;
+      return {
+        label: `${b.label} · ${shortHint}`,
+        targetId: b.targetId,
+      };
+    });
   }
 
   function isPositiveBranchLabel(label) {
@@ -1985,17 +2045,27 @@
         // 현재 포커스된 카드에는 카드 내부에도 바로 [예] / [아니오] 미니 버튼을 달아 보드에서 시선을 떼지 않고도 진행 가능하게 함
         let inlineChoicesHtml = "";
         if (isSelected && nextBranches.length > 0) {
-          const btns = nextBranches
-            .map(({ label, targetId }) => {
-              const isYes = isPositiveBranchLabel(label);
-              const isDanger = isRedflag && isYes;
-              const bCls = isDanger ? "inline-danger" : isYes ? "inline-yes" : "inline-no";
-              return `<button type="button" class="btn-inline-choice ${bCls}" data-branch-label="${escapeHtml(
-                label
-              )}" data-branch-target="${escapeHtml(targetId)}">${escapeHtml(label)} →</button>`;
-            })
-            .join("");
-          inlineChoicesHtml = `<div class="card-inline-choices">${btns}</div>`;
+          if (ntype === "dx" && nextBranches.length > 1) {
+            inlineChoicesHtml = `
+              <div class="card-inline-choices">
+                <button type="button" class="btn-inline-choice inline-yes btn-inline-equip-l4-set" data-dx-id="${escapeHtml(
+                  node.id
+                )}">⚡ 추천 치료·티칭 세트(${nextBranches.length}종) 일괄 장착 →</button>
+              </div>
+            `;
+          } else {
+            const btns = nextBranches
+              .map(({ label, targetId }) => {
+                const isYes = isPositiveBranchLabel(label);
+                const isDanger = isRedflag && isYes;
+                const bCls = isDanger ? "inline-danger" : isYes ? "inline-yes" : "inline-no";
+                return `<button type="button" class="btn-inline-choice ${bCls}" data-branch-label="${escapeHtml(
+                  label
+                )}" data-branch-target="${escapeHtml(targetId)}">${escapeHtml(label)} →</button>`;
+              })
+              .join("");
+            inlineChoicesHtml = `<div class="card-inline-choices">${btns}</div>`;
+          }
         }
 
         // L4 카드(치료·티칭)를 여러 개 조합할 수 있는 [+ 콤보에 추가/해제] 버튼 (진료 보드가 L3 이상이거나 이미 L4가 켜져 있을 때)
@@ -2049,6 +2119,10 @@
         card.querySelectorAll(".btn-inline-choice").forEach((b) => {
           b.addEventListener("click", (ev) => {
             ev.stopPropagation();
+            if (b.classList.contains("btn-inline-equip-l4-set")) {
+              equipRecommendedL4Combo(node, nextBranches, nodesMap);
+              return;
+            }
             const lb = b.getAttribute("data-branch-label");
             const tid = b.getAttribute("data-branch-target");
             playCardTransition(node.id, lb, tid);
@@ -2090,6 +2164,27 @@
 
       treeColumnsEl.appendChild(colEl);
     });
+  }
+
+  function equipRecommendedL4Combo(dxNode, branches, nodesMap) {
+    if (!dxNode || !Array.isArray(branches) || branches.length === 0) return;
+    const l4Targets = branches
+      .map((b) => b.targetId)
+      .filter((tid) => tid && nodesMap && nodesMap[tid]);
+    if (l4Targets.length === 0) return;
+
+    pathDecisions[dxNode.id] = `추천 세트(${l4Targets.length}종)`;
+    const dxIdx = currentPath.indexOf(dxNode.id);
+    const basePath = dxIdx !== -1 ? currentPath.slice(0, dxIdx + 1) : [...currentPath, dxNode.id];
+    l4Targets.forEach((tid) => {
+      if (!basePath.includes(tid)) basePath.push(tid);
+    });
+    currentPath = basePath;
+    activeNodeId = l4Targets[0];
+    renderClinicBoardMode();
+    triggerSmoothEnter(nodeDetailContent, "dock-morph-enter");
+    autoPanBoardToActiveLayer();
+    showToast(`⚡ [${dxNode["제목"]}] 추천 치료·티칭 ${l4Targets.length}종이 콤보에 일괄 장착되었습니다.`);
   }
 
   function playCardTransition(fromId, decisionLabel, toId) {
@@ -2376,21 +2471,74 @@
       `;
     }
 
+    // L4 카드(치료·티칭)에서 같은 감별진단(L3)의 형제 치료·티칭 카드를 독 내부에서 바로 추가/해제할 수 있는 멀티 콤보 바
+    const currentLayer = getLayerFromNodeId(node.id);
+    if (currentLayer === "L4") {
+      const activeDxId =
+        [...currentPath].reverse().find((pid) => getLayerFromNodeId(pid) === "L3") || node["상위"];
+      const dxNode = activeDxId && nodesMap[activeDxId] ? nodesMap[activeDxId] : null;
+      const dxBranches = dxNode ? getEffectiveBranches(dxNode, nodesMap) : [];
+      if (dxNode && dxBranches.length > 1) {
+        const siblingPills = dxBranches
+          .map(({ targetId }) => {
+            const sNode = nodesMap[targetId];
+            if (!sNode) return "";
+            const inCombo = currentPath.includes(targetId);
+            const isCurrent = targetId === node.id;
+            const mod =
+              sNode["유형"] === "teach"
+                ? "🗣️ 티칭"
+                : sNode["술기구분"]
+                ? MODALITY_ICONS[sNode["술기구분"]] || `💊 ${sNode["술기구분"]}`
+                : "💊 치료";
+            return `
+              <button type="button" class="l4-sibling-pill ${inCombo ? "in-combo" : ""} ${
+              isCurrent ? "is-current" : ""
+            }" data-sibling-id="${escapeHtml(targetId)}" title="${escapeHtml(sNode["제목"] || "")}">
+                <span>${inCombo ? "✔" : "+"} ${escapeHtml(mod)}</span>
+                <span class="l4-sib-id">${escapeHtml(targetId)}</span>
+              </button>
+            `;
+          })
+          .join("");
+        html += `
+          <div class="l4-combo-switcher-box">
+            <div class="l4-combo-switcher-head">
+              <span>🧩 [${escapeHtml(dxNode["제목"])}] 연결 치료·티칭 콤보 구성</span>
+              <span class="l4-combo-switcher-sub">클릭하여 이동 또는 콤보 추가</span>
+            </div>
+            <div class="l4-sibling-pill-grid">${siblingPills}</div>
+          </div>
+        `;
+      }
+    }
+
     // 다음 카드 뽑기(분기 선택) 버튼
     if (branches.length > 0) {
+      const equipAllBtnHtml =
+        ntype === "dx" && branches.length > 1
+          ? `
+            <button type="button" id="btn-dock-equip-l4-combo" class="dock-equip-all-btn">
+              <span>⚡ 이 감별진단의 추천 치료·티칭 세트 일괄 장착 (${branches.length}종 콤보)</span>
+              <span class="dock-equip-all-sub">침 · 약침 · 추나 · 한약 · 환자 티칭을 한 번에 진료 경로에 담습니다 →</span>
+            </button>
+          `
+          : "";
+
       const btnsHtml = branches
         .map(({ label, targetId }) => {
           const tNode = nodesMap[targetId];
           const tTitle = tNode ? tNode["제목"] : targetId;
-          const isYes = isPositiveBranchLabel(label);
-          const cls = isRedflag && isYes ? "choice-danger" : isYes ? "choice-yes" : "choice-no";
+          const isYes = isPositiveBranchLabel(label) || ntype === "dx" || currentLayer === "L4";
+          const cls = isRedflag && isPositiveBranchLabel(label) ? "choice-danger" : isYes ? "choice-yes" : "choice-no";
           const customRecTag =
-            isL1Redflag && !isYes && l0RecId && targetId === l0RecId ? " · 🎯 맞춤 문진" : "";
+            isL1Redflag && !isPositiveBranchLabel(label) && l0RecId && targetId === l0RecId ? " · 🎯 맞춤 문진" : "";
+          const alreadyInCombo = currentLayer === "L3" && currentPath.includes(targetId);
           return `
             <button type="button" class="dock-choice-btn ${cls} btn-dock-branch" data-label="${escapeHtml(
             label
           )}" data-target="${escapeHtml(targetId)}">
-              <span>👉 [${escapeHtml(label)}${customRecTag}]</span>
+              <span>👉 [${escapeHtml(label)}${customRecTag}]${alreadyInCombo ? " ✔콤보포함" : ""}</span>
               <span style="font-size:0.82rem; opacity:0.92;">${escapeHtml(tTitle)} (${escapeHtml(targetId)}) →</span>
             </button>
           `;
@@ -2400,8 +2548,9 @@
       html += `
         <div>
           <div style="font-size:0.78rem; font-weight:800; color:var(--text-muted); margin-bottom:0.35rem;">
-            🎴 다음 이어질 카드 고르기:
+            ${ntype === "dx" ? "💊 추천 치료 · 환자 티칭 선택 (일괄 장착 또는 개별 카드 선택):" : "🎴 다음 이어질 카드 고르기:"}
           </div>
+          ${equipAllBtnHtml}
           <div class="dock-choice-grid">${btnsHtml}</div>
         </div>
       `;
@@ -2440,6 +2589,26 @@
 
     html += `</div>`; // close .dock-card-frame
     nodeDetailContent.innerHTML = html;
+
+    const equipComboBtn = document.getElementById("btn-dock-equip-l4-combo");
+    if (equipComboBtn) {
+      equipComboBtn.addEventListener("click", () => {
+        equipRecommendedL4Combo(node, branches, nodesMap);
+      });
+    }
+
+    nodeDetailContent.querySelectorAll(".l4-sibling-pill").forEach((pill) => {
+      pill.addEventListener("click", () => {
+        const sid = pill.getAttribute("data-sibling-id");
+        if (!sid || !nodesMap[sid]) return;
+        if (!currentPath.includes(sid)) {
+          currentPath.push(sid);
+        }
+        activeNodeId = sid;
+        renderClinicBoardMode();
+        triggerSmoothEnter(nodeDetailContent, "dock-morph-enter");
+      });
+    });
 
     nodeDetailContent.querySelectorAll(".btn-dock-branch").forEach((btn) => {
       btn.addEventListener("click", () => {

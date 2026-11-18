@@ -401,12 +401,42 @@ def validate_nodes(
                 errors.append(f"[{loc} ({nid})] ask 노드에 '왜(왜 묻는가)' 설명이 없습니다.")
             if not extract_referenced_ids(node.get("다음")):
                 errors.append(f"[{loc} ({nid})] ask 노드에 예/아니오 '다음' 노드가 없습니다.")
+            elif isinstance(node.get("다음"), dict):
+                for b_key, b_val in node["다음"].items():
+                    if isinstance(b_val, list) and len(b_val) > 1:
+                        errors.append(
+                            f"[{loc} ({nid})] ask 노드 분기 '{b_key}'에 다중 타겟({b_val})이 지정되어 중복 선택지가 생성됩니다. 분기당 1개 타겟만 지정하세요."
+                        )
 
         elif ntype == "test":
+            if "민감도특이도" in node:
+                errors.append(f"[{loc} ({nid})] test 노드에 구식 키 '민감도특이도'가 있습니다. '민감도', '특이도', 'LR+', '대안검사'로 분리하세요.")
             if not has_content(node, ["검사명"], ["검사명"]):
                 errors.append(f"[{loc} ({nid})] test 노드에 '검사명'이 없습니다.")
             if not has_content(node, ["배제대상", "배제"], ["무엇을 배제하는가", "배제"]):
                 errors.append(f"[{loc} ({nid})] test 노드에 '무엇을 배제하는가(배제대상)'가 없습니다.")
+            if not has_content(node, ["민감도"], []):
+                errors.append(f"[{loc} ({nid})] test 노드에 '민감도'가 누락되었습니다.")
+            if not has_content(node, ["특이도"], []):
+                errors.append(f"[{loc} ({nid})] test 노드에 '특이도'가 누락되었습니다.")
+            if not has_content(node, ["LR+"], []):
+                errors.append(f"[{loc} ({nid})] test 노드에 'LR+'가 누락되었습니다.")
+            if not has_content(node, ["대안검사"], []):
+                errors.append(f"[{loc} ({nid})] test 노드에 '대안검사'가 누락되었습니다.")
+            if isinstance(node.get("다음"), dict):
+                seen_targets: dict[tuple[str, ...], str] = {}
+                for b_key, b_val in node["다음"].items():
+                    if isinstance(b_val, list) and len(b_val) > 1:
+                        errors.append(
+                            f"[{loc} ({nid})] test 노드 분기 '{b_key}'에 다중 타겟({b_val})이 지정되어 중복 선택지가 생성됩니다. 분기키를 분리하세요."
+                        )
+                    t_tuple = tuple(b_val) if isinstance(b_val, list) else (str(b_val),)
+                    if t_tuple in seen_targets:
+                        errors.append(
+                            f"[{loc} ({nid})] test 노드 분기 '{b_key}'와 '{seen_targets[t_tuple]}'가 동일한 타겟({list(t_tuple)})을 가리킵니다."
+                        )
+                    else:
+                        seen_targets[t_tuple] = b_key
 
         elif ntype == "dx":
             links = node.get("질환링크")
@@ -427,18 +457,34 @@ def validate_nodes(
         elif ntype == "treat":
             if node.get("내숙련도") is None or not isinstance(node.get("내숙련도"), int) or not (0 <= node["내숙련도"] <= 5):
                 errors.append(f"[{loc} ({nid})] treat 노드의 '내숙련도'(0~5 정수)가 누락되었거나 범위를 벗어났습니다.")
+            for req_key in ("술기구분", "술기세트", "자침점용량", "빈도", "기간", "금기", "부작용"):
+                if not has_content(node, [req_key], []):
+                    errors.append(f"[{loc} ({nid})] treat 노드에 '{req_key}'가 누락되었습니다.")
             if not has_content(node, ["전원기준", "전원 기준"], ["전원 기준", "전원기준"]):
                 errors.append(f"[{loc} ({nid})] treat 노드에 '전원 기준(전원기준)'이 누락되었습니다.")
             if not has_content(node, ["재평가시점", "재평가 시점"], ["재평가 시점", "재평가시점"]):
                 errors.append(f"[{loc} ({nid})] treat 노드에 '재평가 시점'이 누락되었습니다.")
 
         elif ntype == "teach":
+            if "금지사항" in node:
+                errors.append(f"[{loc} ({nid})] teach 노드에 오기 키 '금지사항'이 있습니다. '하지말아야할것'으로 수정하세요.")
+            if "전원기준보조" in node:
+                errors.append(f"[{loc} ({nid})] teach 노드에 오기 키 '전원기준보조'가 있습니다.")
             if not has_content(node, ["환자설명", "환자 설명"], ["환자 설명"]):
                 errors.append(f"[{loc} ({nid})] teach 노드에 '환자 설명'이 누락되었습니다.")
+            for req_key in ("생활지도", "흔한오해", "하지말아야할것"):
+                if not has_content(node, [req_key], []):
+                    errors.append(f"[{loc} ({nid})] teach 노드에 '{req_key}'가 누락되었습니다.")
 
         elif ntype == "outcome":
+            if node.get("내숙련도") is None or not isinstance(node.get("내숙련도"), int) or not (0 <= node["내숙련도"] <= 5):
+                errors.append(f"[{loc} ({nid})] outcome 노드의 '내숙련도'(0~5 정수)가 누락되었거나 범위를 벗어났습니다.")
             if not has_content(node, ["측정지표", "측정 지표"], ["측정 지표"]):
                 errors.append(f"[{loc} ({nid})] outcome 노드에 '측정 지표'가 누락되었습니다.")
+            if not has_content(node, ["측정시점"], []):
+                errors.append(f"[{loc} ({nid})] outcome 노드에 '측정시점'이 누락되었습니다.")
+            if not has_content(node, ["판정기준"], []):
+                errors.append(f"[{loc} ({nid})] outcome 노드에 '판정기준'이 누락되었습니다.")
 
         elif ntype == "skill":
             if node.get("내숙련도") is None or not isinstance(node.get("내숙련도"), int) or not (0 <= node["내숙련도"] <= 5):
@@ -472,10 +518,35 @@ def validate_nodes(
             if rid not in nodes_by_id:
                 errors.append(f"[{nid}] '추천문진'이 존재하지 않는 노드를 참조합니다: '{rid}'")
 
-    # 3. 증상별 레드플래그 ask 노드가 최소 1개 이상인지 확인
+    # 3. 증상별 레드플래그 ask 노드가 최소 1개 이상인지 확인 + L0 도달성(BFS) 검사
     for sym_code, rf_count in symptom_redflags.items():
         if rf_count < 1:
             errors.append(f"[증상 {sym_code}] 레드플래그(레드플래그: true) ask 노드가 0개입니다.")
+
+        sym_nodes = [nid for nid in nodes_by_id if nid.startswith(f"{sym_code}-")]
+        l0_roots = [nid for nid in sym_nodes if "-L0-" in nid]
+        if not l0_roots:
+            errors.append(f"[증상 {sym_code}] L0 진입 노드가 없습니다.")
+            continue
+        visited: set[str] = set()
+        queue = list(l0_roots)
+        while queue:
+            cur = queue.pop(0)
+            if cur in visited or cur not in nodes_by_id:
+                continue
+            visited.add(cur)
+            cur_node = nodes_by_id[cur]
+            for nxt in extract_referenced_ids(cur_node.get("다음")):
+                if nxt not in visited:
+                    queue.append(nxt)
+            rec = cur_node.get("추천문진")
+            if rec:
+                rid = str(rec).strip().strip("[]")
+                if rid not in visited:
+                    queue.append(rid)
+        unreachable = sorted(nid for nid in sym_nodes if nid not in visited)
+        if unreachable:
+            errors.append(f"[증상 {sym_code}] L0에서 도달할 수 없는 고아 노드: {unreachable}")
 
     return errors
 
