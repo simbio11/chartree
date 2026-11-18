@@ -826,12 +826,284 @@
     return result;
   }
 
-  function chooseSymptomFromNav(code) {
-    selectSymptom(code);
+  function chooseSymptomFromNav(code, targetNodeId) {
+    if (currentMode === "home") {
+      activeSymptomCode = code;
+      switchMode("clinic");
+      selectSymptom(code, targetNodeId);
+      return;
+    }
+    selectSymptom(code, targetNodeId);
     if (currentMode === "setup") {
       populateSymptomSelects();
       switchSetupSubview(currentSubview);
     }
+  }
+
+  function computeSymptomTypeBreakdown(nodesMap) {
+    const counts = {
+      total: 0,
+      l0: 0,
+      ask: 0,
+      test: 0,
+      dx: 0,
+      treat: 0,
+      teach: 0,
+      outcome: 0,
+    };
+    Object.values(nodesMap || {}).forEach((n) => {
+      counts.total += 1;
+      const layer = getLayerFromNodeId(n.id);
+      const t = n["유형"] || "ask";
+      if (layer === "L0") counts.l0 += 1;
+      else if (t === "ask") counts.ask += 1;
+      else if (t === "test") counts.test += 1;
+      else if (t === "dx") counts.dx += 1;
+      else if (t === "treat") counts.treat += 1;
+      else if (t === "teach") counts.teach += 1;
+      else counts.outcome += 1;
+    });
+    return counts;
+  }
+
+  function renderHomeHubMode() {
+    if (!mergedTreeData || !mergedTreeData["증상"]) return;
+    const symptoms = mergedTreeData["증상"];
+    const grouped = groupSymptomsByCategory(symptoms);
+
+    // 1. 전체 카드 유형별 집계
+    const globalCounts = {
+      symptoms: Object.keys(symptoms).length,
+      total: 0,
+      l0: 0,
+      ask: 0,
+      test: 0,
+      dx: 0,
+      treat: 0,
+      teach: 0,
+      outcome: 0,
+    };
+    const perSymptomCounts = {};
+    Object.entries(symptoms).forEach(([code, symObj]) => {
+      const c = computeSymptomTypeBreakdown(symObj.nodes);
+      perSymptomCounts[code] = c;
+      globalCounts.total += c.total;
+      globalCounts.l0 += c.l0;
+      globalCounts.ask += c.ask;
+      globalCounts.test += c.test;
+      globalCounts.dx += c.dx;
+      globalCounts.treat += c.treat;
+      globalCounts.teach += c.teach;
+      globalCounts.outcome += c.outcome;
+    });
+
+    const statsGrid = document.getElementById("home-type-breakdown-grid");
+    if (statsGrid) {
+      const statSpecs = [
+        {
+          key: "total",
+          badge: "ARCHIVE TOTAL",
+          label: "전체 프로토콜 · 카드",
+          val: `${globalCounts.symptoms}증상 · ${globalCounts.total}장`,
+          sub: `루틴 덱 ${getAvailableRoutines().length}종 · 공용 술기 ${skillsList.length}종`,
+          accent: "stat-total",
+        },
+        {
+          key: "l0",
+          badge: "L0 · ENTRY",
+          label: "🗣️ 환자 호소 양상",
+          val: `${globalCounts.l0}장`,
+          sub: "주호소 유형별 맞춤 L1 문진 직결",
+          accent: "stat-l0",
+        },
+        {
+          key: "ask",
+          badge: "L1 · INTERVIEW",
+          label: "❓ 분기 문진 · 레드플래그",
+          val: `${globalCounts.ask}장`,
+          sub: "응급 배제(SNNOOP10·Ottawa 등) 및 감별 질문",
+          accent: "stat-ask",
+        },
+        {
+          key: "test",
+          badge: "L2 · EXAM",
+          label: "🔬 이학적 검사",
+          val: `${globalCounts.test}장`,
+          sub: "민감도·특이도·LR+ 기반 신체 진찰",
+          accent: "stat-test",
+        },
+        {
+          key: "dx",
+          badge: "L3 · DIAGNOSIS",
+          label: "🩺 감별 진단",
+          val: `${globalCounts.dx}장`,
+          sub: "확률 증감 소견 및 볼트 질환 노트 연계",
+          accent: "stat-dx",
+        },
+        {
+          key: "treat",
+          badge: "L4 · TREATMENT",
+          label: "💊 치료 술기 모듈",
+          val: `${globalCounts.treat}장`,
+          sub: "침·전침·약침·추나·한약·재활 원자 카드",
+          accent: "stat-treat",
+        },
+        {
+          key: "teach",
+          badge: "L4 · PATIENT ED",
+          label: "🗣️ 환자 티칭 · 생활지도",
+          val: `${globalCounts.teach}장`,
+          sub: "24px+ 환자 교육 화면 & 주의사항",
+          accent: "stat-teach",
+        },
+        {
+          key: "outcome",
+          badge: "L5 · OUTCOME",
+          label: "📊 경과 판정 · 전원",
+          val: `${globalCounts.outcome}장`,
+          sub: "NRS/기능 지표 평가 및 응급 전원 프로토콜",
+          accent: "stat-outcome",
+        },
+      ];
+
+      statsGrid.innerHTML = statSpecs
+        .map(
+          (st) => `
+          <div class="home-stat-card ${st.accent}">
+            <div class="hsc-top">
+              <span class="hsc-badge">${escapeHtml(st.badge)}</span>
+              <span class="hsc-value">${escapeHtml(st.val)}</span>
+            </div>
+            <div class="hsc-label">${escapeHtml(st.label)}</div>
+            <div class="hsc-sub">${escapeHtml(st.sub)}</div>
+          </div>
+        `
+        )
+        .join("");
+    }
+
+    // 2. 최근 조회한 프로토콜 3개 표시
+    const recentInline = document.getElementById("home-recent-inline");
+    if (recentInline) {
+      const recents = getRecentSymptoms().filter((c) => Boolean(symptoms[c]));
+      if (recents.length === 0) {
+        recentInline.innerHTML = "";
+      } else {
+        recentInline.innerHTML =
+          `<span class="recent-label">최근 진료:</span>` +
+          recents
+            .map((code) => {
+              const s = symptoms[code];
+              return `<button type="button" class="recent-sym-chip" data-recent-sym="${escapeHtml(code)}">
+                ${escapeHtml(s.name)} <span>${escapeHtml(code)}</span>
+              </button>`;
+            })
+            .join("");
+        recentInline.querySelectorAll(".recent-sym-chip").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            chooseSymptomFromNav(btn.getAttribute("data-recent-sym"));
+          });
+        });
+      }
+    }
+
+    // 3. 카테고리별 증상 프로토콜 디렉터리
+    const dirContainer = document.getElementById("home-category-directory");
+    if (!dirContainer) return;
+    dirContainer.innerHTML = "";
+
+    grouped.forEach(({ meta, items }) => {
+      const catTotalCards = items.reduce((acc, it) => acc + it.nodeCount, 0);
+      const catBlock = document.createElement("div");
+      catBlock.className = "home-cat-block";
+      catBlock.innerHTML = `
+        <div class="home-cat-header">
+          <div class="home-cat-title-wrap">
+            <span class="home-cat-icon">${meta.icon}</span>
+            <h3 class="home-cat-title">${escapeHtml(meta.label)}</h3>
+            <span class="home-cat-meta">${items.length}개 증상 · 총 ${catTotalCards}장</span>
+          </div>
+        </div>
+      `;
+
+      const cardsGrid = document.createElement("div");
+      cardsGrid.className = "home-sym-cards-grid";
+
+      items.forEach(({ code, symObj }) => {
+        const c = perSymptomCounts[code] || computeSymptomTypeBreakdown(symObj.nodes);
+        const l0Nodes = Object.values(symObj.nodes || {})
+          .filter((n) => getLayerFromNodeId(n.id) === "L0")
+          .sort((a, b) => String(a.id).localeCompare(String(b.id)));
+
+        const l0ListHtml = l0Nodes
+          .map((l0) => {
+            const recId = l0["추천문진"];
+            const recNode = recId && symObj.nodes[recId] ? symObj.nodes[recId] : null;
+            const cleanTitle = String(l0["제목"] || "").replace(/^\[호소\]\s*/, "");
+            return `
+              <button type="button" class="home-l0-entry-btn" data-sym="${escapeHtml(code)}" data-node="${escapeHtml(
+              l0.id
+            )}" title="${escapeHtml(recNode ? `맞춤 추천문진: ${recId} ${recNode["제목"]}` : l0["제목"])}">
+                <span class="hl0-left">
+                  <span class="hl0-id">${escapeHtml(l0.id)}</span>
+                  <span class="hl0-title">${escapeHtml(cleanTitle)}</span>
+                </span>
+                ${
+                  recId
+                    ? `<span class="hl0-rec">🎯 ${escapeHtml(recId)}</span>`
+                    : `<span class="hl0-rec">진입 →</span>`
+                }
+              </button>
+            `;
+          })
+          .join("");
+
+        const symCard = document.createElement("article");
+        symCard.className = "home-symptom-card";
+        symCard.innerHTML = `
+          <div class="hsc-header">
+            <div class="hsc-title-group">
+              <span class="hsc-code-badge">${escapeHtml(code)}</span>
+              <h4 class="hsc-sym-name">${escapeHtml(symObj.name)}</h4>
+            </div>
+            <button type="button" class="btn-open-sym-board" data-open-sym="${escapeHtml(code)}">
+              진료 보드 열기 (${c.total}장) →
+            </button>
+          </div>
+
+          <!-- 종류별 카드 개수 브레이크다운 -->
+          <div class="hsc-type-pills" aria-label="카드 종류별 개수">
+            <span class="type-count-pill pill-l0" title="환자 호소 양상 (L0)">🗣️ 호소 <strong>${c.l0}</strong></span>
+            <span class="type-count-pill pill-ask" title="분기 문진 (L1)">❓ 문진 <strong>${c.ask}</strong></span>
+            <span class="type-count-pill pill-test" title="이학적 검사 (L2)">🔬 검사 <strong>${c.test}</strong></span>
+            <span class="type-count-pill pill-dx" title="감별 진단 (L3)">🩺 감별 <strong>${c.dx}</strong></span>
+            <span class="type-count-pill pill-treat" title="치료 술기 (L4)">💊 치료 <strong>${c.treat}</strong></span>
+            <span class="type-count-pill pill-teach" title="환자 티칭 (L4)">🗣️ 티칭 <strong>${c.teach}</strong></span>
+            <span class="type-count-pill pill-outcome" title="경과 판정·전원 (L5)">📊 결과 <strong>${c.outcome}</strong></span>
+          </div>
+
+          <!-- 환자 호소 양상(L0) 바로 진입 목록 -->
+          <div class="hsc-l0-section">
+            <div class="hsc-l0-heading">🗣️ 환자 호소 양상 (클릭 시 해당 호소 맞춤 문진으로 즉시 시작)</div>
+            <div class="hsc-l0-list">${l0ListHtml}</div>
+          </div>
+        `;
+
+        symCard.querySelector(".btn-open-sym-board").addEventListener("click", () => {
+          chooseSymptomFromNav(code);
+        });
+        symCard.querySelectorAll(".home-l0-entry-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            chooseSymptomFromNav(btn.getAttribute("data-sym"), btn.getAttribute("data-node"));
+          });
+        });
+
+        cardsGrid.appendChild(symCard);
+      });
+
+      catBlock.appendChild(cardsGrid);
+      dirContainer.appendChild(catBlock);
+    });
   }
 
   function renderHeaderSymptomTabs() {
@@ -1080,6 +1352,7 @@
   function selectSymptom(symCode, targetNodeId) {
     if (!mergedTreeData || !mergedTreeData["증상"][symCode]) return;
     activeSymptomCode = symCode;
+    recordRecentSymptom(symCode);
     const sym = mergedTreeData["증상"][symCode];
     const entryId = sym.entry || Object.keys(sym.nodes)[0];
     pathDecisions = {};
@@ -1517,6 +1790,22 @@
     }
     activeNodeId = actualTarget;
     renderClinicBoardMode();
+    triggerSmoothEnter(nodeDetailContent, "dock-morph-enter");
+    autoPanBoardToActiveLayer();
+  }
+
+  function autoPanBoardToActiveLayer() {
+    const viewport = document.getElementById("board-scroll-viewport");
+    const activeLayer = getLayerFromNodeId(activeNodeId);
+    const colEl = treeColumnsEl ? treeColumnsEl.querySelector(`.layer-column[data-layer="${activeLayer}"]`) : null;
+    if (!viewport || !colEl) return;
+    if (window.innerWidth <= 768) {
+      viewport.scrollTo({ left: Math.max(0, colEl.offsetLeft - 8), behavior: "smooth" });
+      return;
+    }
+    // 데스크톱에서 보드가 가로 스크롤 중일 때 현재 층이 화면 중앙 부근에 오도록 부드럽게 패닝
+    const targetLeft = Math.max(0, colEl.offsetLeft - Math.round(viewport.clientWidth * 0.22));
+    viewport.scrollTo({ left: targetLeft, behavior: "smooth" });
   }
 
   /* ==================== 카드 간 SVG 베지어 곡선 연결선 렌더링 ==================== */
@@ -2844,7 +3133,238 @@
     return lines.join("\n");
   }
 
-  /* ==================== 빠른 검색 팝오버 ==================== */
+  /* ==================== 차트(SOAP) 요약 생성 & L0 최우선 통합 검색 ==================== */
+  function generateSoapChartSummary() {
+    if (!mergedTreeData || !mergedTreeData["증상"][activeSymptomCode]) return "";
+    const sym = mergedTreeData["증상"][activeSymptomCode];
+    const nodesMap = sym.nodes || {};
+    const sLines = [];
+    const oLines = [];
+    const aLines = [];
+    const pLines = [];
+
+    currentPath.forEach((nid) => {
+      const n = nodesMap[nid];
+      if (!n) return;
+      const layer = getLayerFromNodeId(nid);
+      const t = n["유형"] || "ask";
+      const dec = pathDecisions[nid] ? ` → [${pathDecisions[nid]}]` : "";
+
+      if (layer === "L0") {
+        sLines.push(`• [주호소 (${nid})] ${String(n["제목"] || "").replace(/^\[호소\]\s*/, "")}`);
+        if (n["질문"]) sLines.push(`  - 환자 표현: “${n["질문"]}”`);
+      } else if (t === "ask") {
+        sLines.push(`• [문진 (${nid})] ${n["제목"]}${dec}`);
+        if (n["질문"]) sLines.push(`  - 확인: ${n["질문"]}`);
+      } else if (t === "test") {
+        oLines.push(`• [검사 (${nid})] ${n["검사명"] || n["제목"]}${dec}`);
+        if (n["배제대상"]) oLines.push(`  - 배제/목적: ${n["배제대상"]}`);
+      } else if (t === "dx") {
+        const cands = Array.isArray(n["후보"]) ? n["후보"].join(", ") : n["제목"];
+        aLines.push(`• [감별 (${nid})] ${n["제목"]} (${cands})`);
+        if (n["올리는소견"]) aLines.push(`  - 부합 소견: ${n["올리는소견"]}`);
+      } else if (t === "treat") {
+        pLines.push(`• [치료 (${nid})] ${n["제목"]}`);
+        if (n["술기세트"]) pLines.push(`  - 술기: ${n["술기세트"]}`);
+        if (n["자침점용량"]) pLines.push(`  - 자침점·용량: ${n["자침점용량"]}`);
+        if (n["빈도"] || n["기간"]) pLines.push(`  - 빈도·기간: ${n["빈도"] || "-"} / ${n["기간"] || "-"}`);
+      } else if (t === "teach") {
+        pLines.push(`• [티칭 (${nid})] ${n["제목"]}`);
+        if (n["환자설명"]) pLines.push(`  - 설명: ${n["환자설명"]}`);
+        if (n["생활지도"]) pLines.push(`  - 생활지도: ${n["생활지도"]}`);
+      } else if (t === "outcome") {
+        pLines.push(`• [경과/전원 (${nid})] ${n["제목"]} (${n["측정지표"] || "-"})`);
+      }
+    });
+
+    const today = new Date().toISOString().slice(0, 10);
+    return [
+      `# [차트나무 임상 진료 요약 (SOAP)] ${sym.name}(${activeSymptomCode}) · ${today}`,
+      `- 진행 경로: ${currentPath.join(" → ")}`,
+      "",
+      `[S · 주관적 호소 및 문진]`,
+      sLines.length > 0 ? sLines.join("\n") : "• (선택된 문진 없음)",
+      "",
+      `[O · 이학적 검사 소견]`,
+      oLines.length > 0 ? oLines.join("\n") : "• (선택된 검사 없음)",
+      "",
+      `[A · 감별 진단 평가]`,
+      aLines.length > 0 ? aLines.join("\n") : "• (선택된 감별 카드 없음)",
+      "",
+      `[P · 치료 오더 및 환자 교육]`,
+      pLines.length > 0 ? pLines.join("\n") : "• (선택된 치료/티칭 카드 없음)",
+    ].join("\n");
+  }
+
+  function searchNodesWithL0Priority(rawQuery) {
+    const q = (rawQuery || "").trim().toLowerCase();
+    if (!q || !mergedTreeData || !mergedTreeData["증상"]) {
+      return { l0Matches: [], otherMatches: [] };
+    }
+
+    const directL0 = [];
+    const directOther = [];
+    const matchedSymptomCodes = new Set();
+
+    Object.entries(mergedTreeData["증상"]).forEach(([code, sym]) => {
+      const symNodes = sym.nodes || {};
+      Object.values(symNodes).forEach((node) => {
+        const layer = getLayerFromNodeId(node.id);
+        const recId = node["추천문진"];
+        const recTitle = recId && symNodes[recId] ? symNodes[recId]["제목"] : "";
+        const hay = [
+          code,
+          sym.name,
+          node.id,
+          node["제목"],
+          node["질문"],
+          node["왜"],
+          node["술기세트"],
+          node["자침점용량"],
+          node["검사명"],
+          node["배제대상"],
+          Array.isArray(node["후보"]) ? node["후보"].join(" ") : "",
+          node["환자설명"],
+          node["근거"],
+          recId,
+          recTitle,
+        ]
+          .join(" ")
+          .toLowerCase();
+
+        if (hay.includes(q)) {
+          matchedSymptomCodes.add(code);
+          if (layer === "L0") {
+            directL0.push({ symCode: code, symName: sym.name, node, isDirect: true });
+          } else {
+            directOther.push({ symCode: code, symName: sym.name, node });
+          }
+        }
+      });
+    });
+
+    // 만약 세부 검사/치료 키워드(예: 신바로, Ottawa)로 검색해 직접 매칭된 L0가 적다면, 매칭된 증상의 대표 호소 양상(L0) 카드도 상단에 함께 제시
+    const seenL0Ids = new Set(directL0.map((x) => x.node.id));
+    if (directL0.length === 0 && matchedSymptomCodes.size > 0) {
+      matchedSymptomCodes.forEach((code) => {
+        const sym = mergedTreeData["증상"][code];
+        if (!sym || !sym.nodes) return;
+        Object.values(sym.nodes)
+          .filter((n) => getLayerFromNodeId(n.id) === "L0")
+          .sort((a, b) => String(a.id).localeCompare(String(b.id)))
+          .slice(0, 3)
+          .forEach((l0Node) => {
+            if (!seenL0Ids.has(l0Node.id)) {
+              seenL0Ids.add(l0Node.id);
+              directL0.push({ symCode: code, symName: sym.name, node: l0Node, isDirect: false });
+            }
+          });
+      });
+    }
+
+    directL0.sort((a, b) => {
+      if (a.isDirect !== b.isDirect) return a.isDirect ? -1 : 1;
+      return String(a.node.id).localeCompare(String(b.node.id));
+    });
+
+    directOther.sort((a, b) => String(a.node.id).localeCompare(String(b.node.id)));
+
+    return { l0Matches: directL0, otherMatches: directOther };
+  }
+
+  function handleHomeHeroSearch(query) {
+    const wrapEl = document.getElementById("home-search-results-wrap");
+    const clearBtn = document.getElementById("btn-clear-home-search");
+    const l0ListEl = document.getElementById("home-search-l0-list");
+    const otherListEl = document.getElementById("home-search-other-list");
+    const l0CountEl = document.getElementById("home-search-l0-count");
+    const otherCountEl = document.getElementById("home-search-other-count");
+    if (!wrapEl || !l0ListEl || !otherListEl) return;
+
+    const q = (query || "").trim();
+    if (clearBtn) clearBtn.hidden = q.length === 0;
+    if (!q) {
+      wrapEl.hidden = true;
+      return;
+    }
+
+    const { l0Matches, otherMatches } = searchNodesWithL0Priority(q);
+    wrapEl.hidden = false;
+    if (l0CountEl) l0CountEl.textContent = `${l0Matches.length}건`;
+    if (otherCountEl) otherCountEl.textContent = `${otherMatches.length}건`;
+
+    l0ListEl.innerHTML = "";
+    if (l0Matches.length === 0) {
+      l0ListEl.innerHTML = `<p class="search-empty-msg">일치하는 호소 양상(L0) 카드가 없습니다.</p>`;
+    } else {
+      l0Matches.slice(0, 8).forEach(({ symCode, symName, node, isDirect }) => {
+        const symNodes = mergedTreeData["증상"][symCode] ? mergedTreeData["증상"][symCode].nodes : {};
+        const recId = node["추천문진"];
+        const recNode = recId && symNodes[recId] ? symNodes[recId] : null;
+        const cleanTitle = String(node["제목"] || "").replace(/^\[호소\]\s*/, "");
+
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "home-search-l0-card";
+        card.innerHTML = `
+          <div class="hsl0-top">
+            <span class="hsl0-badge">🗣️ 호소 양상 (L0) ${isDirect ? "" : "· 연관 증상 진입"}</span>
+            <span class="hsl0-sym">${escapeHtml(symName)} · ${escapeHtml(node.id)}</span>
+          </div>
+          <div class="hsl0-title">${escapeHtml(cleanTitle)}</div>
+          ${node["질문"] ? `<div class="hsl0-quote">“${escapeHtml(node["질문"])}”</div>` : ""}
+          <div class="hsl0-footer">
+            <span>${
+              recNode
+                ? `🎯 맞춤 추천문진: ${escapeHtml(recId)} (${escapeHtml(recNode["제목"])})`
+                : "🛡️ L1-01 레드플래그 확인 후 문진 시작"
+            }</span>
+            <span class="hsl0-go">이 호소로 진료 시작 →</span>
+          </div>
+        `;
+        card.addEventListener("click", () => {
+          chooseSymptomFromNav(symCode, node.id);
+        });
+        l0ListEl.appendChild(card);
+      });
+    }
+
+    otherListEl.innerHTML = "";
+    if (otherMatches.length === 0) {
+      otherListEl.innerHTML = `<p class="search-empty-msg">일치하는 하위 문진·검사·감별·치료 카드가 없습니다.</p>`;
+    } else {
+      otherMatches.slice(0, 12).forEach(({ symCode, symName, node }) => {
+        const ntype = node["유형"] || "ask";
+        const summary =
+          node["질문"] ||
+          node["검사명"] ||
+          node["술기세트"] ||
+          node["환자설명"] ||
+          (Array.isArray(node["후보"]) ? node["후보"].join(", ") : "") ||
+          node["왜"] ||
+          "";
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "home-search-other-card";
+        card.innerHTML = `
+          <div class="hso-top">
+            <span class="node-type-badge type-${escapeHtml(ntype)}">${escapeHtml(
+          TYPE_KOREAN[ntype] || ntype
+        )}</span>
+            <span class="hso-id">${escapeHtml(symName)} · ${escapeHtml(node.id)}</span>
+          </div>
+          <div class="hso-title">${escapeHtml(node["제목"])}</div>
+          ${summary ? `<div class="hso-desc">${escapeHtml(summary)}</div>` : ""}
+        `;
+        card.addEventListener("click", () => {
+          chooseSymptomFromNav(symCode, node.id);
+        });
+        otherListEl.appendChild(card);
+      });
+    }
+  }
+
+  /* ==================== 상단 빠른 검색 팝오버 (L0 최우선 정렬) ==================== */
   function handleQuickSearch(query) {
     const q = (query || "").trim().toLowerCase();
     if (!q || !mergedTreeData) {
@@ -2852,50 +3372,38 @@
       return;
     }
 
-    const matched = [];
-    Object.entries(mergedTreeData["증상"]).forEach(([code, sym]) => {
-      Object.values(sym.nodes || {}).forEach((node) => {
-        const hay = [
-          code,
-          sym.name,
-          node.id,
-          node["제목"],
-          node["질문"],
-          node["술기세트"],
-          node["자침점용량"],
-          node["검사명"],
-          node["환자설명"],
-        ]
-          .join(" ")
-          .toLowerCase();
-        if (hay.includes(q)) matched.push({ symCode: code, symName: sym.name, node });
-      });
-    });
+    const { l0Matches, otherMatches } = searchNodesWithL0Priority(q);
+    const combined = [
+      ...l0Matches.map((x) => Object.assign({}, x, { isL0: true })),
+      ...otherMatches.map((x) => Object.assign({}, x, { isL0: false })),
+    ];
 
     nodeSearchSection.hidden = false;
     nodeSearchGrid.innerHTML = "";
-    if (matched.length === 0) {
+    if (combined.length === 0) {
       nodeSearchGrid.innerHTML = "<p style='color:#94a3b8; font-size:0.84rem;'>일치하는 카드가 없습니다.</p>";
       return;
     }
 
-    matched.slice(0, 9).forEach(({ symCode, symName, node }) => {
+    combined.slice(0, 10).forEach(({ symCode, symName, node, isL0 }) => {
       const card = document.createElement("div");
-      card.className = "routine-deck-item";
+      card.className = `routine-deck-item ${isL0 ? "search-item-l0-priority" : ""}`;
+      const typeLabel = isL0 ? "🗣️ 호소 양상 (1순위 진입)" : TYPE_KOREAN[node["유형"]] || node["유형"];
       card.innerHTML = `
-        <div style="display:flex; justify-content:space-between;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
           <span style="font-size:0.74rem; color:#38bdf8; font-weight:800;">${escapeHtml(symName)} · ${escapeHtml(
             node.id
           )}</span>
-          <span style="font-size:0.72rem;">${escapeHtml(TYPE_KOREAN[node["유형"]] || node["유형"])}</span>
+          <span style="font-size:0.72rem; font-weight:800; color:${isL0 ? "#c4b5fd" : "#cbd5e1"};">${escapeHtml(
+        typeLabel
+      )}</span>
         </div>
         <strong style="font-size:0.9rem;">${escapeHtml(node["제목"])}</strong>
       `;
       card.addEventListener("click", () => {
         nodeSearchSection.hidden = true;
         searchInput.value = "";
-        if (currentMode !== "clinic") switchMode("clinic");
-        selectSymptom(symCode, node.id);
+        chooseSymptomFromNav(symCode, node.id);
       });
       nodeSearchGrid.appendChild(card);
     });
@@ -2903,8 +3411,46 @@
 
   /* ==================== 이벤트 바인딩 ==================== */
   function bindEvents() {
+    const btnModeHome = document.getElementById("btn-mode-home");
+    const btnBrandHome = document.getElementById("btn-brand-home");
+    if (btnModeHome) btnModeHome.addEventListener("click", () => switchMode("home"));
+    if (btnBrandHome) btnBrandHome.addEventListener("click", () => switchMode("home"));
+
     document.getElementById("btn-mode-clinic").addEventListener("click", () => switchMode("clinic"));
     document.getElementById("btn-mode-setup").addEventListener("click", () => switchMode("setup"));
+
+    // 홈 허브 중앙 검색창 & 추천 키워드 칩
+    const homeHeroSearch = document.getElementById("home-hero-search");
+    const btnClearHomeSearch = document.getElementById("btn-clear-home-search");
+    if (homeHeroSearch) {
+      homeHeroSearch.addEventListener("input", (e) => handleHomeHeroSearch(e.target.value));
+    }
+    if (btnClearHomeSearch && homeHeroSearch) {
+      btnClearHomeSearch.addEventListener("click", () => {
+        homeHeroSearch.value = "";
+        handleHomeHeroSearch("");
+        homeHeroSearch.focus();
+      });
+    }
+    document.querySelectorAll(".quick-kw-chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const kw = chip.getAttribute("data-kw") || "";
+        if (homeHeroSearch) {
+          homeHeroSearch.value = kw;
+          handleHomeHeroSearch(kw);
+          homeHeroSearch.focus();
+        }
+      });
+    });
+
+    // SOAP 차트 요약 복사 버튼
+    const soapBtn = document.getElementById("btn-copy-soap-summary");
+    if (soapBtn) {
+      soapBtn.addEventListener("click", () => {
+        const summary = generateSoapChartSummary();
+        if (summary) copyToClipboard(summary, "현재 진료 경로 SOAP 차트 요약");
+      });
+    }
 
     document.querySelectorAll(".setup-tab").forEach((btn) => {
       btn.addEventListener("click", () => switchSetupSubview(btn.getAttribute("data-subview")));
@@ -3409,59 +3955,43 @@
     document.addEventListener("keydown", (ev) => {
       if (ev.key === "Escape") {
         closeMobileSymptomSheet();
-      }
-    });
-
-    setupPwaInstall();
-  }
-
-  function setupPwaInstall() {
-    const installBtn = document.getElementById("btn-install-pwa");
-    if (!installBtn) return;
-
-    const isStandalone =
-      window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
-    if (isStandalone) {
-      installBtn.hidden = true;
-      return;
-    }
-
-    let deferredPrompt = null;
-    const ua = navigator.userAgent || "";
-    const isMobileUa = /Android|iPhone|iPad|iPod/i.test(ua);
-    const isIos = /iPhone|iPad|iPod/i.test(ua);
-
-    if (isMobileUa) {
-      installBtn.hidden = false;
-    }
-
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      installBtn.hidden = false;
-    });
-
-    installBtn.addEventListener("click", async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const result = await deferredPrompt.userChoice;
-        if (result && result.outcome === "accepted") {
-          installBtn.hidden = true;
-        }
-        deferredPrompt = null;
+        if (nodeSearchSection) nodeSearchSection.hidden = true;
         return;
       }
-      if (isIos) {
-        showToast("📱 Safari 하단 [공유 □↑] → [홈 화면에 추가]로 차트나무를 설치하세요.");
-      } else {
-        showToast("📲 브라우저 메뉴(⋮) → [홈 화면에 추가 / 앱 설치]를 선택하세요.");
-      }
-    });
 
-    window.addEventListener("appinstalled", () => {
-      deferredPrompt = null;
-      installBtn.hidden = true;
-      showToast("✅ 차트나무 앱이 홈 화면에 설치되었습니다!");
+      const tag = (ev.target && ev.target.tagName ? ev.target.tagName : "").toUpperCase();
+      const isTyping = tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || (ev.target && ev.target.isContentEditable);
+      if (isTyping) return;
+
+      // '/' 또는 Ctrl+K 로 즉시 검색창 포커스
+      if (ev.key === "/" || ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === "k")) {
+        ev.preventDefault();
+        const homeSearch = document.getElementById("home-hero-search");
+        if (currentMode === "home" && homeSearch) {
+          homeSearch.focus();
+        } else if (searchInput) {
+          searchInput.focus();
+        }
+        return;
+      }
+
+      // 진료 보드 단축키: 1/2로 첫 번째·두 번째 분기 선택, Backspace로 한 칸 뒤로
+      if (currentMode === "clinic" && teachModal && teachModal.hidden) {
+        if (ev.key === "1" || ev.key === "2") {
+          const branchBtns = nodeDetailContent ? nodeDetailContent.querySelectorAll(".btn-dock-branch") : [];
+          const idx = ev.key === "1" ? 0 : 1;
+          if (branchBtns[idx]) {
+            ev.preventDefault();
+            branchBtns[idx].click();
+          }
+        } else if (ev.key === "Backspace") {
+          const undoBtn = document.getElementById("btn-path-undo");
+          if (undoBtn && currentPath.length > 1) {
+            ev.preventDefault();
+            undoBtn.click();
+          }
+        }
+      }
     });
   }
 
@@ -3525,6 +4055,7 @@
 
       populateSymptomSelects();
       renderClinicBoardMode();
+      renderHomeHubMode();
 
       const sym = mergedTreeData["증상"][activeSymptomCode];
       if (sym && sym.entry && sym.nodes[sym.entry]) {

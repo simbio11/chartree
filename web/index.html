@@ -20,10 +20,11 @@
     <div class="header-inner">
       <!-- 좌측: 브랜드 + 증상 덱 선택 알약 (#symptom-grid) -->
       <div class="header-left">
-        <div class="brand-badge" title="차트나무 (Chartree)">
+        <button type="button" id="btn-brand-home" class="brand-badge" title="차트나무 홈 허브로 이동">
           <span class="brand-icon">🌳</span>
           <span class="brand-text">차트나무</span>
-        </div>
+          <span class="brand-sub">CDS</span>
+        </button>
         <!-- 증상 카테고리 드롭다운(데스크톱) & 현재 증상 선택기(모바일) (#symptom-grid ID 유지) -->
         <div id="symptom-grid" class="symptom-deck-tabs" role="list"></div>
         <div id="active-symptom-indicator" class="active-symptom-pill" aria-live="polite"></div>
@@ -35,32 +36,32 @@
         <div id="recent-section" hidden><div id="recent-list"></div></div>
       </div>
 
-      <!-- 중앙: 2대 모드 전환 스위치 (실제 진료 보드 vs 카드·루틴 제작소) -->
+      <!-- 중앙: 3대 모드 전환 스위치 (홈 허브 / 진료 보드 / 연구·세팅) -->
       <div class="mode-switcher" role="tablist" aria-label="모드 전환">
-        <button type="button" id="btn-mode-clinic" class="mode-btn active" data-mode="clinic">
-          🩺 실제 진료 보드
+        <button type="button" id="btn-mode-home" class="mode-btn active" data-mode="home">
+          🏛️ 홈 허브
+        </button>
+        <button type="button" id="btn-mode-clinic" class="mode-btn" data-mode="clinic">
+          🩺 진료 보드
         </button>
         <button type="button" id="btn-mode-setup" class="mode-btn" data-mode="setup">
-          🛠️ 세팅 · 공부
+          🛠️ 연구 · 세팅
         </button>
       </div>
 
-      <!-- 우측: 빠른 검색 & 내 루틴 덱 서랍 & PWA 설치 버튼 -->
+      <!-- 우측: 빠른 검색 & 내 루틴 덱 서랍 -->
       <div class="header-right">
         <div class="search-mini">
           <input
             type="search"
             id="symptom-search"
-            placeholder="🔍 카드·경혈·진단 검색…"
+            placeholder="🔍 빠른 카드 검색 (/)…"
             autocomplete="off"
           >
           <span id="summary-stats" hidden></span>
         </div>
         <button type="button" id="btn-toggle-routine-drawer" class="btn-deck-drawer" title="짜놓은 진료 루틴 덱 열기">
-          ⚡ 내 루틴 덱 <span id="header-routine-count" class="count-dot">0</span>
-        </button>
-        <button type="button" id="btn-install-pwa" class="btn-install-pwa" hidden title="홈 화면에 차트나무 앱 설치">
-          📲 앱 설치
+          ⚡ 루틴 덱 <span id="header-routine-count" class="count-dot">0</span>
         </button>
         <span id="generated-time" class="sr-only"></span>
       </div>
@@ -95,23 +96,105 @@
 
   <main class="app-main">
     <!-- ========================================================================
+         MODE 0: 🏛️ 학술 홈 허브 (중앙 통합 검색 · 카드 유형별 통계 · 카테고리별 증상 디렉터리)
+         ======================================================================== -->
+    <div id="mode-home-container" class="mode-container view-transition">
+      <section class="home-hero-panel">
+        <div class="home-hero-eyebrow">CHARTREE CLINICAL DECISION SUPPORT · 근거 기반 한의 임상 프로토콜</div>
+        <h1 class="home-hero-title">차트나무 임상 의사결정 아카이브</h1>
+        <p class="home-hero-subtitle">
+          환자 주호소(L0)에서 출발하여 응급 레드플래그 배제(L1), 이학적 검사(L2), 감별 진단(L3), 술기별 치료·환자 티칭(L4)까지 학술 근거로 연결된 임상 분기 트리입니다.
+        </p>
+
+        <!-- 중앙 통합 검색창 (호소 양상 L0 최상단 우선 노출 + 하위 관련 카드 나열) -->
+        <div class="home-search-box">
+          <div class="home-search-input-wrap">
+            <span class="home-search-icon" aria-hidden="true">🔍</span>
+            <input
+              type="search"
+              id="home-hero-search"
+              placeholder="환자 호소 양상, 증상명, 이학적 검사(예: Spurling, Ottawa), 경혈·처방 검색..."
+              autocomplete="off"
+            >
+            <button type="button" id="btn-clear-home-search" class="btn-clear-search" hidden aria-label="검색어 지우기">✕</button>
+            <kbd class="search-kbd-hint" title="단축키 / 로 즉시 검색">/</kbd>
+          </div>
+          <div class="home-quick-keywords" aria-label="자주 찾는 임상 키워드">
+            <span class="quick-kw-label">추천 검색:</span>
+            <button type="button" class="quick-kw-chip" data-kw="벼락두통">벼락두통</button>
+            <button type="button" class="quick-kw-chip" data-kw="뒷목">뒷목·경추</button>
+            <button type="button" class="quick-kw-chip" data-kw="빙글빙글">회전성 어지럼</button>
+            <button type="button" class="quick-kw-chip" data-kw="저리고">방사통·저림</button>
+            <button type="button" class="quick-kw-chip" data-kw="신바로">신바로 약침</button>
+            <button type="button" class="quick-kw-chip" data-kw="Ottawa">Ottawa 규칙</button>
+          </div>
+        </div>
+
+        <!-- 중앙 검색 결과 영역 (검색어 입력 시 즉시 펼쳐짐: 상단 L0 호소 양상 -> 하단 기타 카드) -->
+        <div id="home-search-results-wrap" class="home-search-results-wrap" hidden>
+          <div class="home-search-group" id="home-search-l0-group">
+            <div class="home-search-group-head l0-priority-head">
+              <span>🗣️ 1순위 · 환자 호소 양상 (L0 진입 카드)</span>
+              <span id="home-search-l0-count" class="search-count-pill">0건</span>
+            </div>
+            <div id="home-search-l0-list" class="home-search-l0-grid"></div>
+          </div>
+
+          <div class="home-search-group" id="home-search-other-group">
+            <div class="home-search-group-head">
+              <span>📑 2순위 · 관련 문진 · 이학적 검사 · 감별 · 치료 · 티칭 카드</span>
+              <span id="home-search-other-count" class="search-count-pill">0건</span>
+            </div>
+            <div id="home-search-other-list" class="home-search-other-grid"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 아카이브 카드 유형별 분포 대시보드 -->
+      <section class="home-stats-section" aria-label="카드 종류별 구축 현황">
+        <div class="home-section-head">
+          <div>
+            <h2 class="home-section-title">📊 프로토콜 카드 유형별 아카이브 현황</h2>
+            <p class="home-section-desc">전체 증상 프로토콜에 수록된 임상 카드의 층위·종류별 분포입니다.</p>
+          </div>
+          <div id="home-recent-inline" class="home-recent-inline"></div>
+        </div>
+        <div id="home-type-breakdown-grid" class="home-type-breakdown-grid"></div>
+      </section>
+
+      <!-- 카테고리별 증상 프로토콜 디렉터리 -->
+      <section class="home-directory-section" aria-label="카테고리별 증상 프로토콜 선택">
+        <div class="home-section-head">
+          <div>
+            <h2 class="home-section-title">🗂️ 임상 분과·카테고리별 프로토콜 디렉터리</h2>
+            <p class="home-section-desc">증상 카드를 선택해 진료 보드로 진입하거나, 카드 안의 환자 호소 양상(L0)을 바로 클릭해 맞춤 문진으로 시작하세요.</p>
+          </div>
+        </div>
+        <div id="home-category-directory" class="home-category-directory"></div>
+      </section>
+    </div>
+
+    <!-- ========================================================================
          MODE 1: 🩺 실제 진료 보드 (가로 카드 보드 + 흐릿한 비선택지 + SVG 연결선 + 우측 인스펙터)
          ======================================================================== -->
-    <div id="mode-clinic-container" class="mode-container">
+    <div id="mode-clinic-container" class="mode-container view-transition" hidden>
       <!-- 보드 상단 슬림 컨트롤 바 (걸어온 콤보 칩 + 뒤로/리셋만 아주 깔끔하게 한 줄로) -->
       <div id="pathway-bar" class="board-control-strip">
         <div class="combo-trail">
-          <span class="combo-label">선택한 카드 콤보:</span>
+          <span class="combo-label">진료 경로:</span>
           <div id="pathway-chips" class="combo-chips"></div>
         </div>
         <div class="board-actions">
+          <button type="button" id="btn-copy-soap-summary" class="btn-ctrl btn-ctrl-soap" title="현재까지 진행한 문진·검사·감별·치료 경로를 SOAP 차트 형식으로 복사">
+            📋 차트(SOAP) 요약 복사
+          </button>
           <button type="button" id="btn-copy-combo-orders" class="btn-ctrl" style="background:#dcfce7; color:#15803d; border-color:#86efac;" hidden>
             📋 선택 치료 콤보 전체 복사
           </button>
-          <button type="button" id="btn-path-undo" class="btn-ctrl" title="직전 카드로 되돌리기">↩ 한 칸 뒤로</button>
-          <button type="button" id="btn-path-reset" class="btn-ctrl" title="처음 진입 카드로 초기화">🔄 판 리셋</button>
+          <button type="button" id="btn-path-undo" class="btn-ctrl" title="직전 카드로 되돌리기 (Backspace)">↩ 한 칸 뒤로</button>
+          <button type="button" id="btn-path-reset" class="btn-ctrl" title="처음 진입 카드로 초기화 (R)">🔄 판 리셋</button>
           <button type="button" id="btn-clinic-to-setup" class="btn-ctrl btn-ctrl-accent">
-            + 현재 카드에서 새 가지 만들기
+            + 현재 카드에서 새 가지
           </button>
         </div>
       </div>
