@@ -93,68 +93,68 @@
       name: "두경부·편두통·전정·요추 심부 표적 침술 (협척·신수·풍지·예풍)",
       level: 4,
       count: 42,
-      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01", "NP-L4-01", "KN-L4-01", "AN-L4-01", "EL-L4-01", "HN-L4-01", "FTL-L4-01", "DY-L4-01"],
-      notes: "두경부·사지·말초신경·족부·위장/T6-10 배수혈 표적 자침. 당뇨 발 감각저하(LOPS) 화상성 뜸 금지, 흉추 배수혈 기흉 주의.",
+      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01", "NP-L4-01", "KN-L4-01", "AN-L4-01", "EL-L4-01", "HN-L4-01", "FTL-L4-01", "DY-L4-01", "AB-L4-01"],
+      notes: "두경부·사지·말초신경·족부·위장/대장(천추·상거허·팔료혈) 표적 자침. 마른체형 천추 심자 주의, 흉추 배수혈 기흉 주의.",
       updated: "2026-11-19",
     },
     {
       id: "SK-002",
       category: "침·전침",
-      name: "경항부·협착·사지관절·DPN·족저·위장(족삼리-상거허) 2Hz / 100Hz 전침술",
+      name: "경항부·협착·사지관절·DPN·족저·위장/대장(천추-복결) 2Hz / 100Hz 전침술",
       level: 4,
       count: 35,
-      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02", "NP-L4-02", "KN-L4-02", "AN-L4-02", "EL-L4-02", "HN-L4-02", "FTL-L4-02", "DY-L4-02"],
-      notes: "위마비·PDS엔 족삼리-상거허·내관-간사 2Hz. 심장을 가로지르는 복/흉부 전극 배치 및 심장박동기 절대 금기.",
+      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02", "NP-L4-02", "KN-L4-02", "AN-L4-02", "EL-L4-02", "HN-L4-02", "FTL-L4-02", "DY-L4-02", "AB-L4-02"],
+      notes: "만성 변비엔 천추-복결(동측 연결) 2/10Hz, IBS엔 족삼리-상거허 2Hz. 급성 복증·장폐색·임신부·심장박동기 절대 금기.",
       updated: "2026-11-19",
     },
     {
       id: "SK-003",
       category: "약침·봉침",
-      name: "척추·관절·신경·족부·배수혈(T3-T10) 약침술 (신바로/황련/자하거/봉약침)",
+      name: "척추·관절·신경·족부·배수혈(T3-T10/대장수·팔료혈) 약침술",
       level: 3,
       count: 14,
-      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03", "NP-L4-03", "KN-L4-03", "AN-L4-03", "EL-L4-03", "HN-L4-03", "FTL-L4-03", "DY-L4-03"],
-      notes: "흉추 협척 심부 늑간 진입(기흉) 및 신경·건 실질 내 직접 주사 절대 금지; 복강 내 장기 천공 주의.",
+      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03", "NP-L4-03", "KN-L4-03", "AN-L4-03", "EL-L4-03", "HN-L4-03", "FTL-L4-03", "DY-L4-03", "AB-L4-03"],
+      notes: "흉추 기흉 및 전복부 장막 천공 회피(배부/천골부 권장); 신경·건 실질 내 직접 주사 및 급성 복증 절대 금지.",
       updated: "2026-11-19",
     },
     {
       id: "SK-004",
       category: "추나·수기",
-      name: "Cox · 상경추·거골·족부 추나 · 흉추(T1-10)/횡격막/SCM MFR · 신경활주",
+      name: "Cox · 상경추·사지 추나 · 흉요천추/횡격막 MFR · 시계방향 대장유동",
       level: 3,
       count: 28,
-      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04", "NP-L4-04", "KN-L4-04", "AN-L4-04", "EL-L4-04", "HN-L4-04", "FTL-L4-04", "DY-L4-04"],
-      notes: "GERD·FD엔 흉추 신전 가동 & 횡격막·SCM 이완(식사 직후 복부 압박 금지). 급성 복증·대동맥류·골절 절대 금기.",
+      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04", "NP-L4-04", "KN-L4-04", "AN-L4-04", "EL-L4-04", "HN-L4-04", "FTL-L4-04", "DY-L4-04", "AB-L4-04"],
+      notes: "변비·IBS엔 요천추·장요근 이완 + 시계방향 대장 유동(충수염·게실염·IBD 활동기·장폐색 시 복부 마사지 절대 금지).",
       updated: "2026-11-19",
     },
     {
       id: "SK-005",
       category: "이학적검사",
-      name: "HINTS+ · SLR · Ottawa · Durkan/6축 · Windlass/Thompson · 복진/Carnett/Murphy",
+      name: "HINTS+ · SLR · Ottawa · Durkan · Windlass · 복진(McBurney/Carnett/Murphy)",
       level: 4,
       count: 19,
-      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04", "NP-L2-02", "NP-L2-06", "KN-L2-02", "AN-L2-01", "AN-L2-04", "EL-L2-01", "EL-L2-03", "HN-L2-01", "HN-L2-04", "HN-L2-06", "FTL-L2-01", "FTL-L2-02", "FTL-L2-04", "FTL-L2-05", "DY-L2-01", "DY-L2-02", "DY-L2-04", "DY-L2-05"],
-      notes: "복진(심하비경/진수음)·Carnett(복벽통)·Murphy(담낭염)·NSAIDs+SSRI/항응고제 약물 3축 및 40세↑ 내시경 기준 점검.",
+      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04", "NP-L2-02", "NP-L2-06", "KN-L2-02", "AN-L2-01", "AN-L2-04", "EL-L2-01", "EL-L2-03", "HN-L2-01", "HN-L2-04", "HN-L2-06", "FTL-L2-01", "FTL-L2-02", "FTL-L2-04", "FTL-L2-05", "DY-L2-01", "DY-L2-02", "DY-L2-04", "DY-L2-05", "AB-L2-01", "AB-L2-02", "AB-L2-03", "AB-L2-05"],
+      notes: "9분면 청진→촉진, McBurney/Rovsing/Psoas(충수염), 브리스톨 척도, Carnett, 탈수 4징후 및 50세↑ 대장내시경 기준 점검.",
       updated: "2026-11-19",
     },
     {
       id: "SK-006",
       category: "한약처방",
-      name: "변증 한약 (독활기생탕·황기계지오물탕·평위산·반하사심탕·오패산·육군자탕)",
+      name: "변증 한약 (독활기생탕·평위산·반하사심탕·오패산·통사요방·대건중탕·곽향정기산)",
       level: 4,
       count: 54,
-      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06", "NP-L4-05", "KN-L4-06", "AN-L4-05", "EL-L4-06", "HN-L4-05", "FTL-L4-05", "DY-L4-05"],
-      notes: "식상엔 보화환·평위산(후박), 속쓰림/GERD엔 반하사심탕·오패산, 기허 PDS엔 육군자탕. 항응고제·PPI·NSAIDs 상호작용 확인.",
+      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06", "NP-L4-05", "KN-L4-06", "AN-L4-05", "EL-L4-06", "HN-L4-05", "FTL-L4-05", "DY-L4-05", "AB-L4-05"],
+      notes: "IBS엔 통사요방·삼령백출산, 변비/유착엔 대건중탕·마자인환(대황 장기연용 금기), SIBO 가스 시 다당류 조절.",
       updated: "2026-11-19",
     },
     {
       id: "SK-007",
       category: "추나·수기",
-      name: "WalkBack · Big 3 · CCFT · VMO/SEBT · Rathleff·Alfredson · 횡격막 복식호흡",
+      name: "WalkBack · Big 3 · CCFT · Rathleff·Alfredson · 횡격막호흡 · 배변발판자세",
       level: 4,
       count: 15,
-      linkedNodes: ["HA-L4-06", "LBP-L4-07", "NP-L4-06", "KN-L4-07", "AN-L4-06", "HN-L4-06", "FTL-L4-06", "DY-L4-06"],
-      notes: "GERD·FD엔 횡격막 복식호흡(LES 외인성 보강) + 식후 15분 산책 + 좌측와위 수면 자세.",
+      linkedNodes: ["HA-L4-06", "LBP-L4-07", "NP-L4-06", "KN-L4-07", "AN-L4-06", "HN-L4-06", "FTL-L4-06", "DY-L4-06", "AB-L4-06"],
+      notes: "출구형 변비·IBS엔 15~20cm 배변 발판 + 골반저 이완 호기 배변 + 5~10분 이내 제한.",
       updated: "2026-11-19",
     },
     {
@@ -386,6 +386,27 @@
       name: "속쓰림·EPS·약인성 위염 루틴 (약물3축/내시경 → 반하사심탕 + PPI 테이퍼링 티칭)",
       path: ["DY-L0-03", "DY-L1-01", "DY-L1-03", "DY-L2-02", "DY-L2-05", "DY-L3-02", "DY-L4-01", "DY-L4-05", "DY-L4-08", "DY-L4-09"],
       orderMemo: "[검사] Carnett 복벽배제 & NSAIDs+SSRI/항응고 점검 + [한약] 반하사심탕·오패산 + [티칭] 40세↑ 내시경·고위험 PPI 유지 vs 단순 반동 테이퍼링",
+    },
+    {
+      id: "RT-32",
+      symptom: "AB",
+      name: "과민성 장 증후군(IBS-D/SIBO) 루틴 (천추·상거허 + 통사요방/삼령백출산 + 저FODMAP)",
+      path: ["AB-L0-02", "AB-L1-01", "AB-L1-02", "AB-L2-01", "AB-L3-01", "AB-L4-01", "AB-L4-02", "AB-L4-05", "AB-L4-07"],
+      orderMemo: "[침·전침] 천추·상거허·족삼리·태충 2Hz + [한약] 통사요방(간비부조)/삼령백출산(SIBO 후박가미) + [티칭] 3단계 저FODMAP & 예기불안 완화",
+    },
+    {
+      id: "RT-33",
+      symptom: "AB",
+      name: "만성 기능성/출구형 변비 루틴 (천추-복결 2/10Hz 전침 + 팔료혈 + 대건중탕·발판자세)",
+      path: ["AB-L0-03", "AB-L1-01", "AB-L1-03", "AB-L2-02", "AB-L3-02", "AB-L4-01", "AB-L4-02", "AB-L4-03", "AB-L4-04", "AB-L4-05", "AB-L4-06", "AB-L4-08"],
+      orderMemo: "[전침] 천추-복결 2/10Hz(Liu 2016) + [약침/추나] 팔료혈·장요근·시계방향 대장유동 + [한약/재활] 대건중탕/마자인환 + 배변 발판 15~20cm",
+    },
+    {
+      id: "RT-34",
+      symptom: "AB",
+      name: "급성 위장관염 루틴 (탈수/이질 배제 → 곽향정기산 + 천추·족삼리 + ORS/지사제 금기)",
+      path: ["AB-L0-05", "AB-L1-01", "AB-L1-05", "AB-L2-04", "AB-L3-03", "AB-L4-01", "AB-L4-05", "AB-L4-09"],
+      orderMemo: "[검사] 활력징후/탈수·C.diff/충수염 배제 + [침/한약] 천추·족삼리 + 곽향정기산 3~5일 + [티칭] 전해질 ORS & 발열/혈변 시 지사제 절대 금기",
     },
   ];
 
@@ -4403,7 +4424,7 @@
       dbGetAll("routines"),
     ]);
 
-    const seedFlag = localStorage.getItem("clin7_seed_v15");
+    const seedFlag = localStorage.getItem("clin7_seed_v16");
     if (savedSkills.length === 0 || seedFlag !== "done") {
       const skillMap = new Map(savedSkills.map((s) => [s.id, s]));
       for (const sk of DEFAULT_SKILLS) {
@@ -4434,7 +4455,7 @@
         }
       }
       routinesList = Array.from(rtMap.values());
-      localStorage.setItem("clin7_seed_v15", "done");
+      localStorage.setItem("clin7_seed_v16", "done");
     } else {
       routinesList = savedRoutines;
     }
