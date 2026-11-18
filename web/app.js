@@ -729,7 +729,8 @@
           const isYes =
             decisionRibbonLabel.includes("예") ||
             decisionRibbonLabel.includes("양성") ||
-            decisionRibbonLabel.includes("수동제한");
+            decisionRibbonLabel.includes("수동제한") ||
+            decisionRibbonLabel.includes("진료 시작");
           const isDanger = activeNode && activeNode["레드플래그"] === true && isYes;
           const rCls = isDanger ? "ribbon-danger" : isYes ? "" : "ribbon-no";
           ribbonHtml = `<span class="next-decision-ribbon ${rCls}">👉 [${escapeHtml(
@@ -772,7 +773,11 @@
         if (isSelected && nextBranches.length > 0) {
           const btns = nextBranches
             .map(({ label, targetId }) => {
-              const isYes = label.includes("예") || label.includes("양성") || label.includes("수동제한");
+              const isYes =
+                label.includes("예") ||
+                label.includes("양성") ||
+                label.includes("수동제한") ||
+                label.includes("진료 시작");
               const isDanger = isRedflag && isYes;
               const bCls = isDanger ? "inline-danger" : isYes ? "inline-yes" : "inline-no";
               return `<button type="button" class="btn-inline-choice ${bCls}" data-branch-label="${escapeHtml(
@@ -1045,7 +1050,11 @@
         .map(({ label, targetId }) => {
           const tNode = nodesMap[targetId];
           const tTitle = tNode ? tNode["제목"] : targetId;
-          const isYes = label.includes("예") || label.includes("양성") || label.includes("수동제한");
+          const isYes =
+            label.includes("예") ||
+            label.includes("양성") ||
+            label.includes("수동제한") ||
+            label.includes("진료 시작");
           const cls = isRedflag && isYes ? "choice-danger" : isYes ? "choice-yes" : "choice-no";
           return `
             <button type="button" class="dock-choice-btn ${cls} btn-dock-branch" data-label="${escapeHtml(
