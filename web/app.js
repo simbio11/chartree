@@ -93,58 +93,58 @@
       name: "두경부·편두통·전정·요추 심부 표적 침술 (협척·신수·풍지·예풍)",
       level: 4,
       count: 42,
-      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01", "NP-L4-01", "KN-L4-01", "AN-L4-01"],
-      notes: "두경부 0.25×30mm 득기, 요추 협척 40~50mm, 무릎 독비·내슬안 사자, 발목 구허·신맥·곤륜(아킬레스건 실질 심자 금지).",
+      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01", "NP-L4-01", "KN-L4-01", "AN-L4-01", "EL-L4-01"],
+      notes: "두경부·사지 표적 자침. 팔꿈치 곡지·수삼리, 드퀘르뱅 양계·열결, TFCC 양곡·후계, 수근관 내관(신경 직자 회피).",
       updated: "2026-11-19",
     },
     {
       id: "SK-002",
       category: "침·전침",
-      name: "경항부·요추 협착·슬관절·족관절 2Hz / 급성 100Hz 전침술",
+      name: "경항부·요추 협착·슬/족관절·상과염 2Hz / 급성 100Hz 전침술",
       level: 4,
       count: 35,
-      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02", "NP-L4-02", "KN-L4-02", "AN-L4-02"],
-      notes: "협착증 BL25-L4협척 2Hz 30분, 무릎 혈해-양구 2Hz, 발목 구허-양릉천(비골근)·승산-합양. 심장박동기 장착자 절대 금기.",
+      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02", "NP-L4-02", "KN-L4-02", "AN-L4-02", "EL-L4-02"],
+      notes: "협착증 BL25-L4협척 2Hz 30분, 무릎 혈해-양구 2Hz, 팔꿈치 곡지-수삼리 2Hz. 심장박동기 장착자 절대 금기.",
       updated: "2026-11-19",
     },
     {
       id: "SK-003",
       category: "약침·봉침",
-      name: "경추·요추·슬관절·족관절 단계별 심부 약침술 (신바로/중성어혈/자하거/봉약침)",
+      name: "척추·슬/족관절·상과/건초 단계별 약침술 (신바로/봉약침/자하거)",
       level: 3,
       count: 14,
-      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03", "NP-L4-03", "KN-L4-03", "AN-L4-03"],
-      notes: "급성 염좌 중성어혈/황련 → 2주 후 자하거/녹용 인대 증식(건 실질 직접 금지). 화농/통풍(Hot joint) 절대 금지.",
+      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03", "NP-L4-03", "KN-L4-03", "AN-L4-03", "EL-L4-03"],
+      notes: "양방 스테로이드 주사 후 최소 2주간 심부 약침/침도 유예! 드퀘르뱅 수유모에게 안전 대안, 건 실질 직접 주입 금지.",
       updated: "2026-11-19",
     },
     {
       id: "SK-004",
       category: "추나·수기",
-      name: "Cox 굴곡-신연 · 상경추·흉추 · 슬/족관절 거골 후방활주 추나 · MFR",
+      name: "Cox 감압 · 상경추·거골 활주 · Mulligan MWM(테니스엘보) 추나",
       level: 3,
       count: 28,
-      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04", "NP-L4-04", "KN-L4-04", "AN-L4-04"],
-      notes: "척수증·VBI·급성 디스크 HVLA 금기; Ottawa 골절·High ankle 초기 외회전·아킬레스 파열·DVT 시 족관절 추나 금기.",
+      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04", "NP-L4-04", "KN-L4-04", "AN-L4-04", "EL-L4-04"],
+      notes: "Bisset BMJ 2006 MWM(무통 악력 증가 확인 시 시행). 주상골 골절·Kanavel·DRUJ 탈구 시 추나 절대 금기.",
       updated: "2026-11-19",
     },
     {
       id: "SK-005",
       category: "이학적검사",
-      name: "HINTS+ · SLR · Laslett · Wainner/Cook · Lachman · Ottawa/전방견인/Thompson",
+      name: "HINTS+ · SLR · Laslett · Wainner/Cook · Lachman · Ottawa · Cozen/Finkelstein",
       level: 4,
       count: 19,
-      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04", "NP-L2-02", "NP-L2-06", "KN-L2-02", "AN-L2-01", "AN-L2-04"],
-      notes: "발목 전방견인은 수상 4~5일 지연 진찰 시 민감도 96%, Thompson 검사는 아킬레스 파열 민감도 96%.",
+      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04", "NP-L2-02", "NP-L2-06", "KN-L2-02", "AN-L2-01", "AN-L2-04", "EL-L2-01", "EL-L2-03"],
+      notes: "외측상과 1~2cm vs PIN 3~4cm 구별, 아이히호프 위양성 50% 회피 오리지널 핀켈스타인 & 코담배갑(주상골) 선별.",
       updated: "2026-11-19",
     },
     {
       id: "SK-006",
       category: "한약처방",
-      name: "질환별 변증 한약 처방 (청상견통탕·독활기생탕·방기황기탕·당귀수산+오령산·회수산)",
+      name: "질환별 변증 한약 처방 (청상견통탕·독활기생탕·당귀수산+오령산·서경탕·당귀점통탕)",
       level: 4,
       count: 54,
-      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06", "NP-L4-05", "KN-L4-06", "AN-L4-05"],
-      notes: "급성 염좌 부종엔 당귀수산+오령산, 치타박일방(대황)은 연변 시 계지복령환 대체. 임신부 활혈거어제 금기.",
+      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06", "NP-L4-05", "KN-L4-06", "AN-L4-05", "EL-L4-06"],
+      notes: "상지 건병증/관절통엔 서경탕·당귀점통탕, 수습 부종엔 방기황기탕/오령산. 임신부·수유부 안전성 확인.",
       updated: "2026-11-19",
     },
     {
@@ -160,10 +160,10 @@
     {
       id: "SK-008",
       category: "도침·침도",
-      name: "견봉하 · 요추 극간인대 · 슬개지대/거위발 유착 박리 침도 시술",
+      name: "견봉하 · 요추 인대 · 슬개지대 · 상과/드퀘르뱅/A1 도르래 미세 박리",
       level: 1,
       count: 2,
-      linkedNodes: ["SH-L4-05", "LBP-L4-05", "KN-L4-05"],
+      linkedNodes: ["SH-L4-05", "LBP-L4-05", "KN-L4-05", "EL-L4-05"],
       notes: "Lv.1 — 초음파 가이드/골면 접촉 필수. L1~L3 횡돌기 전방 신장/후복막 대혈관 손상 절대 주의.",
       updated: "2026-11-19",
     },
@@ -302,6 +302,27 @@
       name: "아킬레스건병증 루틴 (건 주위 전침 + 약침 + Alfredson 편심성 + 위치별 티칭)",
       path: ["AN-L0-05", "AN-L1-01", "AN-L1-05", "AN-L2-04", "AN-L3-04", "AN-L4-01", "AN-L4-02", "AN-L4-03", "AN-L4-06", "AN-L4-08"],
       orderMemo: "[침·전침] 태계·곤륜·승산-합양 2Hz(건 실질 금지) + [약침] 건 주변 자하거/신바로 + [재활] Alfredson 편심성 + [티칭] 삽입부 스트레칭 금지(평지까지)",
+    },
+    {
+      id: "RT-20",
+      symptom: "EL",
+      name: "외측상과염(테니스 엘보) 루틴 (곡지-수삼리 전침 + Mulligan MWM + 편심성 티칭)",
+      path: ["EL-L0-02", "EL-L1-01", "EL-L1-02", "EL-L2-01", "EL-L3-01", "EL-L4-01", "EL-L4-02", "EL-L4-03", "EL-L4-04", "EL-L4-07"],
+      orderMemo: "[침·전침] 곡지-수삼리 2Hz + [약침] 신바로(스테로이드 2주 유예) + [추나] Mulligan MWM(BMJ 2006) + [티칭] 손바닥 위로 들기·편심성·주사 재발 경고",
+    },
+    {
+      id: "RT-21",
+      symptom: "EL",
+      name: "드퀘르뱅 증후군 루틴 (양계·열결 침 + 안전 약침 + 엄지 스파이카·육아 티칭)",
+      path: ["EL-L0-04", "EL-L1-01", "EL-L1-04", "EL-L2-03", "EL-L3-03", "EL-L4-01", "EL-L4-03", "EL-L4-06", "EL-L4-08"],
+      orderMemo: "[침] 양계·열결 + [약침] 신바로(수유모 안전 대안) + [한약] 서경탕/당귀점통탕 + [티칭] 자가 꺾기 금지·엄지 스파이카·팔뚝 육아 자세",
+    },
+    {
+      id: "RT-22",
+      symptom: "EL",
+      name: "TFCC · 수근관 · 방아쇠 수지 루틴 (양곡/내관 + 가동추나 + 야간 중립 부목)",
+      path: ["EL-L0-05", "EL-L1-01", "EL-L1-05", "EL-L2-04", "EL-L3-04", "EL-L4-01", "EL-L4-03", "EL-L4-04", "EL-L4-06", "EL-L4-09"],
+      orderMemo: "[침·약침] 양곡·양지·Fovea 자하거/봉약침 + [추나] DRUJ·수근골 가동 + [한약] 서경탕/오령산 + [티칭] 바닥 짚기 금지·야간 중립 부목",
     },
   ];
 
@@ -3388,7 +3409,7 @@
       dbGetAll("routines"),
     ]);
 
-    const seedFlag = localStorage.getItem("clin7_seed_v11");
+    const seedFlag = localStorage.getItem("clin7_seed_v12");
     if (savedSkills.length === 0 || seedFlag !== "done") {
       const skillMap = new Map(savedSkills.map((s) => [s.id, s]));
       for (const sk of DEFAULT_SKILLS) {
@@ -3419,7 +3440,7 @@
         }
       }
       routinesList = Array.from(rtMap.values());
-      localStorage.setItem("clin7_seed_v11", "done");
+      localStorage.setItem("clin7_seed_v12", "done");
     } else {
       routinesList = savedRoutines;
     }
