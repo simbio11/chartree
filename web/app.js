@@ -93,68 +93,68 @@
       name: "두경부·편두통·전정·요추 심부 표적 침술 (협척·신수·풍지·예풍)",
       level: 4,
       count: 42,
-      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01", "NP-L4-01", "KN-L4-01", "AN-L4-01", "EL-L4-01", "HN-L4-01", "FTL-L4-01", "DY-L4-01", "AB-L4-01"],
-      notes: "두경부·사지·말초신경·족부·위장/대장(천추·상거허·팔료혈) 표적 자침. 마른체형 천추 심자 주의, 흉추 배수혈 기흉 주의.",
+      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01", "NP-L4-01", "KN-L4-01", "AN-L4-01", "EL-L4-01", "HN-L4-01", "FTL-L4-01", "DY-L4-01", "AB-L4-01", "FP-L4-01"],
+      notes: "두경부·사지·위장/대장·안면표정근(양백·지창·협거·예풍) 표적 자침. 급성기(≤7일) 약자극·수포 직접 자침 금지.",
       updated: "2026-11-19",
     },
     {
       id: "SK-002",
       category: "침·전침",
-      name: "경항부·협착·사지관절·DPN·족저·위장/대장(천추-복결) 2Hz / 100Hz 전침술",
+      name: "경항부·협착·사지관절·DPN·위장/대장·안면(아급성 2Hz) 전침술",
       level: 4,
       count: 35,
-      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02", "NP-L4-02", "KN-L4-02", "AN-L4-02", "EL-L4-02", "HN-L4-02", "FTL-L4-02", "DY-L4-02", "AB-L4-02"],
-      notes: "만성 변비엔 천추-복결(동측 연결) 2/10Hz, IBS엔 족삼리-상거허 2Hz. 급성 복증·장폐색·임신부·심장박동기 절대 금기.",
+      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02", "NP-L4-02", "KN-L4-02", "AN-L4-02", "EL-L4-02", "HN-L4-02", "FTL-L4-02", "DY-L4-02", "AB-L4-02", "FP-L4-02"],
+      notes: "안면마비 전침은 발병 7~10일 이후 아급성기에 2Hz 약자극만 적용(초급성 1주·연합운동·HFS 및 심장박동기 절대 금기).",
       updated: "2026-11-19",
     },
     {
       id: "SK-003",
       category: "약침·봉침",
-      name: "척추·관절·신경·족부·배수혈(T3-T10/대장수·팔료혈) 약침술",
+      name: "척추·관절·신경·배수혈·예풍/안면(황련·자하거) 약침술",
       level: 3,
       count: 14,
-      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03", "NP-L4-03", "KN-L4-03", "AN-L4-03", "EL-L4-03", "HN-L4-03", "FTL-L4-03", "DY-L4-03", "AB-L4-03"],
-      notes: "흉추 기흉 및 전복부 장막 천공 회피(배부/천골부 권장); 신경·건 실질 내 직접 주사 및 급성 복증 절대 금지.",
+      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03", "NP-L4-03", "KN-L4-03", "AN-L4-03", "EL-L4-03", "HN-L4-03", "FTL-L4-03", "DY-L4-03", "AB-L4-03", "FP-L4-03"],
+      notes: "예풍 급성 황련·회복 자하거 소량 주입(VZV 수포 위·안와 내·신경 본간 직접 주사 절대 금지).",
       updated: "2026-11-19",
     },
     {
       id: "SK-004",
       category: "추나·수기",
-      name: "Cox · 상경추·사지 추나 · 흉요천추/횡격막 MFR · 시계방향 대장유동",
+      name: "Cox · 상경추·사지 추나 · 흉요천추/대장유동 · 안면근막이완",
       level: 3,
       count: 28,
-      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04", "NP-L4-04", "KN-L4-04", "AN-L4-04", "EL-L4-04", "HN-L4-04", "FTL-L4-04", "DY-L4-04", "AB-L4-04"],
-      notes: "변비·IBS엔 요천추·장요근 이완 + 시계방향 대장 유동(충수염·게실염·IBD 활동기·장폐색 시 복부 마사지 절대 금지).",
+      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04", "NP-L4-04", "KN-L4-04", "AN-L4-04", "EL-L4-04", "HN-L4-04", "FTL-L4-04", "DY-L4-04", "AB-L4-04", "FP-L4-04"],
+      notes: "안면마비엔 상경추/SCM/건측 과긴장 & 만성 구축 이완(뇌졸중·측두골골절·초급성 강압 마사지 금지).",
       updated: "2026-11-19",
     },
     {
       id: "SK-005",
       category: "이학적검사",
-      name: "HINTS+ · SLR · Ottawa · Durkan · Windlass · 복진(McBurney/Carnett/Murphy)",
+      name: "HINTS+ · SLR · Ottawa · Durkan · Windlass · 복진 · 이마주름/H-B/이경",
       level: 4,
       count: 19,
-      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04", "NP-L2-02", "NP-L2-06", "KN-L2-02", "AN-L2-01", "AN-L2-04", "EL-L2-01", "EL-L2-03", "HN-L2-01", "HN-L2-04", "HN-L2-06", "FTL-L2-01", "FTL-L2-02", "FTL-L2-04", "FTL-L2-05", "DY-L2-01", "DY-L2-02", "DY-L2-04", "DY-L2-05", "AB-L2-01", "AB-L2-02", "AB-L2-03", "AB-L2-05"],
-      notes: "9분면 청진→촉진, McBurney/Rovsing/Psoas(충수염), 브리스톨 척도, Carnett, 탈수 4징후 및 50세↑ 대장내시경 기준 점검.",
+      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04", "NP-L2-02", "NP-L2-06", "KN-L2-02", "AN-L2-01", "AN-L2-04", "EL-L2-01", "EL-L2-03", "HN-L2-01", "HN-L2-04", "HN-L2-06", "FTL-L2-01", "FTL-L2-02", "FTL-L2-04", "FTL-L2-05", "DY-L2-01", "DY-L2-02", "DY-L2-04", "DY-L2-05", "AB-L2-01", "AB-L2-02", "AB-L2-03", "AB-L2-05", "FP-L2-01", "FP-L2-02", "FP-L2-03", "FP-L2-06"],
+      notes: "이마주름 대조+FAST(중추 감별), H-B(I~VI)·Sunnybrook, 이경 외이도 수포(람세이헌트) 및 연합운동 평가.",
       updated: "2026-11-19",
     },
     {
       id: "SK-006",
       category: "한약처방",
-      name: "변증 한약 (독활기생탕·평위산·반하사심탕·오패산·통사요방·대건중탕·곽향정기산)",
+      name: "변증 한약 (평위산·반하사심탕·통사요방·대건중탕·이기거풍산·견정산·보양환오탕)",
       level: 4,
       count: 54,
-      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06", "NP-L4-05", "KN-L4-06", "AN-L4-05", "EL-L4-06", "HN-L4-05", "FTL-L4-05", "DY-L4-05", "AB-L4-05"],
-      notes: "IBS엔 통사요방·삼령백출산, 변비/유착엔 대건중탕·마자인환(대황 장기연용 금기), SIBO 가스 시 다당류 조절.",
+      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06", "NP-L4-05", "KN-L4-06", "AN-L4-05", "EL-L4-06", "HN-L4-05", "FTL-L4-05", "DY-L4-05", "AB-L4-05", "FP-L4-05"],
+      notes: "안면마비 급성기엔 이기거풍산·형방패독산, 회복기엔 견정산(법제품)·보양환오탕. 스테로이드 병용 중 감초·혈당 점검.",
       updated: "2026-11-19",
     },
     {
       id: "SK-007",
       category: "추나·수기",
-      name: "WalkBack · Big 3 · CCFT · Rathleff·Alfredson · 횡격막호흡 · 배변발판자세",
+      name: "WalkBack · Big 3 · CCFT · Rathleff · 횡격막호흡 · 배변발판 · 안면거울운동",
       level: 4,
       count: 15,
-      linkedNodes: ["HA-L4-06", "LBP-L4-07", "NP-L4-06", "KN-L4-07", "AN-L4-06", "HN-L4-06", "FTL-L4-06", "DY-L4-06", "AB-L4-06"],
-      notes: "출구형 변비·IBS엔 15~20cm 배변 발판 + 골반저 이완 호기 배변 + 5~10분 이내 제한.",
+      linkedNodes: ["HA-L4-06", "LBP-L4-07", "NP-L4-06", "KN-L4-07", "AN-L4-06", "HN-L4-06", "FTL-L4-06", "DY-L4-06", "AB-L4-06", "FP-L4-06"],
+      notes: "거울 앞 건측 지지+10~20% 약한 대칭 표정 훈련(완전마비 시 최대 힘주기·껌씹기/풍선불기 절대 금지).",
       updated: "2026-11-19",
     },
     {
@@ -407,6 +407,27 @@
       name: "급성 위장관염 루틴 (탈수/이질 배제 → 곽향정기산 + 천추·족삼리 + ORS/지사제 금기)",
       path: ["AB-L0-05", "AB-L1-01", "AB-L1-05", "AB-L2-04", "AB-L3-03", "AB-L4-01", "AB-L4-05", "AB-L4-09"],
       orderMemo: "[검사] 활력징후/탈수·C.diff/충수염 배제 + [침/한약] 천추·족삼리 + 곽향정기산 3~5일 + [티칭] 전해질 ORS & 발열/혈변 시 지사제 절대 금기",
+    },
+    {
+      id: "RT-35",
+      symptom: "FP",
+      name: "급성 벨마비 72h 루틴 (스테로이드 연계 + 얕은 자침 + 이기거풍산 + 각막/브레이크)",
+      path: ["FP-L0-02", "FP-L1-01", "FP-L1-02", "FP-L2-01", "FP-L2-02", "FP-L2-03", "FP-L3-01", "FP-L4-01", "FP-L4-03", "FP-L4-05", "FP-L4-07", "FP-L4-08"],
+      orderMemo: "[검사] 이마주름·FAST·이경수포 배제 & 72h 스테로이드 연계 + [침/약침] 양백·지창·예풍 얕은 자침(전침 대기) + 황련약침 + [한약/티칭] 이기거풍산 + 인공눈물/수면테이프",
+    },
+    {
+      id: "RT-36",
+      symptom: "FP",
+      name: "아급성 회복기 벨마비 루틴 (2~4주 → 득기 투침 + 2Hz 약전침 + 자하거 + 견정산/보양환오탕)",
+      path: ["FP-L0-04", "FP-L1-01", "FP-L1-05", "FP-L2-02", "FP-L3-01", "FP-L4-01", "FP-L4-02", "FP-L4-03", "FP-L4-05", "FP-L4-06", "FP-L4-09"],
+      orderMemo: "[침·전침] 지창↔협거·양백 득기 + 2Hz 약전침(7~10일↑ 연합운동 없을 시만) + [약침/한약] 예풍 자하거 + 견정산(법제)/보양환오탕 + [재활] 거울 10% 대칭운동(껌 금지)",
+    },
+    {
+      id: "RT-37",
+      symptom: "FP",
+      name: "만성 안면마비 후유증 루틴 (전침 중단 → 근막이완/건측균형 + 자하거 + 분리운동)",
+      path: ["FP-L0-05", "FP-L1-01", "FP-L1-05", "FP-L2-06", "FP-L3-03", "FP-L4-01", "FP-L4-03", "FP-L4-04", "FP-L4-06", "FP-L4-09"],
+      orderMemo: "[금지] 환측 강한 전침/껌씹기 중단 + [약침/추나] 자하거 + 안면 구축 이완·건측 과긴장 완화(매선 고려) + [재활] 눈-입 분리 거울 스트레칭",
     },
   ];
 
@@ -4665,7 +4686,7 @@
       dbGetAll("routines"),
     ]);
 
-    const seedFlag = localStorage.getItem("clin7_seed_v16");
+    const seedFlag = localStorage.getItem("clin7_seed_v17");
     if (savedSkills.length === 0 || seedFlag !== "done") {
       const skillMap = new Map(savedSkills.map((s) => [s.id, s]));
       for (const sk of DEFAULT_SKILLS) {
@@ -4696,7 +4717,7 @@
         }
       }
       routinesList = Array.from(rtMap.values());
-      localStorage.setItem("clin7_seed_v16", "done");
+      localStorage.setItem("clin7_seed_v17", "done");
     } else {
       routinesList = savedRoutines;
     }
