@@ -1266,19 +1266,9 @@
       gridEl.appendChild(groupEl);
     });
 
-    // 현재 선택된 증상 표시 배지 (데스크톱 헤더용 + 모바일 버튼 라벨 동기화)
+    // 모바일 증상 선택 버튼 라벨 동기화
     const activeSym = symptoms[activeSymptomCode];
     const activeCat = getSymptomCategoryMeta(activeSymptomCode);
-    const activeIndicator = document.getElementById("active-symptom-indicator");
-    if (activeIndicator && activeSym) {
-      const nCount = Object.keys(activeSym.nodes || {}).length;
-      activeIndicator.innerHTML = `
-        <span class="active-sym-cat">${activeCat.icon}</span>
-        <span class="active-sym-name">${escapeHtml(activeSym.name)}</span>
-        <span class="active-sym-code">${escapeHtml(activeSymptomCode)} · ${nCount}</span>
-      `;
-    }
-
     const mobileLabel = document.getElementById("mobile-symptom-picker-label");
     if (mobileLabel && activeSym) {
       const nCount = Object.keys(activeSym.nodes || {}).length;
@@ -1413,20 +1403,184 @@
     });
   }
 
+  let routineCascadeTimer = null;
+
+  function inferDecisionBetweenNodes(fromNode, toNodeId, nodesMap) {
+    if (!fromNode || !toNodeId) return "";
+    const branches = getEffectiveBranches(fromNode, nodesMap);
+    const matched = branches.find((b) => b.targetId === toNodeId);
+    if (matched) return matched.label;
+    if (String(fromNode.id || "").endsWith("-L1-01")) return "아니오";
+    if (getLayerFromNodeId(fromNode.id) === "L0") return "안전 확인(레드플래그) 진행";
+    return "예";
+  }
+
   function applyRoutineToClinic(rt) {
-    const sym = mergedTreeData["증상"][rt.symptom];
+    const sym = mergedTreeData && mergedTreeData["증상"] ? mergedTreeData["증상"][rt.symptom] : null;
     if (!sym) return;
-    activeSymptomCode = rt.symptom;
-    const validPath = (rt.path || []).filter((nid) => sym.nodes[nid]);
-    if (validPath.length > 0) {
-      currentPath = validPath;
-      activeNodeId = validPath[validPath.length - 1];
-      pathDecisions = {};
-      renderClinicBoardMode();
-      const memoEl = document.getElementById("qc-memo");
-      if (memoEl && rt.orderMemo) memoEl.value = `[${rt.name}] ${rt.orderMemo}`;
-      showToast(`🎴 '${rt.name}' 카드 콤보(${validPath.length}장)가 보드에 펼쳐졌습니다!`);
+    if (routineCascadeTimer) {
+      clearTimeout(routineCascadeTimer);
+      routineCascadeTimer = null;
     }
+
+    activeSymptomCode = rt.symptom;
+    recordRecentSymptom(rt.symptom);
+    const nodesMap = sym.nodes || {};
+    const validPath = (rt.path || []).filter((nid) => Boolean(nodesMap[nid]));
+    if (validPath.length === 0) return;
+
+    // 1단계(L0 호소 양상)부터 딱-딱-딱 순서대로 부드럽게 불이 들어오며 펼쳐지는 캐스케이드 애니메이션
+    pathDecisions = {};
+    let stepIndex = 0;
+    const stepIntervalMs = 82;
+
+    function runCascadeStep() {
+      const curId = validPath[stepIndex];
+      currentPath = validPath.slice(0, stepIndex + 1);
+      activeNodeId = curId;
+
+      if (stepIndex > 0) {
+        const prevId = validPath[stepIndex - 1];
+        const prevNode = nodesMap[prevId];
+        const decLabel = inferDecisionBetweenNodes(prevNode, curId, nodesMap);
+        if (decLabel) pathDecisions[prevId] = decLabel;
+      }
+
+      renderClinicBoardMode();
+
+      // 방금 점등된 보드 카드와 상단 스테퍼 카드에 점등 글로우 효과 부여
+      const litCard = boardCanvas ? boardCanvas.querySelector(`[data-node-id="${curId}"]`) : null;
+      if (litCard) {
+        litCard.classList.remove("card-igniting");
+        void litCard.offsetWidth;
+        litCard.classList.add("card-igniting");
+      }
+      const litStep = pathwayChips ? pathwayChips.querySelector(".stepper-node-card.active") : null;
+      if (litStep) {
+        litStep.classList.remove("step-igniting");
+        void litStep.offsetWidth;
+        litStep.classList.add("step-igniting");
+      }
+
+      autoPanBoardToActiveLayer();
+
+      if (stepIndex < validPath.length - 1) {
+        stepIndex += 1;
+        routineCascadeTimer = setTimeout(runCascadeStep, stepIntervalMs);
+      } else {
+        routineCascadeTimer = null;
+        const memoEl = document.getElementById("qc-memo");
+        if (memoEl && rt.orderMemo) memoEl.value = `[${rt.name}] ${rt.orderMemo}`;
+        triggerSmoothEnter(nodeDetailContent, "dock-morph-enter");
+        showToast(`⚡ '${rt.name}' (${validPath.length}단계) 루틴이 호소 양상부터 점등되었습니다!`);
+      }
+    }
+
+    runCascadeStep();
+  }
+
+  /* ==================== 루틴 덱 이름 설정·저장·수정 모달 ==================== */
+  let pendingRoutineDraft = null; // { symptom, path, editingId }
+
+  function suggestRoutineNameAndMemo(symCode, pathIds) {
+    const sym = mergedTreeData && mergedTreeData["증상"] ? mergedTreeData["증상"][symCode] : null;
+    if (!sym || !sym.nodes) return { suggestedName: `${symCode} 진료 루틴`, suggestedMemo: "" };
+    const nodesMap = sym.nodes;
+    const nodes = (pathIds || []).map((id) => nodesMap[id]).filter(Boolean);
+
+    const dxNode = nodes.find((n) => n["유형"] === "dx");
+    const l0Node = nodes.find((n) => getLayerFromNodeId(n.id) === "L0");
+    const treatNodes = nodes.filter((n) => n["유형"] === "treat");
+    const teachNodes = nodes.filter((n) => n["유형"] === "teach");
+
+    const baseLabel = dxNode
+      ? String(dxNode["제목"] || "").replace(/\s*감별$/, "")
+      : l0Node
+      ? String(l0Node["제목"] || "").replace(/^\[호소\]\s*/, "").slice(0, 18)
+      : sym.name;
+
+    const modalities = treatNodes
+      .map((n) => n["술기구분"] || String(n["제목"] || "").slice(0, 6))
+      .filter(Boolean);
+
+    const modSummary = modalities.length > 0 ? ` (${modalities.slice(0, 3).join(" + ")})` : "";
+    const suggestedName = `${baseLabel}${modSummary} 루틴`;
+
+    const memoParts = [];
+    treatNodes.forEach((n) => {
+      const tag = n["술기구분"] ? `[${n["술기구분"]}]` : "[치료]";
+      memoParts.push(`${tag} ${n["제목"]}`);
+    });
+    teachNodes.forEach((n) => {
+      memoParts.push(`[티칭] ${n["제목"]}`);
+    });
+
+    return {
+      suggestedName,
+      suggestedMemo: memoParts.join(" + "),
+    };
+  }
+
+  function openRoutineSaveModal({ symptom, path, defaultName = "", defaultMemo = "", editingId = null }) {
+    const symCode = symptom || activeSymptomCode;
+    const sym = mergedTreeData && mergedTreeData["증상"] ? mergedTreeData["증상"][symCode] : null;
+    const cleanPath = (path || []).filter(Boolean);
+    if (cleanPath.length === 0) {
+      showToast("⛔ 루틴으로 저장할 카드 경로가 비어 있습니다.");
+      return;
+    }
+
+    const { suggestedName, suggestedMemo } = suggestRoutineNameAndMemo(symCode, cleanPath);
+    pendingRoutineDraft = {
+      symptom: symCode,
+      path: cleanPath.slice(),
+      editingId,
+    };
+
+    const modal = document.getElementById("routine-save-modal");
+    const titleEl = document.getElementById("routine-modal-title");
+    const symLabelEl = document.getElementById("routine-modal-sym-label");
+    const countEl = document.getElementById("routine-modal-card-count");
+    const previewEl = document.getElementById("routine-modal-path-preview");
+    const nameInput = document.getElementById("modal-routine-name-input");
+    const memoInput = document.getElementById("modal-routine-memo-input");
+    if (!modal || !nameInput || !memoInput) return;
+
+    if (titleEl) {
+      titleEl.textContent = editingId
+        ? `✏️ [${editingId}] 루틴 덱 이름·메모 수정`
+        : "⚡ 내 진료 루틴 덱 이름 설정 및 저장";
+    }
+    if (symLabelEl) symLabelEl.textContent = sym ? `${sym.name}(${symCode})` : symCode;
+    if (countEl) countEl.textContent = String(cleanPath.length);
+
+    if (previewEl) {
+      const nodesMap = sym && sym.nodes ? sym.nodes : {};
+      previewEl.innerHTML = cleanPath
+        .map((nid, idx) => {
+          const n = nodesMap[nid];
+          const t = n ? String(n["제목"] || "").replace(/^\[호소\]\s*/, "") : nid;
+          return `${idx > 0 ? '<span class="rmp-arrow">→</span>' : ""}<span class="rmp-chip"><strong>${escapeHtml(
+            nid
+          )}</strong> ${escapeHtml(t)}</span>`;
+        })
+        .join("");
+    }
+
+    nameInput.value = defaultName || suggestedName;
+    memoInput.value = defaultMemo || suggestedMemo;
+    modal.hidden = false;
+
+    requestAnimationFrame(() => {
+      nameInput.focus();
+      nameInput.select();
+    });
+  }
+
+  function closeRoutineSaveModal() {
+    const modal = document.getElementById("routine-save-modal");
+    if (modal) modal.hidden = true;
+    pendingRoutineDraft = null;
   }
 
   /* ==================== MODE 1: 가로 카드 보드 + 흐릿한 비선택지 + SVG 연결선 ==================== */
@@ -2640,6 +2794,9 @@
             <button type="button" class="btn btn-sm btn-primary btn-run-routine" data-id="${escapeHtml(rt.id)}">
               🩺 진료 보드에 펼치기
             </button>
+            <button type="button" class="btn btn-sm btn-secondary btn-edit-routine" data-id="${escapeHtml(rt.id)}">
+              ✏️ 이름 수정
+            </button>
             <button type="button" class="btn btn-sm btn-danger-outline btn-del-routine" data-id="${escapeHtml(
               rt.id
             )}">
@@ -2668,6 +2825,22 @@
         if (rt) {
           switchMode("clinic");
           applyRoutineToClinic(rt);
+        }
+      });
+    });
+
+    container.querySelectorAll(".btn-edit-routine").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+        const rt = routinesList.find((x) => x.id === id);
+        if (rt) {
+          openRoutineSaveModal({
+            symptom: rt.symptom,
+            path: rt.path || [],
+            defaultName: rt.name || "",
+            defaultMemo: rt.orderMemo || "",
+            editingId: rt.id,
+          });
         }
       });
     });
@@ -4064,6 +4237,17 @@
       showToast("커스텀 카드 수정 내역이 초기화되었습니다.");
     });
 
+    // 진료 보드 상단 [⚡ 현재 경로 루틴 저장] 버튼
+    const quickSaveRoutineBtn = document.getElementById("btn-quick-save-routine");
+    if (quickSaveRoutineBtn) {
+      quickSaveRoutineBtn.addEventListener("click", () => {
+        openRoutineSaveModal({
+          symptom: activeSymptomCode,
+          path: currentPath.slice(),
+        });
+      });
+    }
+
     // 루틴 덱 빌더 이벤트
     document.getElementById("routine-sym-input").addEventListener("change", (e) => {
       activeSymptomCode = e.target.value;
@@ -4083,30 +4267,87 @@
       renderRoutineDeckBuilder();
     });
 
-    document.getElementById("routine-add-form").addEventListener("submit", async (e) => {
+    document.getElementById("routine-add-form").addEventListener("submit", (e) => {
       e.preventDefault();
       if (builderDeckSlots.length === 0) {
         showToast("⛔ 루틴 덱 슬롯에 카드를 최소 1장 이상 담아주세요.");
         return;
       }
       const symptom = document.getElementById("routine-sym-input").value;
-      const name = document.getElementById("routine-name-input").value.trim();
-      const orderMemo = document.getElementById("routine-order-input").value.trim();
+      const typedName = document.getElementById("routine-name-input").value.trim();
+      const typedMemo = document.getElementById("routine-order-input").value.trim();
 
-      const maxRtNum = routinesList.reduce((acc, r) => {
-        const m = String(r.id || "").match(/^RT-(\d+)$/);
-        return m ? Math.max(acc, Number(m[1])) : acc;
-      }, 0);
-      const id = `RT-${String(maxRtNum + 1).padStart(2, "0")}`;
-      const rtObj = { id, symptom, name, path: builderDeckSlots.slice(), orderMemo };
-      routinesList.push(rtObj);
-      await dbPut("routines", rtObj);
-      updateBadges();
-      renderRoutineManager();
-      document.getElementById("routine-name-input").value = "";
-      document.getElementById("routine-order-input").value = "";
-      showToast(`🎴 새 진료 루틴 덱 '${name}'이(가) 완성되었습니다!`);
+      // 저장 버튼을 누르면 항상 루틴 이름 설정·확인 모달을 띄워 원하는 이름으로 최종 저장
+      openRoutineSaveModal({
+        symptom,
+        path: builderDeckSlots.slice(),
+        defaultName: typedName,
+        defaultMemo: typedMemo,
+      });
     });
+
+    // 루틴 이름 설정·저장 모달 이벤트
+    const routineModal = document.getElementById("routine-save-modal");
+    const routineModalForm = document.getElementById("routine-modal-form");
+    const btnCloseRoutineModal = document.getElementById("btn-close-routine-modal");
+    const btnCancelRoutineModal = document.getElementById("btn-cancel-routine-modal");
+
+    if (btnCloseRoutineModal) btnCloseRoutineModal.addEventListener("click", closeRoutineSaveModal);
+    if (btnCancelRoutineModal) btnCancelRoutineModal.addEventListener("click", closeRoutineSaveModal);
+    if (routineModal) {
+      routineModal.addEventListener("click", (ev) => {
+        if (ev.target === routineModal) closeRoutineSaveModal();
+      });
+    }
+    if (routineModalForm) {
+      routineModalForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!pendingRoutineDraft) return;
+        const nameInput = document.getElementById("modal-routine-name-input");
+        const memoInput = document.getElementById("modal-routine-memo-input");
+        const finalName = nameInput ? nameInput.value.trim() : "";
+        const finalMemo = memoInput ? memoInput.value.trim() : "";
+        if (!finalName) {
+          showToast("⛔ 루틴 덱 이름을 입력해 주세요.");
+          return;
+        }
+
+        const { symptom, path, editingId } = pendingRoutineDraft;
+        let savedRt = null;
+
+        if (editingId) {
+          const existing = routinesList.find((r) => r.id === editingId);
+          if (existing) {
+            existing.name = finalName;
+            existing.orderMemo = finalMemo;
+            savedRt = existing;
+            await dbPut("routines", existing);
+          }
+        } else {
+          const maxRtNum = routinesList.reduce((acc, r) => {
+            const m = String(r.id || "").match(/^RT-(\d+)$/);
+            return m ? Math.max(acc, Number(m[1])) : acc;
+          }, 0);
+          const id = `RT-${String(maxRtNum + 1).padStart(2, "0")}`;
+          savedRt = { id, symptom, name: finalName, path: path.slice(), orderMemo: finalMemo };
+          routinesList.push(savedRt);
+          await dbPut("routines", savedRt);
+        }
+
+        closeRoutineSaveModal();
+        updateBadges();
+        renderRoutineDrawerCards();
+        renderRoutineManager();
+        const builderNameEl = document.getElementById("routine-name-input");
+        const builderMemoEl = document.getElementById("routine-order-input");
+        if (builderNameEl) builderNameEl.value = "";
+        if (builderMemoEl) builderMemoEl.value = "";
+
+        if (savedRt) {
+          showToast(`🎴 루틴 덱 '${savedRt.name}'이(가) 저장되었습니다!`);
+        }
+      });
+    }
 
     document.getElementById("btn-export-routines-md").addEventListener("click", () => {
       const exportRoutines = getAvailableRoutines();

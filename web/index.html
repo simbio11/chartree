@@ -27,7 +27,6 @@
         </button>
         <!-- 증상 카테고리 드롭다운(데스크톱) & 현재 증상 선택기(모바일) (#symptom-grid ID 유지) -->
         <div id="symptom-grid" class="symptom-deck-tabs" role="list"></div>
-        <div id="active-symptom-indicator" class="active-symptom-pill" aria-live="polite"></div>
         <button type="button" id="mobile-symptom-picker-btn" class="mobile-symptom-picker-btn" aria-haspopup="dialog" aria-expanded="false">
           <span id="mobile-symptom-picker-label">🩺 증상 선택</span>
           <span class="mobile-picker-action">변경 ▾</span>
@@ -190,6 +189,9 @@
         <div class="board-actions">
           <button type="button" id="btn-copy-soap-summary" class="btn-ctrl btn-ctrl-soap" title="현재까지 진행한 문진·검사·감별·치료 경로로 한방병원 표준 EMR 차트 작성">
             📄 표준 EMR 차트 작성
+          </button>
+          <button type="button" id="btn-quick-save-routine" class="btn-ctrl btn-ctrl-routine" title="현재 진료 보드의 카드 경로를 이름을 지정해 내 루틴 덱으로 저장">
+            ⚡ 현재 경로 루틴 저장
           </button>
           <button type="button" id="btn-copy-combo-orders" class="btn-ctrl" style="background:#dcfce7; color:#15803d; border-color:#86efac;" hidden>
             📋 선택 치료 콤보 전체 복사
@@ -464,8 +466,8 @@
                   <select id="routine-sym-input" class="select-input"></select>
                 </div>
                 <div class="form-field">
-                  <label for="routine-name-input">루틴 덱 이름</label>
-                  <input type="text" id="routine-name-input" placeholder="예: 경추성 두통 후두하근 약침+추나 고속 루틴" required>
+                  <label for="routine-name-input">루틴 덱 이름 (저장 시에도 설정·변경 가능)</label>
+                  <input type="text" id="routine-name-input" placeholder="비워두면 저장 버튼을 누를 때 이름 설정 창이 열립니다">
                 </div>
               </div>
 
@@ -718,6 +720,53 @@
       </section>
     </div>
   </main>
+
+  <!-- ==================== 루틴 덱 이름 설정 및 저장·수정 모달 ==================== -->
+  <div id="routine-save-modal" class="emr-modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="routine-modal-title">
+    <div class="emr-modal-card routine-modal-card">
+      <div class="emr-modal-head">
+        <div>
+          <span class="emr-modal-eyebrow">CUSTOM CLINICAL ROUTINE DECK</span>
+          <h2 id="routine-modal-title" class="emr-modal-title">⚡ 내 진료 루틴 덱 이름 설정 및 저장</h2>
+        </div>
+        <button type="button" id="btn-close-routine-modal" class="btn-sheet-close" aria-label="닫기">✕</button>
+      </div>
+
+      <form id="routine-modal-form" class="case-form">
+        <div class="routine-modal-path-box">
+          <div class="rmp-label">저장될 카드 경로 (<span id="routine-modal-sym-label"></span> · <span id="routine-modal-card-count">0</span>장)</div>
+          <div id="routine-modal-path-preview" class="rmp-chips"></div>
+        </div>
+
+        <div class="form-field">
+          <label for="modal-routine-name-input">루틴 덱 이름 (필수)</label>
+          <input
+            type="text"
+            id="modal-routine-name-input"
+            placeholder="예: 경추성 두통 후두하근 약침 + 추나 표준 루틴"
+            required
+          >
+        </div>
+
+        <div class="form-field">
+          <label for="modal-routine-memo-input">처치 오더 요약 · 메모 (선택)</label>
+          <textarea
+            id="modal-routine-memo-input"
+            rows="2"
+            placeholder="예: [전침] 풍지-천주 2Hz 20분 + [약침] 신바로 0.2cc + [한약] 청상견통탕"
+          ></textarea>
+        </div>
+
+        <div class="emr-modal-foot">
+          <span class="emr-foot-hint">💡 저장 후 루틴을 선택하면 호소 양상(L0)부터 순서대로 부드럽게 점등됩니다.</span>
+          <div class="emr-foot-actions">
+            <button type="button" id="btn-cancel-routine-modal" class="btn btn-secondary">취소</button>
+            <button type="submit" class="btn btn-primary">🎴 이 이름으로 루틴 덱 저장</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- ==================== 한방병원·한의원 표준 EMR 자동 차트 모달 ==================== -->
   <div id="emr-chart-modal" class="emr-modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="emr-modal-title">
