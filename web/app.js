@@ -93,68 +93,68 @@
       name: "두경부·편두통·전정·요추 심부 표적 침술 (협척·신수·풍지·예풍)",
       level: 4,
       count: 42,
-      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01", "NP-L4-01", "KN-L4-01", "AN-L4-01", "EL-L4-01"],
-      notes: "두경부·사지 표적 자침. 팔꿈치 곡지·수삼리, 드퀘르뱅 양계·열결, TFCC 양곡·후계, 수근관 내관(신경 직자 회피).",
+      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01", "NP-L4-01", "KN-L4-01", "AN-L4-01", "EL-L4-01", "HN-L4-01"],
+      notes: "두경부·사지·말초신경 표적 자침. 당뇨 발 감각저하(LOPS)엔 화상성 뜸·사혈 금지, 신경 본간 직자 회피.",
       updated: "2026-11-19",
     },
     {
       id: "SK-002",
       category: "침·전침",
-      name: "경항부·요추 협착·슬/족관절·상과염 2Hz / 급성 100Hz 전침술",
+      name: "경항부·협착·슬/족관절·상과염·DPN 2Hz / 급성 100Hz 전침술",
       level: 4,
       count: 35,
-      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02", "NP-L4-02", "KN-L4-02", "AN-L4-02", "EL-L4-02"],
-      notes: "협착증 BL25-L4협척 2Hz 30분, 무릎 혈해-양구 2Hz, 팔꿈치 곡지-수삼리 2Hz. 심장박동기 장착자 절대 금기.",
+      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02", "NP-L4-02", "KN-L4-02", "AN-L4-02", "EL-L4-02", "HN-L4-02"],
+      notes: "DPN 족삼리-삼음교·태계-곤륜 2Hz 15~20분(감각 둔화 시 검사자가 근육 연축 직접 확인). 심장박동기 장착자 절대 금기.",
       updated: "2026-11-19",
     },
     {
       id: "SK-003",
       category: "약침·봉침",
-      name: "척추·슬/족관절·상과/건초 단계별 약침술 (신바로/봉약침/자하거)",
+      name: "척추·관절·상과·말초신경 약침술 (신바로/홍화/자하거/봉약침)",
       level: 3,
       count: 14,
-      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03", "NP-L4-03", "KN-L4-03", "AN-L4-03", "EL-L4-03"],
-      notes: "양방 스테로이드 주사 후 최소 2주간 심부 약침/침도 유예! 드퀘르뱅 수유모에게 안전 대안, 건 실질 직접 주입 금지.",
+      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03", "NP-L4-03", "KN-L4-03", "AN-L4-03", "EL-L4-03", "HN-L4-03"],
+      notes: "신경 본간 내 직접 주사 절대 금지; 발끝 허혈/궤양 피부 금지; 스테로이드 주사 후 2주 심부 약침 유예.",
       updated: "2026-11-19",
     },
     {
       id: "SK-004",
       category: "추나·수기",
-      name: "Cox 감압 · 상경추·거골 활주 · Mulligan MWM(테니스엘보) 추나",
+      name: "Cox 감압 · 상경추·거골 활주 · MWM · 정중/척골 신경 활주술",
       level: 3,
       count: 28,
-      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04", "NP-L4-04", "KN-L4-04", "AN-L4-04", "EL-L4-04"],
-      notes: "Bisset BMJ 2006 MWM(무통 악력 증가 확인 시 시행). 주상골 골절·Kanavel·DRUJ 탈구 시 추나 절대 금기.",
+      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04", "NP-L4-04", "KN-L4-04", "AN-L4-04", "EL-L4-04", "HN-L4-04"],
+      notes: "신경 슬라이더(무통 미끄러짐) 적용; 척수증·뇌졸중·GBS·동맥 허혈 의심 시 추나·스트레칭 절대 금기.",
       updated: "2026-11-19",
     },
     {
       id: "SK-005",
       category: "이학적검사",
-      name: "HINTS+ · SLR · Laslett · Wainner/Cook · Lachman · Ottawa · Cozen/Finkelstein",
+      name: "HINTS+ · SLR · Laslett · Wainner/Cook · Ottawa · Cozen · Durkan/LOPS/6축",
       level: 4,
       count: 19,
-      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04", "NP-L2-02", "NP-L2-06", "KN-L2-02", "AN-L2-01", "AN-L2-04", "EL-L2-01", "EL-L2-03"],
-      notes: "외측상과 1~2cm vs PIN 3~4cm 구별, 아이히호프 위양성 50% 회피 오리지널 핀켈스타인 & 코담배갑(주상골) 선별.",
+      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04", "NP-L2-02", "NP-L2-06", "KN-L2-02", "AN-L2-01", "AN-L2-04", "EL-L2-01", "EL-L2-03", "HN-L2-01", "HN-L2-04", "HN-L2-06"],
+      notes: "Durkan 30초(특이도 90%), 10g 모노필라멘트 LOPS, 말초 vs 척수(UMN) vs 뇌(반신) 6축 국소화.",
       updated: "2026-11-19",
     },
     {
       id: "SK-006",
       category: "한약처방",
-      name: "질환별 변증 한약 처방 (청상견통탕·독활기생탕·당귀수산+오령산·서경탕·당귀점통탕)",
+      name: "변증 한약 (청상견통탕·독활기생탕·당귀수산+오령산·서경탕·황기계지오물탕)",
       level: 4,
       count: 54,
-      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06", "NP-L4-05", "KN-L4-06", "AN-L4-05", "EL-L4-06"],
-      notes: "상지 건병증/관절통엔 서경탕·당귀점통탕, 수습 부종엔 방기황기탕/오령산. 임신부·수유부 안전성 확인.",
+      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06", "NP-L4-05", "KN-L4-06", "AN-L4-05", "EL-L4-06", "HN-L4-05"],
+      notes: "말초 저림엔 황기계지오물탕·보양환오탕·우차신기환. 복용 중인 가바펜틴·둘록세틴·SSRI·항응고제 상호작용 점검.",
       updated: "2026-11-19",
     },
     {
       id: "SK-007",
       category: "추나·수기",
-      name: "WalkBack · Big 3 · CCFT · VMO/태극권 · SEBT/Alfredson 편심성 재활",
+      name: "WalkBack · Big 3 · CCFT · VMO/태극권 · SEBT/Alfredson · 신경활주·LOPS재활",
       level: 4,
       count: 15,
-      linkedNodes: ["HA-L4-06", "LBP-L4-07", "NP-L4-06", "KN-L4-07", "AN-L4-06"],
-      notes: "CAI 한발서기·비골근 외번 훈련, 아킬레스건 중간부만 계단 내리기(삽입부는 평지까지만).",
+      linkedNodes: ["HA-L4-06", "LBP-L4-07", "NP-L4-06", "KN-L4-07", "AN-L4-06", "HN-L4-06"],
+      notes: "무통 신경 슬라이더 및 감각저하 족부 낙상예방 균형훈련(맨발 자갈 지압판 금지).",
       updated: "2026-11-19",
     },
     {
@@ -324,6 +324,27 @@
       path: ["EL-L0-05", "EL-L1-01", "EL-L1-05", "EL-L2-04", "EL-L3-04", "EL-L4-01", "EL-L4-03", "EL-L4-04", "EL-L4-06", "EL-L4-09"],
       orderMemo: "[침·약침] 양곡·양지·Fovea 자하거/봉약침 + [추나] DRUJ·수근골 가동 + [한약] 서경탕/오령산 + [티칭] 바닥 짚기 금지·야간 중립 부목",
     },
+    {
+      id: "RT-23",
+      symptom: "HN",
+      name: "수근관 증후군(CTS) 루틴 (내관 사자 + 신바로 + 신경활주 + 야간 0° 부목)",
+      path: ["HN-L0-02", "HN-L1-01", "HN-L1-02", "HN-L2-01", "HN-L3-01", "HN-L4-01", "HN-L4-03", "HN-L4-04", "HN-L4-06", "HN-L4-09"],
+      orderMemo: "[침] 내관·대릉 사자 + [약침] 수근관 주위 신바로(신경 내 금지) + [추나·재활] 정중신경 슬라이더 + [티칭] 야간 0° 부목 & 악력기 금지",
+    },
+    {
+      id: "RT-24",
+      symptom: "HN",
+      name: "당뇨병성 다발신경병증(DSPN) 루틴 (팔풍-삼음교 2Hz + 황기계지오물탕 + 족부/B12 티칭)",
+      path: ["HN-L0-05", "HN-L1-01", "HN-L1-05", "HN-L2-04", "HN-L3-04", "HN-L4-01", "HN-L4-02", "HN-L4-05", "HN-L4-07", "HN-L4-08"],
+      orderMemo: "[침·전침] 족삼리-삼음교 2Hz(뜸·사혈 금지) + [한약] 황기계지오물탕/보양환오탕 + [티칭] 혈당·B12 선별 & 뜨거운 족욕·맨발 절대 금지",
+    },
+    {
+      id: "RT-25",
+      symptom: "HN",
+      name: "주관절 터널(4·5지) 루틴 (소해 침 + 척골신경 슬라이더 + 팔꿈치 90°↓ 수면 티칭)",
+      path: ["HN-L0-03", "HN-L1-01", "HN-L1-03", "HN-L2-02", "HN-L3-02", "HN-L4-01", "HN-L4-04", "HN-L4-05", "HN-L4-09"],
+      orderMemo: "[침] 소해·후계 사자(척골신경 직자 회피) + [추나] 척골신경 슬라이더 + [한약] 황기계지오물탕 + [티칭] 수면 시 수건 부목(90°↓)",
+    },
   ];
 
   // 상태 변수
@@ -334,7 +355,7 @@
   let routinesList = [];
   let casesList = [];
 
-  let currentMode = "clinic";
+  let currentMode = "home";
   let currentSubview = "builder";
   let activeSymptomCode = "HA";
   let activeNodeId = "HA-L0-01";
@@ -682,20 +703,63 @@
     );
   }
 
-  /* ==================== 모드 & 서브탭 전환 ==================== */
+  /* ==================== 모드 & 서브탭 전환 (부드러운 모션 적용) ==================== */
+  function triggerSmoothEnter(el, clsName = "motion-enter") {
+    if (!el) return;
+    el.classList.remove(clsName);
+    void el.offsetWidth;
+    el.classList.add(clsName);
+  }
+
+  function recordRecentSymptom(symCode) {
+    if (!symCode) return;
+    try {
+      const raw = localStorage.getItem(RECENT_STORAGE_KEY);
+      const prev = raw ? JSON.parse(raw) : [];
+      const next = [symCode, ...prev.filter((c) => c !== symCode)].slice(0, 3);
+      localStorage.setItem(RECENT_STORAGE_KEY, JSON.stringify(next));
+    } catch (_) {}
+  }
+
+  function getRecentSymptoms() {
+    try {
+      const raw = localStorage.getItem(RECENT_STORAGE_KEY);
+      const list = raw ? JSON.parse(raw) : [];
+      return Array.isArray(list) ? list : [];
+    } catch (_) {
+      return [];
+    }
+  }
+
   function switchMode(mode) {
     currentMode = mode;
-    document.getElementById("btn-mode-clinic").classList.toggle("active", mode === "clinic");
-    document.getElementById("btn-mode-setup").classList.toggle("active", mode === "setup");
+    const btnHome = document.getElementById("btn-mode-home");
+    const btnClinic = document.getElementById("btn-mode-clinic");
+    const btnSetup = document.getElementById("btn-mode-setup");
+    if (btnHome) btnHome.classList.toggle("active", mode === "home");
+    if (btnClinic) btnClinic.classList.toggle("active", mode === "clinic");
+    if (btnSetup) btnSetup.classList.toggle("active", mode === "setup");
 
-    document.getElementById("mode-clinic-container").hidden = mode !== "clinic";
-    document.getElementById("mode-setup-container").hidden = mode !== "setup";
+    const homeContainer = document.getElementById("mode-home-container");
+    const clinicContainer = document.getElementById("mode-clinic-container");
+    const setupContainer = document.getElementById("mode-setup-container");
 
-    if (mode === "clinic") {
+    if (homeContainer) homeContainer.hidden = mode !== "home";
+    if (clinicContainer) clinicContainer.hidden = mode !== "clinic";
+    if (setupContainer) setupContainer.hidden = mode !== "setup";
+
+    if (mode === "home") {
+      renderHeaderSymptomTabs();
+      renderHomeHubMode();
+      triggerSmoothEnter(homeContainer);
+    } else if (mode === "clinic") {
       renderClinicBoardMode();
+      triggerSmoothEnter(clinicContainer);
     } else {
+      renderHeaderSymptomTabs();
       populateSymptomSelects();
       switchSetupSubview(currentSubview);
+      triggerSmoothEnter(setupContainer);
     }
   }
 
@@ -706,7 +770,10 @@
     });
     ["builder", "routines", "skills", "evolution"].forEach((sv) => {
       const el = document.getElementById(`subview-${sv}`);
-      if (el) el.hidden = sv !== subview;
+      if (el) {
+        el.hidden = sv !== subview;
+        if (sv === subview) triggerSmoothEnter(el);
+      }
     });
 
     if (subview === "builder") {
@@ -3409,7 +3476,7 @@
       dbGetAll("routines"),
     ]);
 
-    const seedFlag = localStorage.getItem("clin7_seed_v12");
+    const seedFlag = localStorage.getItem("clin7_seed_v13");
     if (savedSkills.length === 0 || seedFlag !== "done") {
       const skillMap = new Map(savedSkills.map((s) => [s.id, s]));
       for (const sk of DEFAULT_SKILLS) {
@@ -3440,7 +3507,7 @@
         }
       }
       routinesList = Array.from(rtMap.values());
-      localStorage.setItem("clin7_seed_v12", "done");
+      localStorage.setItem("clin7_seed_v13", "done");
     } else {
       routinesList = savedRoutines;
     }
