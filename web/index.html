@@ -402,71 +402,73 @@
             <div>
               <h2 class="panel-title">🎯 내 스킬 도감 · 숙련도</h2>
               <p class="panel-subtitle">
-                술기를 등록해 시행 횟수와 숙련도를 관리합니다. Lv.0~2 치료 카드는 진료 보드에서 자동으로 "⚠️ 지도 필요"가 표시됩니다.
+                술기 숙련도와 시행 횟수를 관리합니다. Lv.0~2 치료 카드는 진료 보드에서 자동으로 "⚠️ 지도 필요"가 표시됩니다.
               </p>
             </div>
-            <button type="button" id="btn-export-skills-md" class="btn btn-sm btn-primary">
-              📋 스킬 도감 md 복사
-            </button>
+            <div class="btn-row">
+              <button type="button" id="btn-toggle-skill-form" class="btn btn-sm btn-accent">
+                + 새 스킬 직접 등록
+              </button>
+              <button type="button" id="btn-export-skills-md" class="btn btn-sm btn-primary">
+                📋 스킬 도감 md 복사
+              </button>
+            </div>
           </div>
 
-          <form id="skill-add-form" class="form-grid skill-form">
-            <div class="form-field">
-              <label for="skill-id-input">스킬 코드</label>
-              <input type="text" id="skill-id-input" placeholder="예: SK-006" required>
-            </div>
-            <div class="form-field">
-              <label for="skill-category-input">스킬 클래스</label>
-              <select id="skill-category-input">
-                <option value="침·전침">침·전침</option>
-                <option value="약침·봉침">약침·봉침</option>
-                <option value="추나·수기">추나·수기</option>
-                <option value="한약처방">한약처방</option>
-                <option value="이학적검사">이학적검사</option>
-                <option value="부항·뜸·기타">부항·뜸·기타</option>
-              </select>
-            </div>
-            <div class="form-field form-field-wide">
-              <label for="skill-name-input">스킬명</label>
-              <input type="text" id="skill-name-input" placeholder="예: 상부 경추(풍지·후두하근) 심부 약침술" required>
-            </div>
-            <div class="form-field">
-              <label for="skill-level-input">현재 숙련도 레벨</label>
-              <select id="skill-level-input">
-                <option value="0">Lv.0 — 미경험 (관찰만 · ⛔)</option>
-                <option value="1">Lv.1 — 관찰·보조 (⚠️지도필요)</option>
-                <option value="2">Lv.2 — 지도하 부분시행 (⚠️지도필요)</option>
-                <option value="3" selected>Lv.3 — 지도하 완수 (🔶가능)</option>
-                <option value="4">Lv.4 — 단독 숙련 시행 (✅숙련)</option>
-                <option value="5">Lv.5 — 마스터·교육 가능 (🌟)</option>
-              </select>
-            </div>
-            <div class="form-field">
-              <label for="skill-linked-nodes">장착할 프로토콜 카드 ID (쉼표 구분)</label>
-              <input type="text" id="skill-linked-nodes" placeholder="예: HA-L4-02, SH-L4-02">
-            </div>
-            <div class="form-field form-field-wide">
-              <label for="skill-notes-input">손끝 노하우 · 자침 깊이 · 금기 메모</label>
-              <input type="text" id="skill-notes-input" placeholder="예: 후두골 하연 골면 확인 후 0.2cc 주입, 추골동맥 주행 주의">
-            </div>
-            <div class="form-actions">
-              <button type="submit" class="btn btn-primary">+ 스킬 도감에 등록</button>
-            </div>
-          </form>
+          <div id="skill-form-drawer" class="skill-form-drawer" hidden>
+            <form id="skill-add-form" class="form-grid skill-form">
+              <div class="form-field">
+                <label for="skill-id-input">스킬 코드</label>
+                <input type="text" id="skill-id-input" placeholder="예: SK-008" required>
+              </div>
+              <div class="form-field">
+                <label for="skill-category-input">스킬 클래스</label>
+                <select id="skill-category-input">
+                  <option value="침·전침">침·전침</option>
+                  <option value="약침·봉침">약침·봉침</option>
+                  <option value="추나·수기">추나·수기</option>
+                  <option value="한약처방">한약처방</option>
+                  <option value="이학적검사">이학적검사</option>
+                  <option value="부항·뜸·기타">부항·뜸·기타</option>
+                </select>
+              </div>
+              <div class="form-field form-field-wide">
+                <label for="skill-name-input">스킬명</label>
+                <input type="text" id="skill-name-input" placeholder="예: 상부 경추(풍지·후두하근) 심부 약침술" required>
+              </div>
+              <div class="form-field">
+                <label for="skill-level-input">현재 숙련도 레벨</label>
+                <select id="skill-level-input">
+                  <option value="0">Lv.0 — 미경험 (관찰만 · ⛔)</option>
+                  <option value="1">Lv.1 — 관찰·보조 (⚠️지도필요)</option>
+                  <option value="2">Lv.2 — 지도하 부분시행 (⚠️지도필요)</option>
+                  <option value="3" selected>Lv.3 — 지도하 완수 (🔶가능)</option>
+                  <option value="4">Lv.4 — 단독 숙련 시행 (✅숙련)</option>
+                  <option value="5">Lv.5 — 마스터·교육 가능 (🌟)</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="skill-linked-nodes">장착할 프로토콜 카드 ID (쉼표 구분)</label>
+                <input type="text" id="skill-linked-nodes" placeholder="예: HA-L4-02, SH-L4-02">
+              </div>
+              <div class="form-field form-field-wide">
+                <label for="skill-notes-input">손끝 노하우 · 자침 깊이 · 금기 메모</label>
+                <input type="text" id="skill-notes-input" placeholder="예: 후두골 하연 골면 확인 후 0.2cc 주입, 추골동맥 주행 주의">
+              </div>
+              <div class="form-actions" style="display:flex; gap:0.4rem; align-items:flex-end;">
+                <button type="submit" class="btn btn-primary">+ 도감에 저장</button>
+                <button type="button" id="btn-close-skill-form" class="btn btn-secondary">닫기</button>
+              </div>
+            </form>
+          </div>
 
           <div class="skill-filter-bar">
-            <div class="skill-filter-group">
-              <span class="filter-label">증상별 보기:</span>
-              <div id="skill-symptom-filters" class="skill-filter-pills"></div>
-            </div>
-            <div class="skill-filter-group">
-              <span class="filter-label">카드 유형:</span>
-              <div id="skill-type-filters" class="skill-filter-pills">
-                <button type="button" class="filter-pill active" data-skill-type="all">전체</button>
-                <button type="button" class="filter-pill" data-skill-type="treat">💊 치료 카드</button>
-                <button type="button" class="filter-pill" data-skill-type="test">🔬 검사 카드</button>
-                <button type="button" class="filter-pill" data-skill-type="teach">🗣️ 티칭 카드</button>
-              </div>
+            <div id="skill-symptom-filters" class="skill-segmented-track" role="tablist" aria-label="증상 필터"></div>
+            <div id="skill-type-filters" class="skill-segmented-track skill-type-track" role="tablist" aria-label="카드 유형 필터">
+              <button type="button" class="filter-pill active" data-skill-type="all">전체 카드</button>
+              <button type="button" class="filter-pill" data-skill-type="treat">💊 치료</button>
+              <button type="button" class="filter-pill" data-skill-type="test">🔬 검사</button>
+              <button type="button" class="filter-pill" data-skill-type="teach">🗣️ 티칭</button>
             </div>
           </div>
 

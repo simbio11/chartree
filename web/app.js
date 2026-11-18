@@ -1799,6 +1799,7 @@
 
       const card = document.createElement("div");
       card.className = "skill-card";
+      card.setAttribute("data-card-type", ntype);
       card.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:0.4rem;">
           <div>
@@ -1893,6 +1894,8 @@
         const node = sym && sym.nodes ? sym.nodes[nid] : null;
         if (!node) return;
 
+        const drawer = document.getElementById("skill-form-drawer");
+        if (drawer) drawer.hidden = false;
         const nextSkNum = skillsList.length + 1;
         document.getElementById("skill-id-input").value = `SK-${String(nextSkNum).padStart(3, "0")}`;
         document.getElementById("skill-name-input").value = node["제목"];
@@ -1903,7 +1906,7 @@
         document.getElementById("skill-notes-input").value =
           node["자침점용량"] || node["술기세트"] || node["검사명"] || "";
         document.getElementById("skill-name-input").focus();
-        showToast(`📝 ${nid} 정보가 위 [스킬 등록 폼]에 채워졌습니다. [+ 스킬 도감에 등록]을 눌러 저장하세요!`);
+        showToast(`📝 ${nid} 정보가 등록 폼에 채워졌습니다.`);
       });
     });
 
@@ -2515,6 +2518,21 @@
       });
       copyToClipboard(lines.join("\n"), "내 진료 루틴 덱 md");
     });
+
+    // 스킬 등록 폼 드로어 토글
+    const skillDrawer = document.getElementById("skill-form-drawer");
+    const btnToggleSkillForm = document.getElementById("btn-toggle-skill-form");
+    const btnCloseSkillForm = document.getElementById("btn-close-skill-form");
+    if (btnToggleSkillForm && skillDrawer) {
+      btnToggleSkillForm.addEventListener("click", () => {
+        skillDrawer.hidden = !skillDrawer.hidden;
+      });
+    }
+    if (btnCloseSkillForm && skillDrawer) {
+      btnCloseSkillForm.addEventListener("click", () => {
+        skillDrawer.hidden = true;
+      });
+    }
 
     // 스킬 도감 유형 필터
     document.querySelectorAll("#skill-type-filters .filter-pill").forEach((btn) => {
