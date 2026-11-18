@@ -452,7 +452,35 @@
             </div>
           </form>
 
+          <div class="skill-filter-bar">
+            <div class="skill-filter-group">
+              <span class="filter-label">증상별 보기:</span>
+              <div id="skill-symptom-filters" class="skill-filter-pills"></div>
+            </div>
+            <div class="skill-filter-group">
+              <span class="filter-label">카드 유형:</span>
+              <div id="skill-type-filters" class="skill-filter-pills">
+                <button type="button" class="filter-pill active" data-skill-type="all">전체</button>
+                <button type="button" class="filter-pill" data-skill-type="treat">💊 치료 카드</button>
+                <button type="button" class="filter-pill" data-skill-type="test">🔬 검사 카드</button>
+                <button type="button" class="filter-pill" data-skill-type="teach">🗣️ 티칭 카드</button>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="subsection-heading">1) 🎯 내 공용·등록 술기 스킬 (여러 증상 카드에 장착 가능)</h3>
           <div id="skill-list-grid" class="skill-list-grid"></div>
+
+          <hr style="border:none; border-top:1px solid var(--border); margin:0.5rem 0;">
+
+          <div class="section-header-row">
+            <div>
+              <h3 class="subsection-heading">2) 💊 증상별 프로토콜 치료·검사·티칭 카드 도감 (트리와 자동 연동)</h3>
+              <p class="panel-subtitle">새로 추가한 치료·검사·티칭 카드가 자동으로 여기 뜹니다. 숙련도를 바꾸면 실제 진료 보드 경고 배지에 즉시 반영됩니다.</p>
+            </div>
+            <span id="protocol-skill-cards-count" class="nav-pill" style="background:#e2e8f0; color:#0f172a; font-weight:800;">0장</span>
+          </div>
+          <div id="protocol-skill-cards-grid" class="skill-list-grid"></div>
         </div>
       </section>
 

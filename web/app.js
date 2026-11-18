@@ -172,6 +172,9 @@
 
   // 루틴 덱 빌더에서 현재 슬롯에 담아둔 카드 ID 배열
   let builderDeckSlots = [];
+  // 스킬 도감 필터 상태
+  let skillFilterSymptom = "ALL";
+  let skillFilterType = "all";
 
   // DOM 참조
   const gridEl = document.getElementById("symptom-grid");
@@ -1526,46 +1529,130 @@
   }
 
   /* ==================== MODE 2 - WORKSHOP 3: 내 스킬 도감 ==================== */
+  function getNodeSymptomCode(nodeId) {
+    const m = String(nodeId || "").match(/^([A-Z]{2,4})-/);
+    return m ? m[1] : "";
+  }
+
   function renderSkillRegistry() {
     const container = document.getElementById("skill-list-grid");
+    const protoGrid = document.getElementById("protocol-skill-cards-grid");
+    const symFilterWrap = document.getElementById("skill-symptom-filters");
+    const protoCountBadge = document.getElementById("protocol-skill-cards-count");
     if (!container) return;
 
+    // 1. 증상 필터 버튼 렌더링
+    if (symFilterWrap && mergedTreeData && mergedTreeData["증상"]) {
+      const syms = Object.entries(mergedTreeData["증상"]);
+      let filterHtml = `<button type="button" class="filter-pill ${
+        skillFilterSymptom === "ALL" ? "active" : ""
+      }" data-sym="ALL">전체 증상</button>`;
+      syms.forEach(([code, obj]) => {
+        filterHtml += `<button type="button" class="filter-pill ${
+          skillFilterSymptom === code ? "active" : ""
+        }" data-sym="${escapeHtml(code)}">${escapeHtml(obj.name)} (${escapeHtml(code)})</button>`;
+      });
+      symFilterWrap.innerHTML = filterHtml;
+
+      symFilterWrap.querySelectorAll(".filter-pill").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          skillFilterSymptom = btn.getAttribute("data-sym");
+          renderSkillRegistry();
+        });
+      });
+    }
+
+    // 2. 섹션 1: 내 공용/등록 스킬 (증상 필터 적용)
+    const filteredSkills = skillsList.filter((sk) => {
+      if (skillFilterSymptom === "ALL") return true;
+      return (sk.linkedNodes || []).some((nid) => getNodeSymptomCode(nid) === skillFilterSymptom);
+    });
+
     container.innerHTML = "";
-    skillsList.forEach((sk) => {
-      const lv = Number(sk.level) || 0;
-      const stars = "★".repeat(lv) + "☆".repeat(Math.max(0, 5 - lv));
-      const card = document.createElement("div");
-      card.className = "skill-card";
-      card.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:0.5rem;">
-          <div>
-            <span class="node-id-badge">${escapeHtml(sk.id)} · ${escapeHtml(sk.category)}</span>
-            <h3 style="font-size:0.95rem; font-weight:900; margin-top:0.25rem;">${escapeHtml(sk.name)}</h3>
+    if (filteredSkills.length === 0) {
+      container.innerHTML =
+        '<p style="font-size:0.84rem; color:var(--text-muted);">해당 증상에 연결된 공용 스킬이 없습니다. 아래 프로토콜 카드에서 [+ 내 스킬로 연결]을 누르거나 위 폼에서 추가하세요.</p>';
+    } else {
+      filteredSkills.forEach((sk) => {
+        const lv = Number(sk.level) || 0;
+        const stars = "★".repeat(lv) + "☆".repeat(Math.max(0, 5 - lv));
+
+        // 연결된 증상 목록 추출
+        const linkedSyms = Array.from(
+          new Set(
+            (sk.linkedNodes || [])
+              .map((nid) => {
+                const sc = getNodeSymptomCode(nid);
+                const sObj = mergedTreeData && mergedTreeData["증상"] ? mergedTreeData["증상"][sc] : null;
+                return sObj ? `${sObj.name}(${sc})` : sc;
+              })
+              .filter(Boolean)
+          )
+        );
+
+        const symBadgesHtml = linkedSyms
+          .map((s) => `<span class="skill-sym-badge">${escapeHtml(s)}</span>`)
+          .join(" ");
+
+        const nodeChipsHtml = (sk.linkedNodes || [])
+          .map(
+            (nid) =>
+              `<button type="button" class="btn-node-jump-chip" data-jump-node="${escapeHtml(
+                nid
+              )}" title="진료 보드에서 이 카드 보기">${escapeHtml(nid)} →</button>`
+          )
+          .join(" ");
+
+        const card = document.createElement("div");
+        card.className = "skill-card";
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:0.5rem;">
+            <div>
+              <div style="display:flex; flex-wrap:wrap; gap:0.3rem; align-items:center;">
+                <span class="node-id-badge">${escapeHtml(sk.id)} · ${escapeHtml(sk.category)}</span>
+                ${symBadgesHtml}
+              </div>
+              <h3 style="font-size:0.95rem; font-weight:900; margin-top:0.3rem;">${escapeHtml(sk.name)}</h3>
+            </div>
+            <span class="prof-chip prof-${lv}">Lv.${lv} ${stars}</span>
           </div>
-          <span class="prof-chip prof-${lv}">Lv.${lv} ${stars}</span>
-        </div>
-        <div style="font-size:0.82rem; color:var(--text-muted);">${escapeHtml(sk.notes || "")}</div>
-        <div style="font-size:0.76rem; color:#0369a1; font-weight:800;">
-          장착된 카드: ${escapeHtml((sk.linkedNodes || []).join(", ") || "없음")}
-        </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.4rem; padding-top:0.4rem; border-top:1px solid var(--border-light);">
-          <select class="select-input skill-lv-change" data-id="${escapeHtml(sk.id)}" style="font-size:0.78rem; padding:0.2rem 0.45rem;">
-            <option value="0" ${lv === 0 ? "selected" : ""}>Lv.0 미경험(⛔)</option>
-            <option value="1" ${lv === 1 ? "selected" : ""}>Lv.1 관찰(⚠️)</option>
-            <option value="2" ${lv === 2 ? "selected" : ""}>Lv.2 부분시행(⚠️)</option>
-            <option value="3" ${lv === 3 ? "selected" : ""}>Lv.3 지도하완수(🔶)</option>
-            <option value="4" ${lv === 4 ? "selected" : ""}>Lv.4 단독숙련(✅)</option>
-            <option value="5" ${lv === 5 ? "selected" : ""}>Lv.5 마스터(🌟)</option>
-          </select>
-          <div style="display:flex; align-items:center; gap:0.35rem;">
-            <span style="font-size:0.78rem; font-weight:800;">누적 ${Number(sk.count || 0)}회</span>
-            <button type="button" class="btn btn-sm btn-outline skill-inc-count" data-id="${escapeHtml(sk.id)}">
-              +1회 (+EXP)
-            </button>
+          <div style="font-size:0.82rem; color:var(--text-muted);">${escapeHtml(sk.notes || "")}</div>
+          <div style="display:flex; flex-wrap:wrap; gap:0.3rem; align-items:center;">
+            <span style="font-size:0.74rem; color:#0369a1; font-weight:800;">연결 카드:</span>
+            ${nodeChipsHtml || '<span style="font-size:0.74rem; color:var(--text-muted);">미연결</span>'}
           </div>
-        </div>
-      `;
-      container.appendChild(card);
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.4rem; padding-top:0.4rem; border-top:1px solid var(--border-light);">
+            <select class="select-input skill-lv-change" data-id="${escapeHtml(
+              sk.id
+            )}" style="font-size:0.78rem; padding:0.2rem 0.45rem;">
+              <option value="0" ${lv === 0 ? "selected" : ""}>Lv.0 미경험(⛔)</option>
+              <option value="1" ${lv === 1 ? "selected" : ""}>Lv.1 관찰(⚠️)</option>
+              <option value="2" ${lv === 2 ? "selected" : ""}>Lv.2 부분시행(⚠️)</option>
+              <option value="3" ${lv === 3 ? "selected" : ""}>Lv.3 지도하완수(🔶)</option>
+              <option value="4" ${lv === 4 ? "selected" : ""}>Lv.4 단독숙련(✅)</option>
+              <option value="5" ${lv === 5 ? "selected" : ""}>Lv.5 마스터(🌟)</option>
+            </select>
+            <div style="display:flex; align-items:center; gap:0.35rem;">
+              <span style="font-size:0.78rem; font-weight:800;">누적 ${Number(sk.count || 0)}회</span>
+              <button type="button" class="btn btn-sm btn-outline skill-inc-count" data-id="${escapeHtml(sk.id)}">
+                +1회 (+EXP)
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    container.querySelectorAll(".btn-node-jump-chip").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const nid = btn.getAttribute("data-jump-node");
+        const sc = getNodeSymptomCode(nid);
+        if (sc) {
+          switchMode("clinic");
+          selectSymptom(sc, nid);
+        }
+      });
     });
 
     container.querySelectorAll(".skill-lv-change").forEach((sel) => {
@@ -1590,6 +1677,158 @@
         await dbPut("skills", sk);
         renderSkillRegistry();
         showToast(`📈 ${sk.name} 누적 시행 ${sk.count}회 달성!`);
+      });
+    });
+
+    // 3. 섹션 2: 프로토콜 트리 안의 모든 치료(treat) · 검사(test) · 티칭(teach) 카드 자동 동기화 표시
+    if (!protoGrid || !mergedTreeData || !mergedTreeData["증상"]) return;
+
+    const targetTypes =
+      skillFilterType === "all" ? new Set(["treat", "test", "teach"]) : new Set([skillFilterType]);
+
+    const protoCards = [];
+    Object.entries(mergedTreeData["증상"]).forEach(([symCode, symObj]) => {
+      if (skillFilterSymptom !== "ALL" && skillFilterSymptom !== symCode) return;
+      Object.values(symObj.nodes || {})
+        .sort((a, b) => String(a.id).localeCompare(String(b.id)))
+        .forEach((node) => {
+          if (targetTypes.has(node["유형"])) {
+            protoCards.push({ symCode, symName: symObj.name, node });
+          }
+        });
+    });
+
+    if (protoCountBadge) protoCountBadge.textContent = `${protoCards.length}장`;
+
+    protoGrid.innerHTML = "";
+    if (protoCards.length === 0) {
+      protoGrid.innerHTML = '<p style="font-size:0.84rem; color:var(--text-muted);">표시할 카드가 없습니다.</p>';
+      return;
+    }
+
+    protoCards.forEach(({ symCode, symName, node }) => {
+      const lv = typeof node["내숙련도"] === "number" ? node["내숙련도"] : 4;
+      const ntype = node["유형"];
+      const linkedSkill = skillsList.find((sk) => (sk.linkedNodes || []).includes(node.id));
+      const summary =
+        node["술기세트"] || node["검사명"] || node["환자설명"] || node["제목"];
+
+      const card = document.createElement("div");
+      card.className = "skill-card";
+      card.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:0.4rem;">
+          <div>
+            <div style="display:flex; flex-wrap:wrap; gap:0.25rem; align-items:center;">
+              <span class="skill-sym-badge">${escapeHtml(symName)} (${escapeHtml(symCode)})</span>
+              <span class="node-id-badge">${escapeHtml(node.id)}</span>
+              <span class="node-type-badge type-${escapeHtml(ntype)}">${escapeHtml(
+                TYPE_KOREAN[ntype] || ntype
+              )}</span>
+            </div>
+            <h3 style="font-size:0.92rem; font-weight:900; margin-top:0.28rem;">${escapeHtml(node["제목"])}</h3>
+          </div>
+          <span class="prof-chip prof-${lv}">Lv.${lv}</span>
+        </div>
+        <div style="font-size:0.8rem; color:var(--text-muted);">${escapeHtml(summary)}</div>
+        <div style="font-size:0.75rem; font-weight:700; color:${linkedSkill ? "#15803d" : "#64748b"};">
+          ${
+            linkedSkill
+              ? `🔗 장착 스킬: ${escapeHtml(linkedSkill.id)} (${escapeHtml(linkedSkill.name)})`
+              : "연결된 공용 스킬 없음 (개별 카드 숙련도 관리)"
+          }
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.35rem; padding-top:0.35rem; border-top:1px solid var(--border-light);">
+          <select class="select-input proto-card-lv-change" data-sym="${escapeHtml(symCode)}" data-nid="${escapeHtml(
+        node.id
+      )}" style="font-size:0.76rem; padding:0.2rem 0.4rem;">
+            <option value="0" ${lv === 0 ? "selected" : ""}>Lv.0 미경험(⛔)</option>
+            <option value="1" ${lv === 1 ? "selected" : ""}>Lv.1 관찰(⚠️)</option>
+            <option value="2" ${lv === 2 ? "selected" : ""}>Lv.2 부분시행(⚠️)</option>
+            <option value="3" ${lv === 3 ? "selected" : ""}>Lv.3 지도하완수(🔶)</option>
+            <option value="4" ${lv === 4 ? "selected" : ""}>Lv.4 단독숙련(✅)</option>
+            <option value="5" ${lv === 5 ? "selected" : ""}>Lv.5 마스터(🌟)</option>
+          </select>
+          <div class="btn-row">
+            ${
+              !linkedSkill
+                ? `<button type="button" class="btn btn-sm btn-outline btn-promote-to-skill" data-sym="${escapeHtml(
+                    symCode
+                  )}" data-nid="${escapeHtml(node.id)}">+ 내 스킬로 등록</button>`
+                : ""
+            }
+            <button type="button" class="btn btn-sm btn-secondary btn-jump-proto-card" data-sym="${escapeHtml(
+              symCode
+            )}" data-nid="${escapeHtml(node.id)}">🩺 보드 보기</button>
+          </div>
+        </div>
+      `;
+      protoGrid.appendChild(card);
+    });
+
+    protoGrid.querySelectorAll(".proto-card-lv-change").forEach((sel) => {
+      sel.addEventListener("change", async (e) => {
+        const symCode = sel.getAttribute("data-sym");
+        const nid = sel.getAttribute("data-nid");
+        const newLv = Number(e.target.value);
+        const sym = mergedTreeData["증상"][symCode];
+        const node = sym && sym.nodes ? sym.nodes[nid] : null;
+        if (!node) return;
+
+        node["내숙련도"] = newLv;
+        const entryItem = {
+          id: node.id,
+          symCode,
+          symName: sym.name,
+          parentBranch: "",
+          node: JSON.parse(JSON.stringify(node)),
+        };
+        const idx = customNodesList.findIndex((x) => x.id === node.id);
+        if (idx >= 0) customNodesList[idx] = entryItem;
+        else customNodesList.push(entryItem);
+        await dbPut("custom_nodes", entryItem);
+
+        // 연결된 스킬이 있으면 함께 동기화
+        for (const sk of skillsList) {
+          if ((sk.linkedNodes || []).includes(node.id)) {
+            sk.level = newLv;
+            await dbPut("skills", sk);
+          }
+        }
+
+        rebuildMergedTree();
+        renderSkillRegistry();
+        showToast(`🎯 ${nid} 카드 숙련도가 Lv.${newLv}(으)로 동기화되었습니다.`);
+      });
+    });
+
+    protoGrid.querySelectorAll(".btn-promote-to-skill").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const symCode = btn.getAttribute("data-sym");
+        const nid = btn.getAttribute("data-nid");
+        const sym = mergedTreeData["증상"][symCode];
+        const node = sym && sym.nodes ? sym.nodes[nid] : null;
+        if (!node) return;
+
+        const nextSkNum = skillsList.length + 1;
+        document.getElementById("skill-id-input").value = `SK-${String(nextSkNum).padStart(3, "0")}`;
+        document.getElementById("skill-name-input").value = node["제목"];
+        document.getElementById("skill-linked-nodes").value = node.id;
+        document.getElementById("skill-level-input").value = String(
+          typeof node["내숙련도"] === "number" ? node["내숙련도"] : 4
+        );
+        document.getElementById("skill-notes-input").value =
+          node["자침점용량"] || node["술기세트"] || node["검사명"] || "";
+        document.getElementById("skill-name-input").focus();
+        showToast(`📝 ${nid} 정보가 위 [스킬 등록 폼]에 채워졌습니다. [+ 스킬 도감에 등록]을 눌러 저장하세요!`);
+      });
+    });
+
+    protoGrid.querySelectorAll(".btn-jump-proto-card").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const symCode = btn.getAttribute("data-sym");
+        const nid = btn.getAttribute("data-nid");
+        switchMode("clinic");
+        selectSymptom(symCode, nid);
       });
     });
   }
@@ -2163,6 +2402,16 @@
         lines.push("");
       });
       copyToClipboard(lines.join("\n"), "내 진료 루틴 덱 md");
+    });
+
+    // 스킬 도감 유형 필터
+    document.querySelectorAll("#skill-type-filters .filter-pill").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#skill-type-filters .filter-pill").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        skillFilterType = btn.getAttribute("data-skill-type");
+        renderSkillRegistry();
+      });
     });
 
     // 스킬 도감 등록
