@@ -509,19 +509,68 @@
     updateBadges();
   }
 
+  function isNodePresentInMergedTree(nid) {
+    if (!mergedTreeData || !mergedTreeData["증상"]) return true;
+    const sc = getNodeSymptomCode(nid);
+    const sym = mergedTreeData["증상"][sc];
+    return Boolean(sym && sym.nodes && sym.nodes[nid]);
+  }
+
+  function getActiveLinkedNodeIds(skillObj) {
+    return (skillObj.linkedNodes || []).filter((nid) => isNodePresentInMergedTree(nid));
+  }
+
+  function getAvailableRoutines() {
+    if (!mergedTreeData || !mergedTreeData["증상"]) return routinesList;
+    const symptoms = mergedTreeData["증상"];
+    return routinesList.filter((rt) => {
+      const sym = symptoms[rt.symptom];
+      if (!sym || !sym.nodes) return false;
+      const path = rt.path || [];
+      return path.length === 0 || path.some((nid) => Boolean(sym.nodes[nid]));
+    });
+  }
+
+  function getProtocolSkillCards(symFilter = "ALL", typeFilter = "all") {
+    if (!mergedTreeData || !mergedTreeData["증상"]) return [];
+    const targetTypes =
+      typeFilter === "all" ? new Set(["treat", "test", "teach"]) : new Set([typeFilter]);
+    const protoCards = [];
+    Object.entries(mergedTreeData["증상"]).forEach(([symCode, symObj]) => {
+      if (symFilter !== "ALL" && symFilter !== symCode) return;
+      Object.values(symObj.nodes || {})
+        .sort((a, b) => String(a.id).localeCompare(String(b.id)))
+        .forEach((node) => {
+          if (targetTypes.has(node["유형"])) {
+            protoCards.push({ symCode, symName: symObj.name, node });
+          }
+        });
+    });
+    return protoCards;
+  }
+
   function updateBadges() {
     const skEl = document.getElementById("nav-skill-count");
     const csEl = document.getElementById("nav-case-count");
     const cuEl = document.getElementById("nav-custom-count");
     const rtEl = document.getElementById("badge-routine-count");
     const hRtEl = document.getElementById("header-routine-count");
+    const mgrRtEl = document.getElementById("routine-manager-count");
     const badgeCu = document.getElementById("custom-node-badge-count");
 
-    if (skEl) skEl.textContent = String(skillsList.length);
+    const availableRoutines = getAvailableRoutines();
+    const totalProtoSkills = getProtocolSkillCards("ALL", "all").length;
+    const totalSkillTabCount = skillsList.length + totalProtoSkills;
+
+    if (skEl) {
+      skEl.textContent = String(totalSkillTabCount);
+      skEl.title = `공용 술기 ${skillsList.length}개 + 프로토콜 카드 ${totalProtoSkills}장`;
+    }
     if (csEl) csEl.textContent = String(casesList.length);
     if (cuEl) cuEl.textContent = String(customNodesList.length);
-    if (rtEl) rtEl.textContent = String(routinesList.length);
-    if (hRtEl) hRtEl.textContent = String(routinesList.length);
+    if (rtEl) rtEl.textContent = String(availableRoutines.length);
+    if (hRtEl) hRtEl.textContent = String(availableRoutines.length);
+    if (mgrRtEl) mgrRtEl.textContent = `${availableRoutines.length}개`;
     if (badgeCu) badgeCu.textContent = String(customNodesList.length);
   }
 
@@ -862,13 +911,14 @@
     const container = document.getElementById("clinic-routine-pills");
     if (!container) return;
 
+    const availableRoutines = getAvailableRoutines();
     container.innerHTML = "";
-    if (routinesList.length === 0) {
+    if (availableRoutines.length === 0) {
       container.innerHTML = "<p style='color:#94a3b8; font-size:0.84rem;'>저장된 루틴 덱이 없습니다.</p>";
       return;
     }
 
-    routinesList.forEach((rt) => {
+    availableRoutines.forEach((rt) => {
       const symName =
         mergedTreeData && mergedTreeData["증상"][rt.symptom]
           ? mergedTreeData["증상"][rt.symptom].name
@@ -1916,13 +1966,17 @@
     const container = document.getElementById("routine-list-container");
     if (!container) return;
 
-    if (routinesList.length === 0) {
+    const availableRoutines = getAvailableRoutines();
+    const mgrRtEl = document.getElementById("routine-manager-count");
+    if (mgrRtEl) mgrRtEl.textContent = `${availableRoutines.length}개`;
+
+    if (availableRoutines.length === 0) {
       container.innerHTML = "<p>저장된 루틴 덱이 없습니다.</p>";
       return;
     }
 
     container.innerHTML = "";
-    routinesList.forEach((rt) => {
+    availableRoutines.forEach((rt) => {
       const card = document.createElement("div");
       card.className = "routine-card";
       card.innerHTML = `
@@ -2013,11 +2067,18 @@
       });
     }
 
-    // 2. 섹션 1: 내 공용/등록 스킬 (증상 필터 적용)
+    // 2. 섹션 1: 내 공용/등록 스킬 (증상 필터 적용, 실제 존재하는 노드 기준)
+    const regCountBadge = document.getElementById("registered-skill-cards-count");
     const filteredSkills = skillsList.filter((sk) => {
       if (skillFilterSymptom === "ALL") return true;
-      return (sk.linkedNodes || []).some((nid) => getNodeSymptomCode(nid) === skillFilterSymptom);
+      return getActiveLinkedNodeIds(sk).some((nid) => getNodeSymptomCode(nid) === skillFilterSymptom);
     });
+    if (regCountBadge) {
+      regCountBadge.textContent =
+        skillFilterSymptom === "ALL"
+          ? `${filteredSkills.length}개`
+          : `${filteredSkills.length}/${skillsList.length}개`;
+    }
 
     container.innerHTML = "";
     if (filteredSkills.length === 0) {
@@ -2027,11 +2088,12 @@
       filteredSkills.forEach((sk) => {
         const lv = Number(sk.level) || 0;
         const stars = "★".repeat(lv) + "☆".repeat(Math.max(0, 5 - lv));
+        const activeLinkedIds = getActiveLinkedNodeIds(sk);
 
         // 연결된 증상 목록 추출
         const linkedSyms = Array.from(
           new Set(
-            (sk.linkedNodes || [])
+            activeLinkedIds
               .map((nid) => {
                 const sc = getNodeSymptomCode(nid);
                 const sObj = mergedTreeData && mergedTreeData["증상"] ? mergedTreeData["증상"][sc] : null;
@@ -2045,7 +2107,7 @@
           .map((s) => `<span class="skill-sym-badge">${escapeHtml(s)}</span>`)
           .join(" ");
 
-        const nodeChipsHtml = (sk.linkedNodes || [])
+        const nodeChipsHtml = activeLinkedIds
           .map(
             (nid) =>
               `<button type="button" class="btn-node-jump-chip" data-jump-node="${escapeHtml(
@@ -2134,22 +2196,15 @@
     // 3. 섹션 2: 프로토콜 트리 안의 모든 치료(treat) · 검사(test) · 티칭(teach) 카드 자동 동기화 표시
     if (!protoGrid || !mergedTreeData || !mergedTreeData["증상"]) return;
 
-    const targetTypes =
-      skillFilterType === "all" ? new Set(["treat", "test", "teach"]) : new Set([skillFilterType]);
+    const totalProtoCount = getProtocolSkillCards("ALL", "all").length;
+    const protoCards = getProtocolSkillCards(skillFilterSymptom, skillFilterType);
 
-    const protoCards = [];
-    Object.entries(mergedTreeData["증상"]).forEach(([symCode, symObj]) => {
-      if (skillFilterSymptom !== "ALL" && skillFilterSymptom !== symCode) return;
-      Object.values(symObj.nodes || {})
-        .sort((a, b) => String(a.id).localeCompare(String(b.id)))
-        .forEach((node) => {
-          if (targetTypes.has(node["유형"])) {
-            protoCards.push({ symCode, symName: symObj.name, node });
-          }
-        });
-    });
-
-    if (protoCountBadge) protoCountBadge.textContent = `${protoCards.length}장`;
+    if (protoCountBadge) {
+      protoCountBadge.textContent =
+        skillFilterSymptom === "ALL" && skillFilterType === "all"
+          ? `${protoCards.length}장`
+          : `${protoCards.length}/${totalProtoCount}장`;
+    }
 
     protoGrid.innerHTML = "";
     if (protoCards.length === 0) {
@@ -2864,7 +2919,11 @@
       const name = document.getElementById("routine-name-input").value.trim();
       const orderMemo = document.getElementById("routine-order-input").value.trim();
 
-      const id = `RT-${String(routinesList.length + 1).padStart(2, "0")}`;
+      const maxRtNum = routinesList.reduce((acc, r) => {
+        const m = String(r.id || "").match(/^RT-(\d+)$/);
+        return m ? Math.max(acc, Number(m[1])) : acc;
+      }, 0);
+      const id = `RT-${String(maxRtNum + 1).padStart(2, "0")}`;
       const rtObj = { id, symptom, name, path: builderDeckSlots.slice(), orderMemo };
       routinesList.push(rtObj);
       await dbPut("routines", rtObj);
@@ -2876,14 +2935,15 @@
     });
 
     document.getElementById("btn-export-routines-md").addEventListener("click", () => {
+      const exportRoutines = getAvailableRoutines();
       const lines = ["# 내 진료 루틴 덱 모음", ""];
-      routinesList.forEach((r) => {
+      exportRoutines.forEach((r) => {
         lines.push(`## ${r.id} [${r.symptom}] ${r.name}`);
         lines.push(`- **카드 콤보**: \`${(r.path || []).join(" → ")}\``);
         lines.push(`- **오더 메모**: ${r.orderMemo || "-"}`);
         lines.push("");
       });
-      copyToClipboard(lines.join("\n"), "내 진료 루틴 덱 md");
+      copyToClipboard(lines.join("\n"), `내 진료 루틴 덱 ${exportRoutines.length}개 md`);
     });
 
     // 스킬 등록 폼 드로어 토글
@@ -3206,13 +3266,19 @@
       dbGetAll("routines"),
     ]);
 
-    const seedFlag = localStorage.getItem("clin7_seed_v9");
+    const seedFlag = localStorage.getItem("clin7_seed_v10");
     if (savedSkills.length === 0 || seedFlag !== "done") {
       const skillMap = new Map(savedSkills.map((s) => [s.id, s]));
       for (const sk of DEFAULT_SKILLS) {
         if (!skillMap.has(sk.id) || seedFlag !== "done") {
-          const prevCount = skillMap.has(sk.id) ? skillMap.get(sk.id).count : sk.count;
-          const mergedSk = Object.assign({}, sk, { count: prevCount });
+          const existing = skillMap.get(sk.id);
+          const mergedSk = Object.assign({}, sk, {
+            level: existing && typeof existing.level === "number" ? existing.level : sk.level,
+            count: existing && typeof existing.count === "number" ? existing.count : sk.count,
+            linkedNodes: Array.from(
+              new Set([...(sk.linkedNodes || []), ...(existing ? existing.linkedNodes || [] : [])])
+            ),
+          });
           skillMap.set(sk.id, mergedSk);
           await dbPut("skills", mergedSk);
         }
@@ -3231,7 +3297,7 @@
         }
       }
       routinesList = Array.from(rtMap.values());
-      localStorage.setItem("clin7_seed_v9", "done");
+      localStorage.setItem("clin7_seed_v10", "done");
     } else {
       routinesList = savedRoutines;
     }

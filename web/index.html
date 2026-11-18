@@ -409,7 +409,10 @@
           <!-- 우측: 완성된 내 루틴 덱 리스트 -->
           <div class="panel-card">
             <div class="section-header-row">
-              <h2 class="panel-title">⚡ 완성된 내 진료 루틴 덱 목록</h2>
+              <div style="display:flex; align-items:center; gap:0.45rem;">
+                <h2 class="panel-title">⚡ 완성된 내 진료 루틴 덱 목록</h2>
+                <span id="routine-manager-count" class="nav-pill" style="background:#e2e8f0; color:#0f172a; font-weight:800;">0개</span>
+              </div>
               <button type="button" id="btn-export-routines-md" class="btn btn-sm btn-outline">
                 📋 전체 루틴 덱 md 복사
               </button>
@@ -496,7 +499,10 @@
             </div>
           </div>
 
-          <h3 class="subsection-heading">1) 🎯 내 공용·등록 술기 스킬</h3>
+          <div class="section-header-row">
+            <h3 class="subsection-heading">1) 🎯 내 공용·등록 술기 스킬</h3>
+            <span id="registered-skill-cards-count" class="nav-pill" style="background:#e2e8f0; color:#0f172a; font-weight:800;">0개</span>
+          </div>
           <div id="skill-list-grid" class="skill-list-grid"></div>
 
           <hr style="border:none; border-top:1px solid var(--border); margin:0.5rem 0;">

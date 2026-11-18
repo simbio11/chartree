@@ -1,4 +1,4 @@
-const CACHE_NAME = "chartree-shell-v4";
+const CACHE_NAME = "chartree-shell-v5";
 const ASSETS = [
   "./",
   "./index.html",
