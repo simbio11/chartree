@@ -721,6 +721,39 @@ body {
 .btn-inline-choice.inline-no { background-color: #0284c7; }
 .btn-inline-choice.inline-danger { background-color: #dc2626; }
 
+.modality-pill {
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 0.08rem 0.42rem;
+  border-radius: 999px;
+  background-color: #ede9fe;
+  color: #5b21b6;
+  border: 1px solid #c4b5fd;
+}
+
+.btn-stack-l4 {
+  margin-top: 0.25rem;
+  width: 100%;
+  background-color: #f8fafc;
+  color: #0369a1;
+  border: 1px dashed #38bdf8;
+  border-radius: 6px;
+  padding: 0.22rem 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.btn-stack-l4:hover {
+  background-color: #e0f2fe;
+}
+
+.btn-stack-l4.stacked {
+  background-color: #dbeafe;
+  border-style: solid;
+  color: #1e40af;
+}
+
 .node-card-badges {
   display: flex;
   flex-wrap: wrap;

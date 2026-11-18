@@ -47,51 +47,61 @@
     skill: "🎯 스킬",
   };
 
+  const MODALITY_ICONS = {
+    침: "🪡 침",
+    전침: "⚡ 전침",
+    약침: "💉 약침",
+    추나: "👐 추나",
+    "수기·정복": "👐 수기",
+    한약: "🌿 한약",
+    재활: "🧘 재활",
+  };
+
   const DEFAULT_SKILLS = [
     {
       id: "SK-001",
       category: "침·전침",
-      name: "두경부·편두통 표적 자침 (풍지·태양-솔곡 수평자침·득기 30분)",
+      name: "두경부·편두통·전정 표적 침술 (풍지·태양-솔곡·예풍·득기)",
       level: 4,
       count: 42,
-      linkedNodes: ["HA-L4-01", "HA-L4-04", "DZ-L4-02"],
-      notes: "0.25×30mm 득기 유도 후 20~30분 유침. 풍지는 반대측 안구 방향으로 0.8~1.2촌 사자.",
+      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01"],
+      notes: "0.25×30mm 득기 유도 후 20~30분 유침. 풍지는 반대측 안구 방향 0.8~1.2촌 사자, 어지럼은 와위 시술.",
       updated: "2026-11-18",
     },
     {
       id: "SK-002",
-      category: "약침·봉침",
-      name: "상부 경추(풍지·천주·후두하근) 심부 약침술 (신바로/오공/자하거)",
-      level: 2,
-      count: 6,
-      linkedNodes: ["HA-L4-02", "DZ-L4-05"],
-      notes: "추골동맥 주행 주의. 30G×25mm로 후두골 하연 확인 후 반드시 혈액 역류(Regurgitation) 체크 뒤 0.2~0.3cc 주입.",
+      category: "침·전침",
+      name: "경항부·후두하근 2Hz 저주파 전침술 (풍지-천주·견우-견료)",
+      level: 4,
+      count: 35,
+      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01"],
+      notes: "2Hz 단속파 15~20분 통전(만성 감작 시 2/100Hz). 심장박동기 장착자 절대 금기.",
       updated: "2026-11-18",
     },
     {
       id: "SK-003",
-      category: "추나·수기",
-      name: "상부 경추 굴곡-회전 검사(CFRT) 및 C0-C1/C1-C2 가동 추나",
-      level: 4,
-      count: 28,
-      linkedNodes: ["HA-L2-01", "HA-L4-03"],
-      notes: "턱을 쇄골에 닿게 최대 굴곡 후 C1-C2 회전 비교(<32° 양성). 추골동맥 보호를 위해 상경추 HVLA 회전 thrust 금기.",
+      category: "약침·봉침",
+      name: "상부 경추·후관절 심부 약침술 (신바로/오공/자하거/황련)",
+      level: 2,
+      count: 6,
+      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02"],
+      notes: "추골동맥 주행 주의. 30G×25mm 자입 후 반드시 혈액 역류(Regurgitation) 확인 뒤 0.2~0.3cc 주입.",
       updated: "2026-11-18",
     },
     {
       id: "SK-004",
-      category: "약침·봉침",
-      name: "견관절 전·후방 관절낭 약침 및 관절가동 추나",
-      level: 2,
-      count: 8,
-      linkedNodes: ["SH-L4-02"],
-      notes: "견우·견료·결절간구 무균 소독 철저. 급성 염증기에는 과도한 Grade III 가동 추나 지양.",
+      category: "추나·수기",
+      name: "상경추(C0-C1/C1-C2) & 견관절 가동 추나 · 후두하근 이완",
+      level: 3,
+      count: 28,
+      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03"],
+      notes: "CFRT 검사 후 시행. 추골동맥 보호를 위해 상경추 고속 회전 스러스트(HVLA) 절대 금기.",
       updated: "2026-11-18",
     },
     {
       id: "SK-005",
       category: "이학적검사",
-      name: "HINTS+ (두부충동·안진·사위편향 + 청력) & Dix-Hallpike / Epley 정복술",
+      name: "HINTS+ · Dix-Hallpike 검사 & Epley/BBQ 이석 정복술",
       level: 4,
       count: 19,
       linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01"],
@@ -100,8 +110,18 @@
     },
     {
       id: "SK-006",
+      category: "한약처방",
+      name: "두통·어지럼·견비통 변증 한약 처방 (청상견통탕·반하백출천마탕·서근탕)",
+      level: 4,
+      count: 54,
+      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04"],
+      notes: "청강의감 26 & 한의CPG 기반 변증 처방. 임신부 활혈거어제 금기, 소음인 마황제 주의.",
+      updated: "2026-11-18",
+    },
+    {
+      id: "SK-007",
       category: "추나·수기",
-      name: "시선방향인지(GDR) & HRV 바이오피드백 비약물 재활 훈련",
+      name: "시선방향인지(GDR) & HRV 호흡 바이오피드백 재활",
       level: 3,
       count: 9,
       linkedNodes: ["HA-L4-06"],
@@ -114,44 +134,51 @@
     {
       id: "RT-01",
       symptom: "HA",
-      name: "경추성 두통 (눈 뒤 방산) 2Hz 전침+청상견통탕+목보호 덱",
-      path: ["HA-L0-01", "HA-L1-01", "HA-L1-03", "HA-L2-01", "HA-L3-01", "HA-L4-03", "HA-L4-09"],
-      orderMemo: "1) SNNOOP10 배제 → 2) CFRT(<32°) 및 C2 외측 1.5cm 눈뒤 방산 확인 → 3) 풍지-천주 2Hz 전침 20분 + 청상견통탕/갈근탕 → 4) 베개 6~8cm & 온찜질 티칭",
+      name: "경추성 두통 루틴 (전침 + 추나 + 한약 + 목보호 티칭)",
+      path: ["HA-L0-01", "HA-L1-01", "HA-L1-03", "HA-L2-01", "HA-L3-01", "HA-L4-02", "HA-L4-04", "HA-L4-05", "HA-L4-09"],
+      orderMemo: "[전침] 풍지-천주 2Hz 20분 + [추나] C0-C1 견인·후두하근 이완 + [한약] 청상견통탕/갈근탕 + [티칭] 베개 6~8cm & 온찜질",
     },
     {
       id: "RT-02",
       symptom: "HA",
-      name: "긴장형 두통 (CPG A등급) 득기 30분 침+자세교정 덱",
-      path: ["HA-L0-01", "HA-L1-01", "HA-L1-05", "HA-L2-02", "HA-L3-02", "HA-L4-01", "HA-L4-08"],
-      orderMemo: "1) 두개주위 근막 압통 확인 → 2) 풍지·태양·백회·합곡·태충 득기 후 30분 유침(10분 간격 재자극) + 소요산가감 → 3) Chin-Tuck 10초×15회 & 테니스공 이완 티칭",
+      name: "긴장형 두통 루틴 (득기 침 + 전침 + 한약 + 자세 티칭)",
+      path: ["HA-L0-01", "HA-L1-01", "HA-L1-05", "HA-L2-02", "HA-L3-02", "HA-L4-01", "HA-L4-02", "HA-L4-05", "HA-L4-08"],
+      orderMemo: "[침] 풍지·태양·백회·합곡·태충 득기 30분 + [전침] 승모근/후두하근 2Hz + [한약] 소요산가감 + [티칭] Chin-Tuck & 테니스공 이완",
     },
     {
       id: "RT-03",
       symptom: "HA",
-      name: "편두통 (무조짐·월경편두통) CGRP 표적침+변증한약+SEEDS 덱",
-      path: ["HA-L0-01", "HA-L1-01", "HA-L1-04", "HA-L2-03", "HA-L3-03", "HA-L4-04", "HA-L4-05", "HA-L4-07"],
-      orderMemo: "1) HIT-6 & 두피 이질통 확인 → 2) 태양-솔곡 수평자침 + 족임읍·외관 → 3) 천마구등음/천궁차조산/가미소요산 → 4) SEEDS & 두통일기(8~12주 예방) 티칭",
+      name: "편두통·MOH 루틴 (표적 침 + 변증 한약 + GDR/HRV + SEEDS)",
+      path: ["HA-L0-01", "HA-L1-01", "HA-L1-04", "HA-L2-03", "HA-L3-03", "HA-L4-01", "HA-L4-05", "HA-L4-06", "HA-L4-07"],
+      orderMemo: "[침] 태양-솔곡 수평자침·족임읍·외관 + [한약] 천마구등음/천궁차조산 + [재활] HRV 호흡 + [티칭] SEEDS & 진통제 테이퍼링",
     },
     {
       id: "RT-04",
       symptom: "DZ",
-      name: "이석증 (BPPV) Epley 정복술 + 잔여어지럼 침/반하백출천마탕 + 비타민D 덱",
-      path: ["DZ-L0-01", "DZ-L1-01", "DZ-L1-02", "DZ-L2-01", "DZ-L3-01", "DZ-L4-01", "DZ-L4-03", "DZ-L4-07"],
-      orderMemo: "1) 양측 Dix-Hallpike 확인 → 2) Epley(단계별 60초 정지) → 3) 잔여 멍함에 반하백출천마탕 3~5일분 → 4) 과도한 목고정 금지·전정억제제 중단·비타민D 티칭",
+      name: "이석증 (BPPV) 루틴 (이석정복 + 와위 침 + 한약 + 비타민D)",
+      path: ["DZ-L0-01", "DZ-L1-01", "DZ-L1-02", "DZ-L2-01", "DZ-L3-01", "DZ-L4-01", "DZ-L4-02", "DZ-L4-06", "DZ-L4-07"],
+      orderMemo: "[수기] Epley(단계별 60초 정지) + [침] 와위 예풍·풍지·내관 + [한약] 잔여 멍함에 반하백출천마탕 3~5일분 + [티칭] 전정억제제 중단·비타민D",
     },
     {
       id: "RT-05",
       symptom: "DZ",
-      name: "전정신경염 (s-AVS) HINTS+ 감별 → 와위 침구+전정재활운동 덱",
-      path: ["DZ-L0-01", "DZ-L1-01", "DZ-L1-03", "DZ-L2-02", "DZ-L3-02", "DZ-L4-02", "DZ-L4-08"],
-      orderMemo: "1) HINTS+ 말초성 & 청력정상 확인 → 2) 와위 예풍·풍지·내관·족삼리 자침 → 3) 누워만 있지 말고 시선고정 고개회전 전정재활운동 티칭",
+      name: "전정신경염 루틴 (HINTS+ → 와위 침 + 한약 + 전정재활)",
+      path: ["DZ-L0-01", "DZ-L1-01", "DZ-L1-03", "DZ-L2-02", "DZ-L3-02", "DZ-L4-02", "DZ-L4-06", "DZ-L4-08"],
+      orderMemo: "[침] 와위 예풍·풍지·내관·족삼리 + [한약] 반하백출천마탕/건비이사탕 + [티칭] 시선고정 고개회전 전정재활운동",
     },
     {
       id: "RT-06",
+      symptom: "DZ",
+      name: "경추성 어지럼 루틴 (전침 + 후두하근 추나 + 한약 + 안전티칭)",
+      path: ["DZ-L0-01", "DZ-L1-01", "DZ-L1-04", "DZ-L2-03", "DZ-L3-04", "DZ-L4-03", "DZ-L4-05", "DZ-L4-06", "DZ-L4-10"],
+      orderMemo: "[전침] 풍지-천주 2Hz + [추나] 후두하근 억제 & C0-C1 가동(HVLA 금지) + [한약] 반하백출천마탕 + [티칭] 5D-3N 경고·기립주의",
+    },
+    {
+      id: "RT-07",
       symptom: "SH",
-      name: "오십견(유착성 관절낭염) 야간통 완화 침·서근탕 덱",
-      path: ["SH-L0-01", "SH-L1-01", "SH-L1-02", "SH-L2-01", "SH-L3-01", "SH-L4-01", "SH-L4-03"],
-      orderMemo: "1) 수동 외회전(PROM) 제한 확인 → 2) 견우·견료·천종·곡지 전침 15분 + 서근탕 → 3) 수면 시 아픈 어깨 아래 낮은 베개 받치기 티칭",
+      name: "오십견 루틴 (전침·침 + 견관절 추나 + 서근탕 + 스트레칭)",
+      path: ["SH-L0-01", "SH-L1-01", "SH-L1-02", "SH-L2-01", "SH-L3-01", "SH-L4-01", "SH-L4-03", "SH-L4-04", "SH-L4-05"],
+      orderMemo: "[전침] 견우-견료 2Hz + [추나] 견관절 가동술 + [한약] 서근탕/양화이사탕 + [티칭] 시계추 운동 & 베개 받치기",
     },
   ];
 
@@ -637,6 +664,13 @@
 
   function renderComboTrailBar(nodesMap) {
     pathwayChips.innerHTML = "";
+    const comboBtn = document.getElementById("btn-copy-combo-orders");
+    const treatCount = currentPath.filter((id) => nodesMap[id] && nodesMap[id]["유형"] === "treat").length;
+    if (comboBtn) {
+      comboBtn.hidden = treatCount === 0;
+      comboBtn.textContent = `📋 선택 치료 콤보(${treatCount}종) 전체 복사`;
+    }
+
     currentPath.forEach((nid, idx) => {
       const node = nodesMap[nid];
       if (!node) return;
@@ -655,7 +689,10 @@
       chip.textContent = `${node.id} ${node["제목"]}`;
       chip.addEventListener("click", () => {
         activeNodeId = nid;
-        currentPath = currentPath.slice(0, idx + 1);
+        // L4 다중 치료 콤보일 때는 칩 클릭만으로 선택 카드 포커스만 이동하고, L0~L3 클릭 시에는 그 지점으로 되돌림
+        if (getLayerFromNodeId(nid) !== "L4") {
+          currentPath = currentPath.slice(0, idx + 1);
+        }
         renderClinicBoardMode();
       });
       pathwayChips.appendChild(chip);
@@ -742,6 +779,11 @@
         }
 
         let badgesHtml = "";
+        if (node["술기구분"]) {
+          badgesHtml += `<span class="modality-pill">${escapeHtml(
+            MODALITY_ICONS[node["술기구분"]] || node["술기구분"]
+          )}</span>`;
+        }
         if (isRedflag) {
           badgesHtml += `<span class="redflag-banner-tag">🚨 레드플래그 · 전원</span>`;
         }
@@ -791,6 +833,18 @@
           inlineChoicesHtml = `<div class="card-inline-choices">${btns}</div>`;
         }
 
+        // L4 카드(치료·티칭)를 여러 개 조합할 수 있는 [+ 콤보에 추가/해제] 버튼 (진료 보드가 L3 이상이거나 이미 L4가 켜져 있을 때)
+        const hasReachedL3OrL4 = currentPath.some((pid) => {
+          const ly = getLayerFromNodeId(pid);
+          return ly === "L3" || ly === "L4";
+        });
+        let stackBtnHtml = "";
+        if (getLayerFromNodeId(node.id) === "L4" && hasReachedL3OrL4) {
+          stackBtnHtml = `<button type="button" class="btn-stack-l4 ${isInPath ? "stacked" : ""}" data-stack-id="${escapeHtml(
+            node.id
+          )}">${isInPath ? "✔ 콤보 포함됨 (클릭해 제외)" : "+ 이 술기 콤보에 함께 담기"}</button>`;
+        }
+
         card.innerHTML = `
           ${ribbonHtml}
           <div class="node-card-top">
@@ -803,7 +857,27 @@
           ${previewText ? `<div class="node-card-preview">${escapeHtml(previewText)}</div>` : ""}
           ${badgesHtml ? `<div class="node-card-badges">${badgesHtml}</div>` : ""}
           ${inlineChoicesHtml}
+          ${stackBtnHtml}
         `;
+
+        // L4 다중 술기 조합 토글 버튼 클릭
+        card.querySelectorAll(".btn-stack-l4").forEach((sb) => {
+          sb.addEventListener("click", (ev) => {
+            ev.stopPropagation();
+            const sid = sb.getAttribute("data-stack-id");
+            const idx = currentPath.indexOf(sid);
+            if (idx >= 0) {
+              if (currentPath.length > 1) {
+                currentPath.splice(idx, 1);
+                if (activeNodeId === sid) activeNodeId = currentPath[currentPath.length - 1];
+              }
+            } else {
+              currentPath.push(sid);
+              activeNodeId = sid;
+            }
+            renderClinicBoardMode();
+          });
+        });
 
         // 인라인 분기 버튼 클릭
         card.querySelectorAll(".btn-inline-choice").forEach((b) => {
@@ -861,10 +935,20 @@
     branchSvgLayer.setAttribute("height", String(boardCanvas.scrollHeight));
     branchSvgLayer.innerHTML = "";
 
+    const pathSet = new Set(currentPath);
     const activeEdges = new Set();
     for (let i = 0; i < currentPath.length - 1; i++) {
       activeEdges.add(`${currentPath[i]}->${currentPath[i + 1]}`);
     }
+    // 다중 술기 콤보가 켜져 있을 때(예: L3→[전침, 추나, 한약]) 경로에 포함된 모든 부모→자식 연결선도 함께 점등
+    Object.values(nodesMap).forEach((sn) => {
+      if (!pathSet.has(sn.id)) return;
+      extractBranchesList(sn).forEach(({ targetId }) => {
+        if (pathSet.has(targetId)) {
+          activeEdges.add(`${sn.id}->${targetId}`);
+        }
+      });
+    });
 
     const activeNode = nodesMap[activeNodeId];
     const nextBranches = extractBranchesList(activeNode);
@@ -2213,6 +2297,34 @@
     });
 
     // 보드 컨트롤
+    const copyComboBtn = document.getElementById("btn-copy-combo-orders");
+    if (copyComboBtn) {
+      copyComboBtn.addEventListener("click", () => {
+        const sym = mergedTreeData["증상"][activeSymptomCode];
+        const nodesMap = sym ? sym.nodes || {} : {};
+        const selectedTreats = currentPath
+          .map((id) => nodesMap[id])
+          .filter((n) => n && (n["유형"] === "treat" || n["유형"] === "teach"));
+        if (selectedTreats.length === 0) return;
+
+        const lines = [`# [${sym.name}] 선택 진료 콤보 오더 (${selectedTreats.length}종)`];
+        selectedTreats.forEach((n) => {
+          if (n["유형"] === "treat") {
+            lines.push(`\n## ${n.id} ${n["제목"]}`);
+            lines.push(`- 술기 세트: ${n["술기세트"] || "-"}`);
+            lines.push(`- 자침점·용량: ${n["자침점용량"] || "-"}`);
+            lines.push(`- 빈도·기간: ${n["빈도"] || "-"} / ${n["기간"] || "-"}`);
+            lines.push(`- 주의/금기: ${n["금기"] || "-"}`);
+          } else {
+            lines.push(`\n## ${n.id} [티칭] ${n["제목"]}`);
+            lines.push(`- 환자 설명: ${n["환자설명"] || "-"}`);
+            if (n["생활지도"]) lines.push(`- 생활 지도: ${n["생활지도"]}`);
+          }
+        });
+        copyToClipboard(lines.join("\n"), `선택 치료 콤보 ${selectedTreats.length}종 전체 오더`);
+      });
+    }
+
     document.getElementById("btn-path-undo").addEventListener("click", () => {
       if (currentPath.length > 1) {
         currentPath.pop();
@@ -2609,7 +2721,7 @@
       dbGetAll("routines"),
     ]);
 
-    const seedFlag = localStorage.getItem("clin7_seed_v3");
+    const seedFlag = localStorage.getItem("clin7_seed_v4");
     if (savedSkills.length === 0 || seedFlag !== "done") {
       const skillMap = new Map(savedSkills.map((s) => [s.id, s]));
       for (const sk of DEFAULT_SKILLS) {
@@ -2634,7 +2746,7 @@
         }
       }
       routinesList = Array.from(rtMap.values());
-      localStorage.setItem("clin7_seed_v3", "done");
+      localStorage.setItem("clin7_seed_v4", "done");
     } else {
       routinesList = savedRoutines;
     }
