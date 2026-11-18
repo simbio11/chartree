@@ -93,68 +93,68 @@
       name: "두경부·편두통·전정·요추 심부 표적 침술 (협척·신수·풍지·예풍)",
       level: 4,
       count: 42,
-      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01", "NP-L4-01", "KN-L4-01", "AN-L4-01", "EL-L4-01", "HN-L4-01"],
-      notes: "두경부·사지·말초신경 표적 자침. 당뇨 발 감각저하(LOPS)엔 화상성 뜸·사혈 금지, 신경 본간 직자 회피.",
+      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01", "NP-L4-01", "KN-L4-01", "AN-L4-01", "EL-L4-01", "HN-L4-01", "FTL-L4-01"],
+      notes: "두경부·사지·말초신경·족부 표적 자침. 당뇨 발 감각저하(LOPS)엔 화상성 뜸·사혈 금지, 신경/건 본간 직자 회피.",
       updated: "2026-11-19",
     },
     {
       id: "SK-002",
       category: "침·전침",
-      name: "경항부·협착·슬/족관절·상과염·DPN 2Hz / 급성 100Hz 전침술",
+      name: "경항부·협착·슬/족관절·상과염·DPN·족저 2Hz / 100Hz 전침술",
       level: 4,
       count: 35,
-      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02", "NP-L4-02", "KN-L4-02", "AN-L4-02", "EL-L4-02", "HN-L4-02"],
-      notes: "DPN 족삼리-삼음교·태계-곤륜 2Hz 15~20분(감각 둔화 시 검사자가 근육 연축 직접 확인). 심장박동기 장착자 절대 금기.",
+      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02", "NP-L4-02", "KN-L4-02", "AN-L4-02", "EL-L4-02", "HN-L4-02", "FTL-L4-02"],
+      notes: "DPN 족삼리-삼음교 / 족저 승산-곤륜·태계-조해 2/100Hz. 당뇨 LOPS 시 연축 확인하며 저출력, 심장박동기 절대 금기.",
       updated: "2026-11-19",
     },
     {
       id: "SK-003",
       category: "약침·봉침",
-      name: "척추·관절·상과·말초신경 약침술 (신바로/홍화/자하거/봉약침)",
+      name: "척추·관절·상과·말초신경·족저근막 약침술 (신바로/홍화/자하거/봉약침)",
       level: 3,
       count: 14,
-      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03", "NP-L4-03", "KN-L4-03", "AN-L4-03", "EL-L4-03", "HN-L4-03"],
-      notes: "신경 본간 내 직접 주사 절대 금지; 발끝 허혈/궤양 피부 금지; 스테로이드 주사 후 2주 심부 약침 유예.",
+      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03", "NP-L4-03", "KN-L4-03", "AN-L4-03", "EL-L4-03", "HN-L4-03", "FTL-L4-03"],
+      notes: "신경·아킬레스건 실질 내 직접 주사 절대 금지; 당뇨발 허혈/궤양 피부 금지; 스테로이드 주사 후 2주 심부 약침 유예.",
       updated: "2026-11-19",
     },
     {
       id: "SK-004",
       category: "추나·수기",
-      name: "Cox 감압 · 상경추·거골 활주 · MWM · 정중/척골 신경 활주술",
+      name: "Cox 감압 · 상경추·거골·거골하/Lisfranc 추나 · 신경활주 · Low-Dye 테이핑",
       level: 3,
       count: 28,
-      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04", "NP-L4-04", "KN-L4-04", "AN-L4-04", "EL-L4-04", "HN-L4-04"],
-      notes: "신경 슬라이더(무통 미끄러짐) 적용; 척수증·뇌졸중·GBS·동맥 허혈 의심 시 추나·스트레칭 절대 금기.",
+      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04", "NP-L4-04", "KN-L4-04", "AN-L4-04", "EL-L4-04", "HN-L4-04", "FTL-L4-04"],
+      notes: "신경 슬라이더·족부 가동 추나 적용; 피로골절·건파열·척수증·뇌졸중·동맥 허혈 의심 시 추나·테이핑 절대 금기.",
       updated: "2026-11-19",
     },
     {
       id: "SK-005",
       category: "이학적검사",
-      name: "HINTS+ · SLR · Laslett · Wainner/Cook · Ottawa · Cozen · Durkan/LOPS/6축",
+      name: "HINTS+ · SLR · Wainner · Ottawa · Durkan/6축 · Windlass/Thompson/Mulder",
       level: 4,
       count: 19,
-      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04", "NP-L2-02", "NP-L2-06", "KN-L2-02", "AN-L2-01", "AN-L2-04", "EL-L2-01", "EL-L2-03", "HN-L2-01", "HN-L2-04", "HN-L2-06"],
-      notes: "Durkan 30초(특이도 90%), 10g 모노필라멘트 LOPS, 말초 vs 척수(UMN) vs 뇌(반신) 6축 국소화.",
+      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04", "NP-L2-02", "NP-L2-06", "KN-L2-02", "AN-L2-01", "AN-L2-04", "EL-L2-01", "EL-L2-03", "HN-L2-01", "HN-L2-04", "HN-L2-06", "FTL-L2-01", "FTL-L2-02", "FTL-L2-04", "FTL-L2-05"],
+      notes: "Windlass(특이도 ~99%), Thompson(아킬레스 파열), Mulder(모턴), 10g 모노필라멘트 LOPS, Ottawa 중족부/종골 Squeeze.",
       updated: "2026-11-19",
     },
     {
       id: "SK-006",
       category: "한약처방",
-      name: "변증 한약 (청상견통탕·독활기생탕·당귀수산+오령산·서경탕·황기계지오물탕)",
+      name: "변증 한약 (청상견통탕·독활기생탕·황기계지오물탕·서경탕·사묘산)",
       level: 4,
       count: 54,
-      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06", "NP-L4-05", "KN-L4-06", "AN-L4-05", "EL-L4-06", "HN-L4-05"],
-      notes: "말초 저림엔 황기계지오물탕·보양환오탕·우차신기환. 복용 중인 가바펜틴·둘록세틴·SSRI·항응고제 상호작용 점검.",
+      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06", "NP-L4-05", "KN-L4-06", "AN-L4-05", "EL-L4-06", "HN-L4-05", "FTL-L4-05"],
+      notes: "족저/건병증엔 독활기생탕·서경탕, 한랭 저림엔 당귀사역탕, 급성 통풍 습열엔 사묘산. 양방 요산저하제·신경병증약·항응고제 점검.",
       updated: "2026-11-19",
     },
     {
       id: "SK-007",
       category: "추나·수기",
-      name: "WalkBack · Big 3 · CCFT · VMO/태극권 · SEBT/Alfredson · 신경활주·LOPS재활",
+      name: "WalkBack · Big 3 · CCFT · VMO/SEBT · Rathleff·Alfredson·Short-Foot 재활",
       level: 4,
       count: 15,
-      linkedNodes: ["HA-L4-06", "LBP-L4-07", "NP-L4-06", "KN-L4-07", "AN-L4-06", "HN-L4-06"],
-      notes: "무통 신경 슬라이더 및 감각저하 족부 낙상예방 균형훈련(맨발 자갈 지압판 금지).",
+      linkedNodes: ["HA-L4-06", "LBP-L4-07", "NP-L4-06", "KN-L4-07", "AN-L4-06", "HN-L4-06", "FTL-L4-06"],
+      notes: "Rathleff(수건 밑 뒤꿈치 들기) 및 Alfredson 편심성 운동(부착부 건병증은 계단 과배굴 금기), 피로골절 시 로딩 절대 금기.",
       updated: "2026-11-19",
     },
     {
@@ -344,6 +344,27 @@
       name: "주관절 터널(4·5지) 루틴 (소해 침 + 척골신경 슬라이더 + 팔꿈치 90°↓ 수면 티칭)",
       path: ["HN-L0-03", "HN-L1-01", "HN-L1-03", "HN-L2-02", "HN-L3-02", "HN-L4-01", "HN-L4-04", "HN-L4-05", "HN-L4-09"],
       orderMemo: "[침] 소해·후계 사자(척골신경 직자 회피) + [추나] 척골신경 슬라이더 + [한약] 황기계지오물탕 + [티칭] 수면 시 수건 부목(90°↓)",
+    },
+    {
+      id: "RT-26",
+      symptom: "FTL",
+      name: "족저근막염 루틴 (승산·태계·신바로 + Low-Dye + Rathleff 로딩)",
+      path: ["FTL-L0-02", "FTL-L1-01", "FTL-L1-02", "FTL-L2-01", "FTL-L3-01", "FTL-L4-01", "FTL-L4-03", "FTL-L4-04", "FTL-L4-06", "FTL-L4-07"],
+      orderMemo: "[침·전침] 승산-곤륜·종골 내측 사자 + [약침] 신바로 내측결절 + [추나/테이핑] 거골 활주 + Low-Dye + [재활/티칭] 기상 전 스트레칭 & Rathleff",
+    },
+    {
+      id: "RT-27",
+      symptom: "FTL",
+      name: "아킬레스건병증 루틴 (Thompson 배제 → 2/100Hz 전침 + 건주위 약침 + Alfredson)",
+      path: ["FTL-L0-03", "FTL-L1-01", "FTL-L1-03", "FTL-L2-02", "FTL-L3-02", "FTL-L4-02", "FTL-L4-03", "FTL-L4-05", "FTL-L4-06", "FTL-L4-09"],
+      orderMemo: "[전침] 승산-곤륜 2/100Hz + [약침] 신바로 건주위(건내 금기) + [한약] 독활기생탕 + [재활/티칭] Alfredson(부착부 과배굴 금기) & 6~12주 타임라인",
+    },
+    {
+      id: "RT-28",
+      symptom: "FTL",
+      name: "족근관 증후군 루틴 (태계-조해 2Hz + 경골신경 슬라이더 + 당뇨 LOPS 감별)",
+      path: ["FTL-L0-05", "FTL-L1-01", "FTL-L1-05", "FTL-L2-04", "FTL-L3-04", "FTL-L4-01", "FTL-L4-02", "FTL-L4-04", "FTL-L4-05", "FTL-L4-08"],
+      orderMemo: "[침·전침] 태계-조해 2Hz(LOPS 시 뜸·과전류 금지) + [추나] 경골신경 슬라이더 + 아치 지지 + [한약] 당귀사역탕/방기황기탕",
     },
   ];
 
@@ -4006,7 +4027,7 @@
       dbGetAll("routines"),
     ]);
 
-    const seedFlag = localStorage.getItem("clin7_seed_v13");
+    const seedFlag = localStorage.getItem("clin7_seed_v14");
     if (savedSkills.length === 0 || seedFlag !== "done") {
       const skillMap = new Map(savedSkills.map((s) => [s.id, s]));
       for (const sk of DEFAULT_SKILLS) {
@@ -4037,7 +4058,7 @@
         }
       }
       routinesList = Array.from(rtMap.values());
-      localStorage.setItem("clin7_seed_v13", "done");
+      localStorage.setItem("clin7_seed_v14", "done");
     } else {
       routinesList = savedRoutines;
     }
