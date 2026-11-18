@@ -29,12 +29,12 @@
   const RRN_REGEX = /\b\d{6}-[1-4]\d{6}\b/;
 
   const LAYER_META = [
-    { key: "L0", title: "L0 · 진입 카드" },
-    { key: "L1", title: "L1 · 문진 카드 (Ask)" },
-    { key: "L2", title: "L2 · 검사 카드 (Test)" },
-    { key: "L3", title: "L3 · 감별 카드 (Dx)" },
-    { key: "L4", title: "L4 · 치료·티칭 카드" },
-    { key: "L5", title: "L5 · 결과·전원 카드" },
+    { key: "L0", title: "L0 · 시작" },
+    { key: "L1", title: "L1 · 문진" },
+    { key: "L2", title: "L2 · 검사" },
+    { key: "L3", title: "L3 · 감별" },
+    { key: "L4", title: "L4 · 치료·티칭" },
+    { key: "L5", title: "L5 · 결과·전원" },
   ];
 
   const TYPE_KOREAN = {
