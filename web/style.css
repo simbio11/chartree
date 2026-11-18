@@ -970,6 +970,57 @@ body {
   box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35);
 }
 
+.next-decision-ribbon.ribbon-preview {
+  background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+  box-shadow: 0 2px 6px rgba(124, 58, 237, 0.3);
+}
+
+.tree-node-card.recommended-interview-preview {
+  opacity: 1;
+  filter: none;
+  background-color: #faf5ff;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.25), 0 6px 14px rgba(124, 58, 237, 0.14);
+}
+
+.badge-rec-l1 {
+  background-color: #ede9fe;
+  color: #5b21b6;
+  border: 1px solid #c4b5fd;
+}
+
+.l0-routing-preview {
+  background: linear-gradient(135deg, #faf5ff 0%, #eef2ff 100%);
+  border: 1.5px solid #c4b5fd;
+  border-radius: 10px;
+  padding: 0.65rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.l0-routing-head {
+  font-size: 0.76rem;
+  font-weight: 900;
+  color: #5b21b6;
+}
+
+.l0-routing-flow {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1e1b4b;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  line-height: 1.45;
+}
+
+.l0-routing-arrow {
+  color: #7c3aed;
+  font-weight: 900;
+}
+
 /* 카드 내부 요소 */
 .node-card-top {
   display: flex;

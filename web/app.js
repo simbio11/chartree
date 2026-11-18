@@ -93,68 +93,68 @@
       name: "두경부·편두통·전정·요추 심부 표적 침술 (협척·신수·풍지·예풍)",
       level: 4,
       count: 42,
-      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01", "NP-L4-01", "KN-L4-01"],
-      notes: "두경부는 0.25×30mm 득기, 요추 협척혈은 0.30×60mm 40~50mm 내측 심자, 무릎은 독비·내슬안 심부 사자 1.2~1.5촌.",
+      linkedNodes: ["HA-L4-01", "DZ-L4-02", "SH-L4-01", "LBP-L4-01", "NP-L4-01", "KN-L4-01", "AN-L4-01"],
+      notes: "두경부 0.25×30mm 득기, 요추 협척 40~50mm, 무릎 독비·내슬안 사자, 발목 구허·신맥·곤륜(아킬레스건 실질 심자 금지).",
       updated: "2026-11-19",
     },
     {
       id: "SK-002",
       category: "침·전침",
-      name: "경항부·요추 협착·슬관절 VMO 2Hz / 급성 100Hz 전침술",
+      name: "경항부·요추 협착·슬관절·족관절 2Hz / 급성 100Hz 전침술",
       level: 4,
       count: 35,
-      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02", "NP-L4-02", "KN-L4-02"],
-      notes: "협착증 BL25-L4협척 2Hz 30분, 무릎 혈해-양구(VMO) 2Hz 20분(2024 메타분석 전침>수기침). 심장박동기 장착자 절대 금기.",
+      linkedNodes: ["HA-L4-02", "DZ-L4-03", "SH-L4-01", "LBP-L4-02", "NP-L4-02", "KN-L4-02", "AN-L4-02"],
+      notes: "협착증 BL25-L4협척 2Hz 30분, 무릎 혈해-양구 2Hz, 발목 구허-양릉천(비골근)·승산-합양. 심장박동기 장착자 절대 금기.",
       updated: "2026-11-19",
     },
     {
       id: "SK-003",
       category: "약침·봉침",
-      name: "경추 후관절·요추 신경근·슬관절낭 심부 약침술 (신바로/봉약침/자하거)",
+      name: "경추·요추·슬관절·족관절 단계별 심부 약침술 (신바로/중성어혈/자하거/봉약침)",
       level: 3,
       count: 14,
-      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03", "NP-L4-03", "KN-L4-03"],
-      notes: "추골동맥 역류 확인 및 관절강 무균 소독 철저. 화농/통풍(Hot swollen joint) 절대 금지, 봉약침 Skin test 필수.",
+      linkedNodes: ["HA-L4-03", "DZ-L4-04", "SH-L4-02", "LBP-L4-03", "NP-L4-03", "KN-L4-03", "AN-L4-03"],
+      notes: "급성 염좌 중성어혈/황련 → 2주 후 자하거/녹용 인대 증식(건 실질 직접 금지). 화농/통풍(Hot joint) 절대 금지.",
       updated: "2026-11-19",
     },
     {
       id: "SK-004",
       category: "추나·수기",
-      name: "Cox 굴곡-신연 · 상경추·흉추 · 슬관절/슬개골 가동 추나 · MFR",
+      name: "Cox 굴곡-신연 · 상경추·흉추 · 슬/족관절 거골 후방활주 추나 · MFR",
       level: 3,
       count: 28,
-      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04", "NP-L4-04", "KN-L4-04"],
-      notes: "척수증·VBI·급성 디스크·협착증 HVLA 금기; 슬관절 급성 잠김·혈관절증·DVT·SIFK 시 신연/도수 금지(OA는 운동 병행).",
+      linkedNodes: ["HA-L4-04", "DZ-L4-05", "SH-L4-03", "LBP-L4-04", "NP-L4-04", "KN-L4-04", "AN-L4-04"],
+      notes: "척수증·VBI·급성 디스크 HVLA 금기; Ottawa 골절·High ankle 초기 외회전·아킬레스 파열·DVT 시 족관절 추나 금기.",
       updated: "2026-11-19",
     },
     {
       id: "SK-005",
       category: "이학적검사",
-      name: "HINTS+ · Dix-Hallpike · SLR · Laslett · Wainner/Cook · Lachman/McMurray",
+      name: "HINTS+ · SLR · Laslett · Wainner/Cook · Lachman · Ottawa/전방견인/Thompson",
       level: 4,
       count: 19,
-      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04", "NP-L2-02", "NP-L2-06", "KN-L2-02"],
-      notes: "SLR은 Braggard 병용, Wainner 3/4 특이도 94%, Lachman ACL 특이도 94%·McMurray 반월판 평가.",
+      linkedNodes: ["DZ-L2-01", "DZ-L2-02", "DZ-L4-01", "LBP-L2-01", "LBP-L2-04", "NP-L2-02", "NP-L2-06", "KN-L2-02", "AN-L2-01", "AN-L2-04"],
+      notes: "발목 전방견인은 수상 4~5일 지연 진찰 시 민감도 96%, Thompson 검사는 아킬레스 파열 민감도 96%.",
       updated: "2026-11-19",
     },
     {
       id: "SK-006",
       category: "한약처방",
-      name: "질환별 변증 한약 처방 (청상견통탕·반하백출천마탕·서근탕·독활기생탕·방기황기탕)",
+      name: "질환별 변증 한약 처방 (청상견통탕·독활기생탕·방기황기탕·당귀수산+오령산·회수산)",
       level: 4,
       count: 54,
-      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06", "NP-L4-05", "KN-L4-06"],
-      notes: "청강의감 & 한의CPG 기반 변증 처방. 임신부 활혈거어제 금기, 고령 NSAID/항응고제 병용 상호작용 확인.",
+      linkedNodes: ["HA-L4-05", "DZ-L4-06", "SH-L4-04", "LBP-L4-06", "NP-L4-05", "KN-L4-06", "AN-L4-05"],
+      notes: "급성 염좌 부종엔 당귀수산+오령산, 치타박일방(대황)은 연변 시 계지복령환 대체. 임신부 활혈거어제 금기.",
       updated: "2026-11-19",
     },
     {
       id: "SK-007",
       category: "추나·수기",
-      name: "WalkBack · McGill Big 3 · CCFT · VMO/중둔근·태극권 · GDR/HRV 재활",
+      name: "WalkBack · Big 3 · CCFT · VMO/태극권 · SEBT/Alfredson 편심성 재활",
       level: 4,
       count: 15,
-      linkedNodes: ["HA-L4-06", "LBP-L4-07", "NP-L4-06", "KN-L4-07"],
-      notes: "Lancet 2024 WalkBack, ACR 강한권고 태극권 & 체중 10% 감량, 무릎 0~45° VMO/중둔근 강화.",
+      linkedNodes: ["HA-L4-06", "LBP-L4-07", "NP-L4-06", "KN-L4-07", "AN-L4-06"],
+      notes: "CAI 한발서기·비골근 외번 훈련, 아킬레스건 중간부만 계단 내리기(삽입부는 평지까지만).",
       updated: "2026-11-19",
     },
     {
@@ -281,6 +281,27 @@
       name: "슬개대퇴(PFPS)·거위발 루틴 (침 + 슬개골 내측 가동 + 중둔근·VMO + 베개티칭)",
       path: ["KN-L0-04", "KN-L1-01", "KN-L1-04", "KN-L2-03", "KN-L3-03", "KN-L4-01", "KN-L4-02", "KN-L4-04", "KN-L4-07", "KN-L4-09"],
       orderMemo: "[침·전침] 혈해-양구 2Hz + [추나] 슬개골 내측 가동 & 외측지대 MFR + [재활] 중둔근/VMO(0~45°) + [티칭] 맥코넬 테이핑 & 계단 보행 요령",
+    },
+    {
+      id: "RT-17",
+      symptom: "AN",
+      name: "급성 외측 발목 염좌 루틴 (구허·신맥 침 + 중성어혈 + 당귀수산·오령산 + 보조기)",
+      path: ["AN-L0-02", "AN-L1-01", "AN-L1-02", "AN-L2-01", "AN-L3-01", "AN-L4-01", "AN-L4-03", "AN-L4-05", "AN-L4-07", "AN-L4-10"],
+      orderMemo: "[침] 구허·신맥·곤륜 + [약침] 중성어혈/황련해독 + [한약] 당귀수산+오령산(부종절반) + [티칭] 초기 온찜질 금지·보조기 & 4~5일 지연 진찰",
+    },
+    {
+      id: "RT-18",
+      symptom: "AN",
+      name: "만성 발목 불안정증(CAI) 루틴 (거골 후방활주 + 자하거 약침 + SEBT·비골근 재활)",
+      path: ["AN-L0-04", "AN-L1-01", "AN-L1-04", "AN-L2-03", "AN-L3-03", "AN-L4-01", "AN-L4-03", "AN-L4-04", "AN-L4-06", "AN-L4-09"],
+      orderMemo: "[추나] 거골 후내측 활주(족배굴곡 회복) + [약침] 자하거/녹용 인대 증식 + [재활] SEBT·한발서기·비골근 외번 + [티칭] 하이힐/굽 마모 신발 금지",
+    },
+    {
+      id: "RT-19",
+      symptom: "AN",
+      name: "아킬레스건병증 루틴 (건 주위 전침 + 약침 + Alfredson 편심성 + 위치별 티칭)",
+      path: ["AN-L0-05", "AN-L1-01", "AN-L1-05", "AN-L2-04", "AN-L3-04", "AN-L4-01", "AN-L4-02", "AN-L4-03", "AN-L4-06", "AN-L4-08"],
+      orderMemo: "[침·전침] 태계·곤륜·승산-합양 2Hz(건 실질 금지) + [약침] 건 주변 자하거/신바로 + [재활] Alfredson 편심성 + [티칭] 삽입부 스트레칭 금지(평지까지)",
     },
   ];
 
@@ -986,7 +1007,15 @@
   }
 
   function buildPathToNode(nodesMap, entryId, targetId) {
-    // 부모 링크 또는 그래프 BFS 역추적으로 진입점부터 targetId까지의 경로를 찾는다
+    // 현재 선택된 L0의 추천문진 단축 경로(L0 -> L1-01 -> 추천문진) 우선 반영
+    const l0Node = nodesMap[entryId];
+    const sc = getNodeSymptomCode(targetId || entryId);
+    const l1RedflagId = `${sc}-L1-01`;
+    if (l0Node && l0Node["추천문진"] === targetId && nodesMap[l1RedflagId] && targetId !== l1RedflagId) {
+      return [entryId, l1RedflagId, targetId];
+    }
+
+    // 부모 링크 역추적으로 진입점부터 targetId까지의 경로를 찾는다
     const parentChain = [];
     let cur = targetId;
     const visited = new Set();
@@ -998,6 +1027,11 @@
       }
       parentChain.unshift(cur);
       if (cur === entryId) break;
+      if (l0Node && l0Node["추천문진"] === cur && nodesMap[l1RedflagId] && cur !== l1RedflagId) {
+        parentChain.unshift(l1RedflagId);
+        parentChain.unshift(entryId);
+        break;
+      }
       cur = nodesMap[cur]["상위"];
     }
     if (parentChain[0] !== entryId && nodesMap[entryId]) {
@@ -1109,8 +1143,18 @@
 
     const pathSet = new Set(currentPath);
     const evoStats = computeNodeEvolutionStats();
+    const selectedL0Node =
+      currentPath.length > 0 && getLayerFromNodeId(currentPath[0]) === "L0"
+        ? nodesMap[currentPath[0]]
+        : activeNode && getLayerFromNodeId(activeNode.id) === "L0"
+        ? activeNode
+        : null;
+    const recInterviewId =
+      selectedL0Node && selectedL0Node["추천문진"] && nodesMap[selectedL0Node["추천문진"]]
+        ? selectedL0Node["추천문진"]
+        : null;
 
-    // L0~L5 그룹핑하되, 각 층에서 (1) 현재 경로 카드 (2) 다음 후보 카드 (3) 나머지 흐릿한 카드 순으로 정렬하면 시선이 자연스럽게 이어짐
+    // L0~L5 그룹핑하되, 각 층에서 (1) 현재 경로 카드 (2) 다음 후보/추천 문진 카드 (3) 나머지 흐릿한 카드 순으로 정렬하면 시선이 자연스럽게 이어짐
     const grouped = { L0: [], L1: [], L2: [], L3: [], L4: [], L5: [] };
     Object.values(nodesMap).forEach((node) => {
       const layer = getLayerFromNodeId(node.id);
@@ -1122,8 +1166,26 @@
 
     LAYER_META.forEach(({ key, title }) => {
       const colNodes = (grouped[key] || []).sort((a, b) => {
-        const scoreA = a.id === activeNodeId ? 0 : pathSet.has(a.id) ? 1 : nextDecisionMap[a.id] ? 2 : 3;
-        const scoreB = b.id === activeNodeId ? 0 : pathSet.has(b.id) ? 1 : nextDecisionMap[b.id] ? 2 : 3;
+        const scoreA =
+          a.id === activeNodeId
+            ? 0
+            : pathSet.has(a.id)
+            ? 1
+            : nextDecisionMap[a.id]
+            ? 2
+            : a.id === recInterviewId
+            ? 2.5
+            : 3;
+        const scoreB =
+          b.id === activeNodeId
+            ? 0
+            : pathSet.has(b.id)
+            ? 1
+            : nextDecisionMap[b.id]
+            ? 2
+            : b.id === recInterviewId
+            ? 2.5
+            : 3;
         if (scoreA !== scoreB) return scoreA - scoreB;
         return String(a.id).localeCompare(String(b.id));
       });
@@ -1143,8 +1205,15 @@
         const isInPath = pathSet.has(node.id);
         const decisionRibbonLabel = nextDecisionMap[node.id];
         const isPlayableNext = Boolean(decisionRibbonLabel);
+        const isRecInterviewPreview =
+          Boolean(recInterviewId) &&
+          node.id === recInterviewId &&
+          !isInPath &&
+          !isPlayableNext &&
+          activeNode &&
+          getLayerFromNodeId(activeNode.id) === "L0";
         const isL0Choosing = currentPath.length <= 1 && key === "L0";
-        const isDimmed = !isSelected && !isInPath && !isPlayableNext && !isL0Choosing;
+        const isDimmed = !isSelected && !isInPath && !isPlayableNext && !isRecInterviewPreview && !isL0Choosing;
         const isRedflag = node["레드플래그"] === true;
         const ntype = node["유형"] || "ask";
         const prof = typeof node["내숙련도"] === "number" ? node["내숙련도"] : null;
@@ -1158,24 +1227,39 @@
           isSelected ? "selected" : "",
           isInPath ? "in-path" : "",
           isPlayableNext ? "recommended-next" : "",
+          isRecInterviewPreview ? "recommended-interview-preview" : "",
           isDimmed ? "card-dimmed" : "",
           isRedflag ? "redflag-node" : "",
         ]
           .filter(Boolean)
           .join(" ");
 
-        // 다음 선택 가능한 후보 카드면 상단에 "👉 [예] 선택 시" 리본 표시
+        // 다음 선택 가능한 후보 카드 또는 L0 추천 문진 예고 리본 표시
         let ribbonHtml = "";
         if (isPlayableNext) {
           const isYes = isPositiveBranchLabel(decisionRibbonLabel);
           const isDanger = activeNode && activeNode["레드플래그"] === true && isYes;
           const rCls = isDanger ? "ribbon-danger" : isYes ? "" : "ribbon-no";
+          const recSuffix =
+            recInterviewId && node.id === recInterviewId && activeNode && String(activeNode.id).endsWith("-L1-01")
+              ? " · 🎯 호소 맞춤"
+              : "";
           ribbonHtml = `<span class="next-decision-ribbon ${rCls}">👉 [${escapeHtml(
             decisionRibbonLabel
-          )}] 카드 뽑기</span>`;
+          )}] 카드 뽑기${recSuffix}</span>`;
+        } else if (isRecInterviewPreview && selectedL0Node) {
+          ribbonHtml = `<span class="next-decision-ribbon ribbon-preview">🎯 [${escapeHtml(
+            selectedL0Node.id
+          )}] 추천 문진 예고</span>`;
         }
 
         let badgesHtml = "";
+        if (key === "L0" && node["추천문진"] && nodesMap[node["추천문진"]]) {
+          const recNode = nodesMap[node["추천문진"]];
+          badgesHtml += `<span class="mini-badge badge-rec-l1" title="${escapeHtml(
+            recNode["제목"] || ""
+          )}">🎯 추천문진 → ${escapeHtml(node["추천문진"])}</span>`;
+        }
         if (node["술기구분"]) {
           badgesHtml += `<span class="modality-pill">${escapeHtml(
             MODALITY_ICONS[node["술기구분"]] || node["술기구분"]
@@ -1465,6 +1549,16 @@
     `;
 
     // 유형별 메인 카드 효과 영역
+    const selectedL0Node =
+      currentPath.length > 0 && getLayerFromNodeId(currentPath[0]) === "L0"
+        ? nodesMap[currentPath[0]]
+        : isL0Node
+        ? node
+        : null;
+    const l0RecId = selectedL0Node && selectedL0Node["추천문진"];
+    const l0RecNode = l0RecId && nodesMap[l0RecId] ? nodesMap[l0RecId] : null;
+    const isL1Redflag = String(node.id || "").endsWith("-L1-01");
+
     if (ntype === "ask") {
       html += `
         <div class="hero-question-box">
@@ -1474,6 +1568,32 @@
           )}</div>
         </div>
       `;
+      if (isL0Node && l0RecNode) {
+        const sc = getNodeSymptomCode(node.id);
+        const rfId = `${sc}-L1-01`;
+        const rfNode = nodesMap[rfId];
+        html += `
+          <div class="l0-routing-preview">
+            <div class="l0-routing-head">🎯 이 호소 양상 선택 시 맞춤 연결 경로</div>
+            <div class="l0-routing-flow">
+              <span>1️⃣ <strong>${escapeHtml(rfId)}</strong> ${escapeHtml(rfNode ? rfNode["제목"] : "응급 레드플래그 확인")}</span>
+              <span class="l0-routing-arrow">→ (음성 시)</span>
+              <span>2️⃣ <strong>${escapeHtml(l0RecId)}</strong> ${escapeHtml(l0RecNode["제목"])}</span>
+            </div>
+          </div>
+        `;
+      } else if (isL1Redflag && selectedL0Node && l0RecNode) {
+        html += `
+          <div class="l0-routing-preview">
+            <div class="l0-routing-head">🎯 호소 양상(${escapeHtml(selectedL0Node.id)}) 맞춤 문진 연결 활성</div>
+            <div class="l0-routing-flow">
+              <span>아래 <strong>[아니오]</strong> 선택 시 <strong>${escapeHtml(l0RecId)}</strong> (${escapeHtml(
+                l0RecNode["제목"]
+              )}) 문진으로 이어집니다.</span>
+            </div>
+          </div>
+        `;
+      }
     } else if (ntype === "test") {
       html += `
         <div class="hero-question-box" style="background:#faf5ff; border-left-color:#7c3aed;">
@@ -1560,11 +1680,13 @@
           const tTitle = tNode ? tNode["제목"] : targetId;
           const isYes = isPositiveBranchLabel(label);
           const cls = isRedflag && isYes ? "choice-danger" : isYes ? "choice-yes" : "choice-no";
+          const customRecTag =
+            isL1Redflag && !isYes && l0RecId && targetId === l0RecId ? " · 🎯 맞춤 문진" : "";
           return `
             <button type="button" class="dock-choice-btn ${cls} btn-dock-branch" data-label="${escapeHtml(
             label
           )}" data-target="${escapeHtml(targetId)}">
-              <span>👉 [${escapeHtml(label)}]</span>
+              <span>👉 [${escapeHtml(label)}${customRecTag}]</span>
               <span style="font-size:0.82rem; opacity:0.92;">${escapeHtml(tTitle)} (${escapeHtml(targetId)}) →</span>
             </button>
           `;
