@@ -24,8 +24,13 @@
           <span class="brand-icon">🌳</span>
           <span class="brand-text">차트나무</span>
         </div>
-        <!-- 증상 선택 칩 (#symptom-grid ID 유지) -->
+        <!-- 증상 카테고리 드롭다운(데스크톱) & 현재 증상 선택기(모바일) (#symptom-grid ID 유지) -->
         <div id="symptom-grid" class="symptom-deck-tabs" role="list"></div>
+        <div id="active-symptom-indicator" class="active-symptom-pill" aria-live="polite"></div>
+        <button type="button" id="mobile-symptom-picker-btn" class="mobile-symptom-picker-btn" aria-haspopup="dialog" aria-expanded="false">
+          <span id="mobile-symptom-picker-label">🩺 증상 선택</span>
+          <span class="mobile-picker-action">변경 ▾</span>
+        </button>
         <!-- 최근 사용 증상 (숨김/보조) -->
         <div id="recent-section" hidden><div id="recent-list"></div></div>
       </div>
@@ -624,6 +629,21 @@
       </div>
       <h2 id="teach-modal-title" class="teach-title"></h2>
       <div id="teach-modal-body" class="teach-body"></div>
+    </div>
+  </div>
+
+  <!-- ==================== 모바일 증상 카테고리 바텀 시트 ==================== -->
+  <div id="mobile-symptom-sheet-backdrop" class="mobile-sheet-backdrop" hidden>
+    <div id="mobile-symptom-sheet" class="mobile-symptom-sheet" role="dialog" aria-modal="true" aria-labelledby="mobile-sheet-title">
+      <div class="mobile-sheet-handle" aria-hidden="true"></div>
+      <div class="mobile-sheet-head">
+        <h2 id="mobile-sheet-title" class="mobile-sheet-title">🌳 증상 프로토콜 선택</h2>
+        <button type="button" id="btn-close-symptom-sheet" class="btn-sheet-close" aria-label="닫기">✕</button>
+      </div>
+      <div class="mobile-sheet-filter">
+        <input type="search" id="mobile-sheet-search" placeholder="🔍 증상명 또는 코드 검색 (예: 두통, LBP)..." autocomplete="off">
+      </div>
+      <div id="mobile-sheet-body" class="mobile-sheet-body"></div>
     </div>
   </div>
 

@@ -57,6 +57,35 @@
     재활: "🧘 재활",
   };
 
+  const SYMPTOM_CATEGORIES = [
+    {
+      key: "msk",
+      icon: "🦴",
+      label: "척추 · 관절",
+      codes: ["LBP", "NP", "SH", "KN", "AN", "EL", "HN", "FTL", "TMJ"],
+    },
+    {
+      key: "neuro",
+      icon: "🧠",
+      label: "두경부 · 신경",
+      codes: ["HA", "DZ", "FP", "TIN"],
+    },
+    {
+      key: "internal",
+      icon: "🫁",
+      label: "소화 · 호흡 · 순환",
+      codes: ["DY", "AB", "RH", "ED"],
+    },
+    {
+      key: "special",
+      icon: "🌙",
+      label: "수면 · 피로 · 부인",
+      codes: ["SL", "FT", "DM"],
+    },
+  ];
+
+  const FALLBACK_CATEGORY = { key: "etc", icon: "📁", label: "기타 증상" };
+
   const DEFAULT_SKILLS = [
     {
       id: "SK-001",
@@ -581,34 +610,231 @@
     }
   }
 
-  /* ==================== 상단 증상 덱 탭 & 루틴 덱 서랍 ==================== */
+  /* ==================== 상단 증상 카테고리 드롭다운 & 모바일 바텀 시트 ==================== */
+  function getSymptomCategoryMeta(symCode) {
+    const found = SYMPTOM_CATEGORIES.find((cat) => cat.codes.includes(symCode));
+    return found || FALLBACK_CATEGORY;
+  }
+
+  function groupSymptomsByCategory(symptoms) {
+    const buckets = new Map();
+    SYMPTOM_CATEGORIES.forEach((cat) => {
+      buckets.set(cat.key, { meta: cat, items: [] });
+    });
+    buckets.set(FALLBACK_CATEGORY.key, { meta: FALLBACK_CATEGORY, items: [] });
+
+    Object.entries(symptoms).forEach(([code, symObj]) => {
+      const catMeta = getSymptomCategoryMeta(code);
+      const nodeCount = Object.keys(symObj.nodes || {}).length;
+      buckets.get(catMeta.key).items.push({ code, symObj, nodeCount });
+    });
+
+    // 카테고리 내부는 로드맵 우선순위 순서대로 정렬하고, 비어 있는 카테고리는 제외
+    const result = [];
+    buckets.forEach((bucket) => {
+      if (bucket.items.length === 0) return;
+      const orderList = bucket.meta.codes || [];
+      bucket.items.sort((a, b) => {
+        const ia = orderList.indexOf(a.code);
+        const ib = orderList.indexOf(b.code);
+        if (ia !== -1 && ib !== -1) return ia - ib;
+        if (ia !== -1) return -1;
+        if (ib !== -1) return 1;
+        return a.code.localeCompare(b.code);
+      });
+      result.push(bucket);
+    });
+    return result;
+  }
+
+  function chooseSymptomFromNav(code) {
+    selectSymptom(code);
+    if (currentMode === "setup") {
+      populateSymptomSelects();
+      switchSetupSubview(currentSubview);
+    }
+  }
+
   function renderHeaderSymptomTabs() {
     if (!mergedTreeData || !mergedTreeData["증상"]) return;
     const symptoms = mergedTreeData["증상"];
+    const grouped = groupSymptomsByCategory(symptoms);
     gridEl.innerHTML = "";
     let totalNodes = 0;
 
-    Object.entries(symptoms).forEach(([code, symObj]) => {
-      const count = Object.keys(symObj.nodes || {}).length;
-      totalNodes += count;
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = `symptom-deck-btn ${code === activeSymptomCode ? "active" : ""}`;
-      btn.setAttribute("role", "listitem");
-      btn.innerHTML = `<span>${escapeHtml(symObj.name)}</span> <span style="opacity:0.75; font-size:0.74rem;">${escapeHtml(
-        code
-      )}</span>`;
-      btn.addEventListener("click", () => {
-        selectSymptom(code);
-        if (currentMode === "setup") {
-          populateSymptomSelects();
-          switchSetupSubview(currentSubview);
+    grouped.forEach(({ meta, items }) => {
+      items.forEach((it) => {
+        totalNodes += it.nodeCount;
+      });
+      const isCategoryActive = items.some((it) => it.code === activeSymptomCode);
+
+      const groupEl = document.createElement("div");
+      groupEl.className = `symptom-cat-group ${isCategoryActive ? "active" : ""}`;
+      groupEl.setAttribute("role", "listitem");
+
+      const triggerBtn = document.createElement("button");
+      triggerBtn.type = "button";
+      triggerBtn.className = `symptom-cat-trigger ${isCategoryActive ? "active" : ""}`;
+      triggerBtn.setAttribute("aria-haspopup", "true");
+      triggerBtn.setAttribute("aria-expanded", "false");
+      triggerBtn.innerHTML = `
+        <span>${meta.icon} ${escapeHtml(meta.label)}</span>
+        <span class="cat-count">${items.length}</span>
+        <span class="cat-caret">▾</span>
+      `;
+      triggerBtn.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        const wasOpen = groupEl.classList.contains("open");
+        gridEl.querySelectorAll(".symptom-cat-group.open").forEach((g) => {
+          g.classList.remove("open");
+          const tb = g.querySelector(".symptom-cat-trigger");
+          if (tb) tb.setAttribute("aria-expanded", "false");
+        });
+        if (!wasOpen) {
+          groupEl.classList.add("open");
+          triggerBtn.setAttribute("aria-expanded", "true");
         }
       });
-      gridEl.appendChild(btn);
+
+      const dropdownEl = document.createElement("div");
+      dropdownEl.className = "symptom-cat-dropdown";
+      dropdownEl.setAttribute("role", "menu");
+
+      const ddHeader = document.createElement("div");
+      ddHeader.className = "cat-dropdown-head";
+      ddHeader.textContent = `${meta.icon} ${meta.label} (${items.length}개 프로토콜)`;
+      dropdownEl.appendChild(ddHeader);
+
+      const ddList = document.createElement("div");
+      ddList.className = "cat-dropdown-list";
+
+      items.forEach(({ code, symObj, nodeCount }) => {
+        const itemBtn = document.createElement("button");
+        itemBtn.type = "button";
+        itemBtn.className = `cat-dropdown-item ${code === activeSymptomCode ? "active" : ""}`;
+        itemBtn.setAttribute("role", "menuitem");
+        itemBtn.innerHTML = `
+          <span class="cat-item-main">
+            <span class="cat-item-name">${escapeHtml(symObj.name)}</span>
+            <span class="cat-item-code">${escapeHtml(code)}</span>
+          </span>
+          <span class="cat-item-count">${nodeCount}카드</span>
+        `;
+        itemBtn.addEventListener("click", () => {
+          groupEl.classList.remove("open");
+          triggerBtn.setAttribute("aria-expanded", "false");
+          chooseSymptomFromNav(code);
+        });
+        ddList.appendChild(itemBtn);
+      });
+
+      dropdownEl.appendChild(ddList);
+      groupEl.appendChild(triggerBtn);
+      groupEl.appendChild(dropdownEl);
+      gridEl.appendChild(groupEl);
     });
 
+    // 현재 선택된 증상 표시 배지 (데스크톱 헤더용 + 모바일 버튼 라벨 동기화)
+    const activeSym = symptoms[activeSymptomCode];
+    const activeCat = getSymptomCategoryMeta(activeSymptomCode);
+    const activeIndicator = document.getElementById("active-symptom-indicator");
+    if (activeIndicator && activeSym) {
+      const nCount = Object.keys(activeSym.nodes || {}).length;
+      activeIndicator.innerHTML = `
+        <span class="active-sym-cat">${activeCat.icon}</span>
+        <span class="active-sym-name">${escapeHtml(activeSym.name)}</span>
+        <span class="active-sym-code">${escapeHtml(activeSymptomCode)} · ${nCount}</span>
+      `;
+    }
+
+    const mobileLabel = document.getElementById("mobile-symptom-picker-label");
+    if (mobileLabel && activeSym) {
+      const nCount = Object.keys(activeSym.nodes || {}).length;
+      mobileLabel.innerHTML = `${activeCat.icon} <strong>${escapeHtml(activeSym.name)}</strong> <span class="mobile-picker-code">${escapeHtml(activeSymptomCode)} · ${nCount}카드</span>`;
+    }
+
+    const sheetBackdrop = document.getElementById("mobile-symptom-sheet-backdrop");
+    if (sheetBackdrop && !sheetBackdrop.hidden) {
+      const sheetSearch = document.getElementById("mobile-sheet-search");
+      renderMobileSymptomSheet(sheetSearch ? sheetSearch.value : "");
+    }
+
     if (statsEl) statsEl.textContent = `증상 ${Object.keys(symptoms).length} · 카드 ${totalNodes}`;
+  }
+
+  function openMobileSymptomSheet() {
+    const backdrop = document.getElementById("mobile-symptom-sheet-backdrop");
+    const pickerBtn = document.getElementById("mobile-symptom-picker-btn");
+    const searchInputEl = document.getElementById("mobile-sheet-search");
+    if (!backdrop) return;
+    if (searchInputEl) searchInputEl.value = "";
+    renderMobileSymptomSheet("");
+    backdrop.hidden = false;
+    if (pickerBtn) pickerBtn.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeMobileSymptomSheet() {
+    const backdrop = document.getElementById("mobile-symptom-sheet-backdrop");
+    const pickerBtn = document.getElementById("mobile-symptom-picker-btn");
+    if (!backdrop) return;
+    backdrop.hidden = true;
+    if (pickerBtn) pickerBtn.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  }
+
+  function renderMobileSymptomSheet(filterQuery) {
+    const bodyEl = document.getElementById("mobile-sheet-body");
+    if (!bodyEl || !mergedTreeData || !mergedTreeData["증상"]) return;
+
+    const q = (filterQuery || "").trim().toLowerCase();
+    const grouped = groupSymptomsByCategory(mergedTreeData["증상"]);
+    bodyEl.innerHTML = "";
+    let renderedCount = 0;
+
+    grouped.forEach(({ meta, items }) => {
+      const filteredItems = items.filter(({ code, symObj }) => {
+        if (!q) return true;
+        return (
+          code.toLowerCase().includes(q) ||
+          symObj.name.toLowerCase().includes(q) ||
+          meta.label.toLowerCase().includes(q)
+        );
+      });
+      if (filteredItems.length === 0) return;
+      renderedCount += filteredItems.length;
+
+      const secEl = document.createElement("section");
+      secEl.className = "mobile-sheet-section";
+      secEl.innerHTML = `
+        <h3 class="mobile-sheet-cat-title">${meta.icon} ${escapeHtml(meta.label)} <span>(${filteredItems.length})</span></h3>
+      `;
+
+      const grid = document.createElement("div");
+      grid.className = "mobile-sheet-grid";
+
+      filteredItems.forEach(({ code, symObj, nodeCount }) => {
+        const cardBtn = document.createElement("button");
+        cardBtn.type = "button";
+        cardBtn.className = `mobile-sheet-card ${code === activeSymptomCode ? "active" : ""}`;
+        cardBtn.innerHTML = `
+          <span class="ms-card-name">${escapeHtml(symObj.name)}</span>
+          <span class="ms-card-meta">${escapeHtml(code)} · ${nodeCount}카드</span>
+        `;
+        cardBtn.addEventListener("click", () => {
+          closeMobileSymptomSheet();
+          chooseSymptomFromNav(code);
+        });
+        grid.appendChild(cardBtn);
+      });
+
+      secEl.appendChild(grid);
+      bodyEl.appendChild(secEl);
+    });
+
+    if (renderedCount === 0) {
+      bodyEl.innerHTML = `<p class="mobile-sheet-empty">일치하는 증상 프로토콜이 없습니다.</p>`;
+    }
   }
 
   function renderRoutineDrawerCards() {
@@ -2859,6 +3085,41 @@
         });
       });
     }
+
+    // 모바일 증상 카테고리 바텀 시트 & 데스크톱 드롭다운 외부 클릭 닫기
+    const mobilePickerBtn = document.getElementById("mobile-symptom-picker-btn");
+    if (mobilePickerBtn) {
+      mobilePickerBtn.addEventListener("click", openMobileSymptomSheet);
+    }
+    const closeSheetBtn = document.getElementById("btn-close-symptom-sheet");
+    if (closeSheetBtn) {
+      closeSheetBtn.addEventListener("click", closeMobileSymptomSheet);
+    }
+    const sheetBackdrop = document.getElementById("mobile-symptom-sheet-backdrop");
+    if (sheetBackdrop) {
+      sheetBackdrop.addEventListener("click", (ev) => {
+        if (ev.target === sheetBackdrop) closeMobileSymptomSheet();
+      });
+    }
+    const sheetSearch = document.getElementById("mobile-sheet-search");
+    if (sheetSearch) {
+      sheetSearch.addEventListener("input", (ev) => {
+        renderMobileSymptomSheet(ev.target.value);
+      });
+    }
+    document.addEventListener("click", () => {
+      if (!gridEl) return;
+      gridEl.querySelectorAll(".symptom-cat-group.open").forEach((g) => {
+        g.classList.remove("open");
+        const tb = g.querySelector(".symptom-cat-trigger");
+        if (tb) tb.setAttribute("aria-expanded", "false");
+      });
+    });
+    document.addEventListener("keydown", (ev) => {
+      if (ev.key === "Escape") {
+        closeMobileSymptomSheet();
+      }
+    });
 
     setupPwaInstall();
   }
