@@ -152,7 +152,7 @@
       id: "RT-02",
       symptom: "HA",
       name: "긴장형 두통 루틴 (득기 침 + 전침 + 한약 + 자세 티칭)",
-      path: ["HA-L0-04", "HA-L1-01", "HA-L1-05", "HA-L2-02", "HA-L3-02", "HA-L4-01", "HA-L4-02", "HA-L4-05", "HA-L4-08"],
+      path: ["HA-L0-04", "HA-L1-01", "HA-L1-06", "HA-L2-02", "HA-L3-02", "HA-L4-01", "HA-L4-02", "HA-L4-05", "HA-L4-08"],
       orderMemo: "[침] 풍지·태양·백회·합곡·태충 득기 30분 + [전침] 승모근/후두하근 2Hz + [한약] 소요산가감 + [티칭] Chin-Tuck & 테니스공 이완",
     },
     {
@@ -2793,7 +2793,7 @@
       dbGetAll("routines"),
     ]);
 
-    const seedFlag = localStorage.getItem("clin7_seed_v5");
+    const seedFlag = localStorage.getItem("clin7_seed_v6");
     if (savedSkills.length === 0 || seedFlag !== "done") {
       const skillMap = new Map(savedSkills.map((s) => [s.id, s]));
       for (const sk of DEFAULT_SKILLS) {
@@ -2818,7 +2818,7 @@
         }
       }
       routinesList = Array.from(rtMap.values());
-      localStorage.setItem("clin7_seed_v5", "done");
+      localStorage.setItem("clin7_seed_v6", "done");
     } else {
       routinesList = savedRoutines;
     }
