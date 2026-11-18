@@ -48,14 +48,128 @@
   };
 
   const MODALITY_ICONS = {
-    침: "🪡 침",
-    전침: "⚡ 전침",
-    약침: "💉 약침",
-    추나: "👐 추나",
-    "수기·정복": "👐 수기",
-    한약: "🌿 한약",
-    재활: "🧘 재활",
+    침: "🪡 침 치료",
+    침도: "🪡 침 치료 (침도)",
+    전침: "⚡ 전침 치료",
+    약침: "💉 약침 치료",
+    추나: "👐 추나 치료",
+    "수기·정복": "🤲 수기·정복",
+    한약: "🌿 한약 치료",
+    재활: "🧘 수기·재활",
   };
+
+  /**
+   * L4 치료(treat) 및 환자 티칭(teach) 카드의 계열별 색상·분류 테마를 반환한다.
+   * - 침구·약침 계열(청록/시안/에메랄드 3톤): 모든 침 치료법(일반침·침도·사암침·표적자침 등)은 mod-acu로 통일, 전침은 mod-ea, 약침은 mod-pa
+   * - 추나·수기·재활 계열(인디고/블루/바이올렛 3톤): 추나는 mod-chuna, 수기·정복은 mod-manual, 도인·재활운동은 mod-rehab
+   * - 한약·약물 계열(앰버/테라코타 2톤): 한약은 mod-herb, 약물·협진은 mod-drug
+   * - 환자 티칭(단일 로즈-플럼 톤): 모든 티칭 카드는 mod-teach로 통일하여 치료 카드와 명확히 구분
+   */
+  function getL4ModalityTheme(node) {
+    if (!node) {
+      return {
+        group: "treat",
+        theme: "mod-acu",
+        badgeLabel: "💊 치료",
+        familyName: "침·약침 계열",
+        sortOrder: 19,
+      };
+    }
+    const ntype = node["유형"] || "treat";
+    if (ntype === "teach") {
+      return {
+        group: "teach",
+        theme: "mod-teach",
+        badgeLabel: "🗣️ 환자 티칭",
+        familyName: "환자 티칭 · 생활지도",
+        sortOrder: 90,
+      };
+    }
+
+    const rawMod = String(node["술기구분"] || "").trim();
+    const title = String(node["제목"] || "");
+
+    if (rawMod.includes("전침") || title.includes("[전침]")) {
+      return {
+        group: "treat",
+        theme: "mod-ea",
+        badgeLabel: "⚡ 전침 치료",
+        familyName: "침·전침·약침 계열",
+        sortOrder: 11,
+      };
+    }
+    if (rawMod.includes("약침") || rawMod.includes("봉약침") || title.includes("[약침]")) {
+      return {
+        group: "treat",
+        theme: "mod-pa",
+        badgeLabel: "💉 약침 치료",
+        familyName: "침·전침·약침 계열",
+        sortOrder: 12,
+      };
+    }
+    if (rawMod.includes("침") || rawMod.includes("매선") || title.includes("[침")) {
+      const subLabel = rawMod && rawMod !== "침" ? `🪡 침 치료 (${rawMod})` : "🪡 침 치료";
+      return {
+        group: "treat",
+        theme: "mod-acu",
+        badgeLabel: subLabel,
+        familyName: "침·전침·약침 계열",
+        sortOrder: 10,
+      };
+    }
+    if (rawMod.includes("추나") || title.includes("[추나]")) {
+      return {
+        group: "treat",
+        theme: "mod-chuna",
+        badgeLabel: "👐 추나 치료",
+        familyName: "추나·수기·재활 계열",
+        sortOrder: 20,
+      };
+    }
+    if (rawMod.includes("수기") || rawMod.includes("정복") || rawMod.includes("테이핑") || title.includes("[수기")) {
+      return {
+        group: "treat",
+        theme: "mod-manual",
+        badgeLabel: "🤲 수기·정복요법",
+        familyName: "추나·수기·재활 계열",
+        sortOrder: 21,
+      };
+    }
+    if (rawMod.includes("재활") || rawMod.includes("운동") || rawMod.includes("도인") || title.includes("[재활")) {
+      return {
+        group: "treat",
+        theme: "mod-rehab",
+        badgeLabel: "🧘 수기·재활운동",
+        familyName: "추나·수기·재활 계열",
+        sortOrder: 22,
+      };
+    }
+    if (rawMod.includes("한약") || title.includes("[한약]")) {
+      return {
+        group: "treat",
+        theme: "mod-herb",
+        badgeLabel: "🌿 한약 치료",
+        familyName: "한약·약물 계열",
+        sortOrder: 30,
+      };
+    }
+    if (rawMod.includes("약물") || rawMod.includes("양약") || rawMod.includes("협진")) {
+      return {
+        group: "treat",
+        theme: "mod-drug",
+        badgeLabel: "💊 약물·협진",
+        familyName: "한약·약물 계열",
+        sortOrder: 31,
+      };
+    }
+    return {
+      group: "treat",
+      theme: "mod-acu",
+      badgeLabel: rawMod ? `🪡 침 치료 (${rawMod})` : "🪡 침 치료",
+      familyName: "침·전침·약침 계열",
+      sortOrder: 15,
+    };
+  }
 
   const SYMPTOM_CATEGORIES = [
     {
@@ -789,12 +903,9 @@
     if (!tNode) return rawLabel || "다음";
     const tType = tNode["유형"];
     const tLayer = getLayerFromNodeId(targetId);
-    if (tType === "treat") {
-      const mod = tNode["술기구분"];
-      const modText = mod ? MODALITY_ICONS[mod] || `💊 ${mod}` : "💊 치료";
-      return `${modText} 선택`;
+    if (tLayer === "L4" || tType === "treat" || tType === "teach") {
+      return getL4ModalityTheme(tNode).badgeLabel;
     }
-    if (tType === "teach") return "🗣️ 환자 티칭";
     if (tType === "outcome" || tLayer === "L5") return "📊 경과·재평가";
     if (tType === "dx" || tLayer === "L3") return "🩺 감별 진단";
     if (tType === "test" || tLayer === "L2") return "🔬 이학적 검사";
@@ -1504,60 +1615,90 @@
       routineCascadeTimer = null;
     }
 
+    const prevSymptomCode = activeSymptomCode;
     activeSymptomCode = rt.symptom;
     recordRecentSymptom(rt.symptom);
     const nodesMap = sym.nodes || {};
     const validPath = (rt.path || []).filter((nid) => Boolean(nodesMap[nid]));
     if (validPath.length === 0) return;
 
-    // 1단계(L0 호소 양상)부터 딱-딱-딱 순서대로 부드럽게 불이 들어오며 펼쳐지는 캐스케이드 애니메이션
-    pathDecisions = {};
+    // 1. 최종 경로와 분기 결정을 계산하고, 보드 카드 레이아웃은 단 1번만 고정 렌더링 (화면 흔들림·재정렬 방지)
+    const finalDecisions = {};
+    for (let i = 1; i < validPath.length; i++) {
+      const prevId = validPath[i - 1];
+      const curId = validPath[i];
+      const decLabel = inferDecisionBetweenNodes(nodesMap[prevId], curId, nodesMap);
+      if (decLabel) finalDecisions[prevId] = decLabel;
+    }
+
+    currentPath = validPath.slice();
+    activeNodeId = validPath[validPath.length - 1];
+    pathDecisions = finalDecisions;
+
+    if (prevSymptomCode !== activeSymptomCode) {
+      renderHeaderSymptomTabs();
+    }
+    renderHorizontalCardBoard(nodesMap);
+    drawSvgBranchLines(nodesMap);
+
+    // 2. 다른 UI(상단 스테퍼·우측 상세 독)는 가만히 두고, 보드 위의 경로 카드와 연결선만 L0부터 스르륵 부드럽게 순차 점등
+    const pathCardEls = validPath
+      .map((nid) => (boardCanvas ? boardCanvas.querySelector(`.tree-node-card[data-node-id="${nid}"]`) : null))
+      .filter(Boolean);
+    const activeEdgeEls = branchSvgLayer
+      ? Array.from(branchSvgLayer.querySelectorAll(".svg-edge.edge-active-path"))
+      : [];
+
+    pathCardEls.forEach((el) => {
+      el.classList.add("glide-pending");
+    });
+    activeEdgeEls.forEach((el) => {
+      el.classList.add("edge-glide-pending");
+    });
+
     let stepIndex = 0;
-    const stepIntervalMs = 82;
+    const stepIntervalMs = 68;
 
-    function runCascadeStep() {
-      const curId = validPath[stepIndex];
-      currentPath = validPath.slice(0, stepIndex + 1);
-      activeNodeId = curId;
-
-      if (stepIndex > 0) {
-        const prevId = validPath[stepIndex - 1];
-        const prevNode = nodesMap[prevId];
-        const decLabel = inferDecisionBetweenNodes(prevNode, curId, nodesMap);
-        if (decLabel) pathDecisions[prevId] = decLabel;
-      }
-
-      renderClinicBoardMode();
-
-      // 방금 점등된 보드 카드와 상단 스테퍼 카드에 점등 글로우 효과 부여
-      const litCard = boardCanvas ? boardCanvas.querySelector(`[data-node-id="${curId}"]`) : null;
-      if (litCard) {
-        litCard.classList.remove("card-igniting");
-        void litCard.offsetWidth;
-        litCard.classList.add("card-igniting");
-      }
-      const litStep = pathwayChips ? pathwayChips.querySelector(".stepper-node-card.active") : null;
-      if (litStep) {
-        litStep.classList.remove("step-igniting");
-        void litStep.offsetWidth;
-        litStep.classList.add("step-igniting");
-      }
-
-      autoPanBoardToActiveLayer();
-
-      if (stepIndex < validPath.length - 1) {
+    function runSmoothCardGlide() {
+      if (stepIndex < pathCardEls.length) {
+        const cardEl = pathCardEls[stepIndex];
+        cardEl.classList.remove("glide-pending");
+        cardEl.classList.add("glide-revealing");
+        const curNid = cardEl.getAttribute("data-node-id");
+        if (branchSvgLayer && curNid) {
+          branchSvgLayer
+            .querySelectorAll(`.svg-edge.edge-active-path[data-to-id="${curNid}"]`)
+            .forEach((edgeEl) => {
+              edgeEl.classList.remove("edge-glide-pending");
+            });
+        }
         stepIndex += 1;
-        routineCascadeTimer = setTimeout(runCascadeStep, stepIntervalMs);
+        routineCascadeTimer = setTimeout(runSmoothCardGlide, stepIntervalMs);
       } else {
-        routineCascadeTimer = null;
-        const memoEl = document.getElementById("qc-memo");
-        if (memoEl && rt.orderMemo) memoEl.value = `[${rt.name}] ${rt.orderMemo}`;
-        triggerSmoothEnter(nodeDetailContent, "dock-morph-enter");
-        showToast(`⚡ '${rt.name}' (${validPath.length}단계) 루틴이 호소 양상부터 점등되었습니다!`);
+        // 3. 카드 점등이 끝난 마지막에 상단 스테퍼와 우측 상세 독이 한 번에 자연스럽게 변환
+        routineCascadeTimer = setTimeout(() => {
+          routineCascadeTimer = null;
+          pathCardEls.forEach((el) => el.classList.remove("glide-revealing"));
+          activeEdgeEls.forEach((el) => el.classList.remove("edge-glide-pending"));
+
+          renderRoutineDrawerCards();
+          renderComboTrailBar(nodesMap);
+          renderActiveCardDock(nodesMap[activeNodeId], nodesMap);
+          syncMobileLayerJump();
+
+          const memoEl = document.getElementById("qc-memo");
+          if (memoEl && rt.orderMemo) memoEl.value = `[${rt.name}] ${rt.orderMemo}`;
+
+          triggerSmoothEnter(pathwayChips, "soft-fade-enter");
+          triggerSmoothEnter(nodeDetailContent, "soft-fade-enter");
+          autoPanBoardToActiveLayer();
+        }, 140);
       }
     }
 
-    runCascadeStep();
+    requestAnimationFrame(() => {
+      runSmoothCardGlide();
+    });
   }
 
   /* ==================== 루틴 덱 이름 설정·저장·수정 모달 ==================== */
@@ -1829,6 +1970,9 @@
       ]
         .filter(Boolean)
         .join(" ");
+      if (layer === "L4" || ntype === "treat" || ntype === "teach") {
+        stepBtn.setAttribute("data-mod-theme", getL4ModalityTheme(node).theme);
+      }
 
       stepBtn.innerHTML = `
         <span class="step-layer-tag">${escapeHtml(layerShortTitle[layer] || layer)}</span>
@@ -1839,7 +1983,8 @@
       `;
       stepBtn.addEventListener("click", () => {
         activeNodeId = nid;
-        if (getLayerFromNodeId(nid) !== "L4") {
+        // L3(감별) 또는 L4(치료·티칭)를 클릭했을 때는 이미 중복 선택해 둔 L4 카드들이 지워지지 않도록 유지
+        if (layer !== "L4" && layer !== "L3") {
           currentPath = currentPath.slice(0, idx + 1);
         }
         renderClinicBoardMode();
@@ -1914,6 +2059,20 @@
 
     LAYER_META.forEach(({ key, title }) => {
       const colNodes = (grouped[key] || []).sort((a, b) => {
+        if (key === "L4") {
+          const themeA = getL4ModalityTheme(a);
+          const themeB = getL4ModalityTheme(b);
+          // L4 열에서는 항상 치료(treat) 그룹을 상단에, 티칭(teach) 그룹을 하단에 분리 배치
+          if (themeA.group !== themeB.group) {
+            return themeA.group === "treat" ? -1 : 1;
+          }
+          const relA = a.id === activeNodeId || pathSet.has(a.id) || nextDecisionMap[a.id] ? 0 : 1;
+          const relB = b.id === activeNodeId || pathSet.has(b.id) || nextDecisionMap[b.id] ? 0 : 1;
+          if (relA !== relB) return relA - relB;
+          if (themeA.sortOrder !== themeB.sortOrder) return themeA.sortOrder - themeB.sortOrder;
+          return String(a.id).localeCompare(String(b.id));
+        }
+
         const scoreA =
           a.id === activeNodeId
             ? 0
@@ -1948,7 +2107,22 @@
         </div>
       `;
 
+      let lastL4Group = null;
+
       colNodes.forEach((node) => {
+        const isL4Layer = key === "L4";
+        const l4Theme = isL4Layer ? getL4ModalityTheme(node) : null;
+        if (isL4Layer && l4Theme && l4Theme.group !== lastL4Group) {
+          lastL4Group = l4Theme.group;
+          const groupDiv = document.createElement("div");
+          groupDiv.className = `l4-column-group-divider group-${l4Theme.group}`;
+          groupDiv.innerHTML =
+            l4Theme.group === "treat"
+              ? `<span>💊 치료 술기 (중복 선택)</span>`
+              : `<span>🗣️ 환자 티칭 · 생활지도 (중복 선택)</span>`;
+          colEl.appendChild(groupDiv);
+        }
+
         const isSelected = node.id === activeNodeId;
         const isInPath = pathSet.has(node.id);
         const decisionRibbonLabel = nextDecisionMap[node.id];
@@ -1970,6 +2144,9 @@
         const card = document.createElement("article");
         card.setAttribute("data-node-id", node.id);
         card.setAttribute("data-type", ntype);
+        if (l4Theme) {
+          card.setAttribute("data-mod-theme", l4Theme.theme);
+        }
         card.className = [
           "tree-node-card",
           isSelected ? "selected" : "",
@@ -1978,13 +2155,19 @@
           isRecInterviewPreview ? "recommended-interview-preview" : "",
           isDimmed ? "card-dimmed" : "",
           isRedflag ? "redflag-node" : "",
+          l4Theme ? `l4-card-themed ${l4Theme.theme}` : "",
         ]
           .filter(Boolean)
           .join(" ");
 
         // 다음 선택 가능한 후보 카드 또는 L0 추천 문진 예고 리본 표시
         let ribbonHtml = "";
-        if (isPlayableNext) {
+        if (isL4Layer && (isPlayableNext || isInPath)) {
+          const checkPrefix = isInPath ? "☑ 선택됨 · " : "☐ 추천 후보 · ";
+          ribbonHtml = `<span class="next-decision-ribbon ribbon-l4-mod ${l4Theme ? l4Theme.theme : ""} ${
+            isInPath ? "is-checked" : ""
+          }">${checkPrefix}${escapeHtml(l4Theme ? l4Theme.badgeLabel : decisionRibbonLabel || "치료·티칭")}</span>`;
+        } else if (isPlayableNext) {
           const isYes = isPositiveBranchLabel(decisionRibbonLabel);
           const isDanger = activeNode && activeNode["레드플래그"] === true && isYes;
           const rCls = isDanger ? "ribbon-danger" : isYes ? "" : "ribbon-no";
@@ -2008,7 +2191,9 @@
             recNode["제목"] || ""
           )}">🎯 추천문진 → ${escapeHtml(node["추천문진"])}</span>`;
         }
-        if (node["술기구분"]) {
+        if (l4Theme) {
+          badgesHtml += `<span class="modality-pill ${l4Theme.theme}">${escapeHtml(l4Theme.badgeLabel)}</span>`;
+        } else if (node["술기구분"]) {
           badgesHtml += `<span class="modality-pill">${escapeHtml(
             MODALITY_ICONS[node["술기구분"]] || node["술기구분"]
           )}</span>`;
@@ -2075,17 +2260,24 @@
         });
         let stackBtnHtml = "";
         if (getLayerFromNodeId(node.id) === "L4" && hasReachedL3OrL4) {
-          stackBtnHtml = `<button type="button" class="btn-stack-l4 ${isInPath ? "stacked" : ""}" data-stack-id="${escapeHtml(
-            node.id
-          )}">${isInPath ? "✔ 콤보 포함됨 (클릭해 제외)" : "+ 이 술기 콤보에 함께 담기"}</button>`;
+          stackBtnHtml = `<button type="button" class="btn-stack-l4 ${isInPath ? "stacked" : ""} ${
+            l4Theme ? l4Theme.theme : ""
+          }" data-stack-id="${escapeHtml(node.id)}">${
+            isInPath ? "☑ 선택됨 (클릭해 해제)" : "☐ 클릭하여 중복 선택"
+          }</button>`;
         }
 
-        const displayTypeLabel = key === "L0" ? "🗣️ 호소 양상" : TYPE_KOREAN[ntype] || ntype;
+        const displayTypeLabel =
+          key === "L0"
+            ? "🗣️ 호소 양상"
+            : l4Theme
+            ? l4Theme.badgeLabel
+            : TYPE_KOREAN[ntype] || ntype;
         card.innerHTML = `
           ${ribbonHtml}
           <div class="node-card-top">
             <span class="node-id-badge">${escapeHtml(node.id)}</span>
-            <span class="node-type-badge type-${escapeHtml(ntype)}">${escapeHtml(
+            <span class="node-type-badge type-${escapeHtml(ntype)} ${l4Theme ? l4Theme.theme : ""}">${escapeHtml(
               displayTypeLabel
             )}</span>
           </div>
@@ -2096,22 +2288,12 @@
           ${stackBtnHtml}
         `;
 
-        // L4 다중 술기 조합 토글 버튼 클릭
+        // L4 다중 술기 조합 토글 버튼 클릭 (현재 보고 있는 단계에서 이탈하지 않고 중복 선택/해제)
         card.querySelectorAll(".btn-stack-l4").forEach((sb) => {
           sb.addEventListener("click", (ev) => {
             ev.stopPropagation();
             const sid = sb.getAttribute("data-stack-id");
-            const idx = currentPath.indexOf(sid);
-            if (idx >= 0) {
-              if (currentPath.length > 1) {
-                currentPath.splice(idx, 1);
-                if (activeNodeId === sid) activeNodeId = currentPath[currentPath.length - 1];
-              }
-            } else {
-              currentPath.push(sid);
-              activeNodeId = sid;
-            }
-            renderClinicBoardMode();
+            toggleL4CardInPath(sid, nodesMap, { keepCurrentFocus: true });
           });
         });
 
@@ -2125,15 +2307,37 @@
             }
             const lb = b.getAttribute("data-branch-label");
             const tid = b.getAttribute("data-branch-target");
+            if (getLayerFromNodeId(tid) === "L4") {
+              toggleL4CardInPath(tid, nodesMap, { keepCurrentFocus: true });
+              return;
+            }
             playCardTransition(node.id, lb, tid);
           });
         });
 
         // 카드 자체 클릭
         card.addEventListener("click", () => {
+          const clickedLayer = getLayerFromNodeId(node.id);
+          // 감별(L3) 또는 치료·티칭(L4) 단계에서 L4 카드를 클릭하면 바로 넘어가거나 기존 선택이 초기화되지 않고 중복 선택(토글)되도록 처리
+          if (clickedLayer === "L4" && hasReachedL3OrL4) {
+            const activeLayer = getLayerFromNodeId(activeNodeId);
+            if (activeLayer === "L3") {
+              toggleL4CardInPath(node.id, nodesMap, { keepCurrentFocus: true });
+            } else {
+              // L4 상세를 보고 있을 때 다른 L4 카드를 누르면 기존 L4 선택들을 모두 유지한 채 해당 카드를 추가·포커스
+              if (!currentPath.includes(node.id)) {
+                toggleL4CardInPath(node.id, nodesMap, { keepCurrentFocus: false });
+              } else {
+                activeNodeId = node.id;
+                renderClinicBoardMode();
+              }
+            }
+            return;
+          }
+
           if (isPlayableNext) {
             playCardTransition(activeNodeId, decisionRibbonLabel, node.id);
-          } else if (getLayerFromNodeId(node.id) === "L0") {
+          } else if (clickedLayer === "L0") {
             activeNodeId = node.id;
             currentPath = [node.id];
             pathDecisions = {};
@@ -2142,7 +2346,9 @@
             const idxInPath = currentPath.indexOf(node.id);
             if (idxInPath !== -1) {
               activeNodeId = node.id;
-              currentPath = currentPath.slice(0, idxInPath + 1);
+              if (clickedLayer !== "L3" && clickedLayer !== "L4") {
+                currentPath = currentPath.slice(0, idxInPath + 1);
+              }
             } else {
               // 흐릿한 비선택 카드를 클릭했을 때도 그 카드로 자연스럽게 경로 재구성
               const entryId =
@@ -2166,12 +2372,65 @@
     });
   }
 
-  function equipRecommendedL4Combo(dxNode, branches, nodesMap) {
+  function toggleL4CardInPath(targetId, nodesMap, options = {}) {
+    const keepCurrentFocus = options.keepCurrentFocus !== false;
+    if (!targetId || !nodesMap || !nodesMap[targetId]) return;
+
+    const activeDxId = [...currentPath].reverse().find((pid) => getLayerFromNodeId(pid) === "L3");
+    const existingIdx = currentPath.indexOf(targetId);
+
+    if (existingIdx !== -1) {
+      if (currentPath.length > 1) {
+        currentPath.splice(existingIdx, 1);
+      }
+      if (activeNodeId === targetId) {
+        const remainingL4 = currentPath.filter((pid) => getLayerFromNodeId(pid) === "L4");
+        activeNodeId =
+          remainingL4.length > 0
+            ? remainingL4[remainingL4.length - 1]
+            : activeDxId || currentPath[currentPath.length - 1];
+      }
+    } else {
+      // L5 노드가 이미 경로 끝에 있다면 L5 앞에 삽입하고, 없으면 끝에 추가
+      const l5Idx = currentPath.findIndex((pid) => getLayerFromNodeId(pid) === "L5");
+      if (l5Idx !== -1) {
+        currentPath.splice(l5Idx, 0, targetId);
+      } else {
+        currentPath.push(targetId);
+      }
+      if (!keepCurrentFocus) {
+        activeNodeId = targetId;
+      }
+    }
+
+    if (activeDxId) {
+      const selectedL4Count = currentPath.filter((pid) => getLayerFromNodeId(pid) === "L4").length;
+      if (selectedL4Count > 0) {
+        pathDecisions[activeDxId] = `치료·티칭 ${selectedL4Count}종`;
+      } else {
+        delete pathDecisions[activeDxId];
+      }
+    }
+
+    renderClinicBoardMode();
+  }
+
+  function equipRecommendedL4Combo(dxNode, branches, nodesMap, options = {}) {
     if (!dxNode || !Array.isArray(branches) || branches.length === 0) return;
     const l4Targets = branches
       .map((b) => b.targetId)
       .filter((tid) => tid && nodesMap && nodesMap[tid]);
     if (l4Targets.length === 0) return;
+
+    const allAlreadySelected = l4Targets.every((tid) => currentPath.includes(tid));
+    if (allAlreadySelected && options.allowToggleOff) {
+      currentPath = currentPath.filter((pid) => !l4Targets.includes(pid));
+      delete pathDecisions[dxNode.id];
+      activeNodeId = dxNode.id;
+      renderClinicBoardMode();
+      showToast(`추천 치료·티칭 선택을 초기화했습니다.`);
+      return;
+    }
 
     pathDecisions[dxNode.id] = `추천 세트(${l4Targets.length}종)`;
     const dxIdx = currentPath.indexOf(dxNode.id);
@@ -2180,11 +2439,11 @@
       if (!basePath.includes(tid)) basePath.push(tid);
     });
     currentPath = basePath;
-    activeNodeId = l4Targets[0];
+    if (!options.stayOnDx) {
+      activeNodeId = dxNode.id;
+    }
     renderClinicBoardMode();
-    triggerSmoothEnter(nodeDetailContent, "dock-morph-enter");
-    autoPanBoardToActiveLayer();
-    showToast(`⚡ [${dxNode["제목"]}] 추천 치료·티칭 ${l4Targets.length}종이 콤보에 일괄 장착되었습니다.`);
+    showToast(`⚡ [${dxNode["제목"]}] 추천 치료·티칭 ${l4Targets.length}종이 모두 선택되었습니다.`);
   }
 
   function playCardTransition(fromId, decisionLabel, toId) {
@@ -2282,6 +2541,8 @@
 
         const pathEl = document.createElementNS(ns, "path");
         pathEl.setAttribute("d", d);
+        pathEl.setAttribute("data-from-id", srcNode.id);
+        pathEl.setAttribute("data-to-id", targetId);
 
         const edgeKey = `${srcNode.id}->${targetId}`;
         if (activeEdges.has(edgeKey)) {
@@ -2471,74 +2732,166 @@
       `;
     }
 
-    // L4 카드(치료·티칭)에서 같은 감별진단(L3)의 형제 치료·티칭 카드를 독 내부에서 바로 추가/해제할 수 있는 멀티 콤보 바
+    // 감별(L3) 완료 후 또는 치료·티칭(L4) 단계에서 [💊 치료 술기]와 [🗣️ 환자 티칭]을 분리하여 여러 개 중복 선택할 수 있는 멀티셀렉트 패널
     const currentLayer = getLayerFromNodeId(node.id);
-    if (currentLayer === "L4") {
-      const activeDxId =
-        [...currentPath].reverse().find((pid) => getLayerFromNodeId(pid) === "L3") || node["상위"];
-      const dxNode = activeDxId && nodesMap[activeDxId] ? nodesMap[activeDxId] : null;
-      const dxBranches = dxNode ? getEffectiveBranches(dxNode, nodesMap) : [];
-      if (dxNode && dxBranches.length > 1) {
-        const siblingPills = dxBranches
-          .map(({ targetId }) => {
-            const sNode = nodesMap[targetId];
-            if (!sNode) return "";
-            const inCombo = currentPath.includes(targetId);
-            const isCurrent = targetId === node.id;
-            const mod =
-              sNode["유형"] === "teach"
-                ? "🗣️ 티칭"
-                : sNode["술기구분"]
-                ? MODALITY_ICONS[sNode["술기구분"]] || `💊 ${sNode["술기구분"]}`
-                : "💊 치료";
-            return `
-              <button type="button" class="l4-sibling-pill ${inCombo ? "in-combo" : ""} ${
-              isCurrent ? "is-current" : ""
-            }" data-sibling-id="${escapeHtml(targetId)}" title="${escapeHtml(sNode["제목"] || "")}">
-                <span>${inCombo ? "✔" : "+"} ${escapeHtml(mod)}</span>
-                <span class="l4-sib-id">${escapeHtml(targetId)}</span>
-              </button>
-            `;
-          })
-          .join("");
-        html += `
-          <div class="l4-combo-switcher-box">
-            <div class="l4-combo-switcher-head">
-              <span>🧩 [${escapeHtml(dxNode["제목"])}] 연결 치료·티칭 콤보 구성</span>
-              <span class="l4-combo-switcher-sub">클릭하여 이동 또는 콤보 추가</span>
-            </div>
-            <div class="l4-sibling-pill-grid">${siblingPills}</div>
+    const activeDxId =
+      currentLayer === "L3"
+        ? node.id
+        : currentLayer === "L4"
+        ? [...currentPath].reverse().find((pid) => getLayerFromNodeId(pid) === "L3") || node["상위"]
+        : null;
+    const activeDxNode = activeDxId && nodesMap[activeDxId] ? nodesMap[activeDxId] : null;
+    const dxL4Branches = activeDxNode
+      ? getEffectiveBranches(activeDxNode, nodesMap).filter((b) => getLayerFromNodeId(b.targetId) === "L4")
+      : [];
+
+    if ((currentLayer === "L3" || currentLayer === "L4") && activeDxNode && dxL4Branches.length > 0) {
+      const treatItems = [];
+      const teachItems = [];
+      dxL4Branches.forEach((b) => {
+        const tNode = nodesMap[b.targetId];
+        if (!tNode) return;
+        const mTheme = getL4ModalityTheme(tNode);
+        const entry = { targetId: b.targetId, node: tNode, mTheme };
+        if (mTheme.group === "teach") teachItems.push(entry);
+        else treatItems.push(entry);
+      });
+
+      treatItems.sort((a, b) => a.mTheme.sortOrder - b.mTheme.sortOrder || a.targetId.localeCompare(b.targetId));
+      teachItems.sort((a, b) => a.targetId.localeCompare(b.targetId));
+
+      const selectedTreatIds = treatItems.filter((x) => currentPath.includes(x.targetId)).map((x) => x.targetId);
+      const selectedTeachIds = teachItems.filter((x) => currentPath.includes(x.targetId)).map((x) => x.targetId);
+      const totalSelectedL4 = selectedTreatIds.length + selectedTeachIds.length;
+      const allL4Checked = totalSelectedL4 === dxL4Branches.length && dxL4Branches.length > 0;
+
+      const renderMultiSelectRow = ({ targetId, node: itemNode, mTheme }) => {
+        const isChecked = currentPath.includes(targetId);
+        const isFocused = activeNodeId === targetId;
+        const cleanTitle = String(itemNode["제목"] || "").replace(/^\[[^\]]+\]\s*/, "");
+        return `
+          <div class="l4-multi-row ${mTheme.theme} ${isChecked ? "is-checked" : ""} ${
+          isFocused ? "is-focused" : ""
+        }" data-l4-id="${escapeHtml(targetId)}">
+            <button type="button" class="l4-multi-toggle-btn" data-toggle-l4="${escapeHtml(
+              targetId
+            )}" aria-pressed="${isChecked ? "true" : "false"}">
+              <span class="l4-multi-checkbox">${isChecked ? "☑" : "☐"}</span>
+              <span class="l4-multi-mod-badge ${mTheme.theme}">${escapeHtml(mTheme.badgeLabel)}</span>
+              <span class="l4-multi-title">${escapeHtml(cleanTitle)}</span>
+              <span class="l4-multi-id">${escapeHtml(targetId)}</span>
+            </button>
+            <button type="button" class="l4-multi-inspect-btn" data-inspect-l4="${escapeHtml(
+              targetId
+            )}" title="이 카드의 상세 오더·설명 보기">
+              ${isFocused ? "열람중" : "상세 🔎"}
+            </button>
           </div>
         `;
-      }
-    }
+      };
 
-    // 다음 카드 뽑기(분기 선택) 버튼
-    if (branches.length > 0) {
-      const equipAllBtnHtml =
-        ntype === "dx" && branches.length > 1
-          ? `
-            <button type="button" id="btn-dock-equip-l4-combo" class="dock-equip-all-btn">
-              <span>⚡ 이 감별진단의 추천 치료·티칭 세트 일괄 장착 (${branches.length}종 콤보)</span>
-              <span class="dock-equip-all-sub">침 · 약침 · 추나 · 한약 · 환자 티칭을 한 번에 진료 경로에 담습니다 →</span>
+      // 선택된 L4 카드들에서 이어지는 L5(경과·재평가) 노드 추출
+      const l5TargetSet = new Set();
+      dxL4Branches.forEach(({ targetId }) => {
+        const l4Node = nodesMap[targetId];
+        if (!l4Node) return;
+        getEffectiveBranches(l4Node, nodesMap).forEach((b) => {
+          if (getLayerFromNodeId(b.targetId) === "L5" && nodesMap[b.targetId]) {
+            l5TargetSet.add(b.targetId);
+          }
+        });
+      });
+      const firstL5Id = Array.from(l5TargetSet)[0] || null;
+      const firstL5Node = firstL5Id ? nodesMap[firstL5Id] : null;
+      const firstSelectedL4Id = selectedTreatIds[0] || selectedTeachIds[0] || (dxL4Branches[0] && dxL4Branches[0].targetId);
+
+      html += `
+        <div class="l4-multiselect-panel">
+          <div class="l4-multiselect-header">
+            <div>
+              <div class="l4-ms-title">🧩 치료 · 환자 티칭 중복 선택 (클릭마다 체크/해제)</div>
+              <div class="l4-ms-sub">하나를 골라도 바로 넘어가지 않습니다. 필요한 치료와 티칭을 여러 개 조합하세요.</div>
+            </div>
+            <button type="button" id="btn-dock-equip-l4-combo" class="btn-ms-select-all ${
+              allL4Checked ? "all-checked" : ""
+            }">
+              ${allL4Checked ? "↺ 전체 선택 해제" : `⚡ 추천 ${dxL4Branches.length}종 전체 선택`}
             </button>
-          `
-          : "";
+          </div>
 
+          ${
+            treatItems.length > 0
+              ? `
+                <div class="l4-ms-section section-treat">
+                  <div class="l4-ms-section-head head-treat">
+                    <span>💊 치료 술기 선택 (침·전침·약침 / 추나·수기·재활 / 한약)</span>
+                    <span class="l4-ms-count-badge">${selectedTreatIds.length} / ${treatItems.length}개 선택됨</span>
+                  </div>
+                  <div class="l4-ms-list">
+                    ${treatItems.map(renderMultiSelectRow).join("")}
+                  </div>
+                </div>
+              `
+              : ""
+          }
+
+          ${
+            teachItems.length > 0
+              ? `
+                <div class="l4-ms-section section-teach">
+                  <div class="l4-ms-section-head head-teach">
+                    <span>🗣️ 환자 티칭 · 생활지도 선택</span>
+                    <span class="l4-ms-count-badge teach-count">${selectedTeachIds.length} / ${teachItems.length}개 선택됨</span>
+                  </div>
+                  <div class="l4-ms-list">
+                    ${teachItems.map(renderMultiSelectRow).join("")}
+                  </div>
+                </div>
+              `
+              : ""
+          }
+
+          <div class="l4-ms-footer-actions">
+            ${
+              currentLayer === "L3" && firstSelectedL4Id
+                ? `
+                  <button type="button" id="btn-focus-selected-l4" class="btn-ms-action-primary" data-focus-id="${escapeHtml(
+                    firstSelectedL4Id
+                  )}">
+                    🔎 선택한 치료·티칭(${totalSelectedL4}개) 상세 오더 · 환자설명 확인하기 →
+                  </button>
+                `
+                : ""
+            }
+            ${
+              firstL5Node
+                ? `
+                  <button type="button" class="btn-ms-action-l5 btn-dock-branch" data-label="📊 경과·재평가" data-target="${escapeHtml(
+                    firstL5Node.id
+                  )}">
+                    📊 [경과·재평가 진행] ${escapeHtml(firstL5Node["제목"])} (${escapeHtml(firstL5Node.id)}) →
+                  </button>
+                `
+                : ""
+            }
+          </div>
+        </div>
+      `;
+    } else if (branches.length > 0) {
+      // L0, L1(문진), L2(검사) 등 일반 단일 분기 선택 버튼
       const btnsHtml = branches
         .map(({ label, targetId }) => {
           const tNode = nodesMap[targetId];
           const tTitle = tNode ? tNode["제목"] : targetId;
-          const isYes = isPositiveBranchLabel(label) || ntype === "dx" || currentLayer === "L4";
-          const cls = isRedflag && isPositiveBranchLabel(label) ? "choice-danger" : isYes ? "choice-yes" : "choice-no";
+          const isYes = isPositiveBranchLabel(label);
+          const cls = isRedflag && isYes ? "choice-danger" : isYes ? "choice-yes" : "choice-no";
           const customRecTag =
-            isL1Redflag && !isPositiveBranchLabel(label) && l0RecId && targetId === l0RecId ? " · 🎯 맞춤 문진" : "";
-          const alreadyInCombo = currentLayer === "L3" && currentPath.includes(targetId);
+            isL1Redflag && !isYes && l0RecId && targetId === l0RecId ? " · 🎯 맞춤 문진" : "";
           return `
             <button type="button" class="dock-choice-btn ${cls} btn-dock-branch" data-label="${escapeHtml(
             label
           )}" data-target="${escapeHtml(targetId)}">
-              <span>👉 [${escapeHtml(label)}${customRecTag}]${alreadyInCombo ? " ✔콤보포함" : ""}</span>
+              <span>👉 [${escapeHtml(label)}${customRecTag}]</span>
               <span style="font-size:0.82rem; opacity:0.92;">${escapeHtml(tTitle)} (${escapeHtml(targetId)}) →</span>
             </button>
           `;
@@ -2548,9 +2901,8 @@
       html += `
         <div>
           <div style="font-size:0.78rem; font-weight:800; color:var(--text-muted); margin-bottom:0.35rem;">
-            ${ntype === "dx" ? "💊 추천 치료 · 환자 티칭 선택 (일괄 장착 또는 개별 카드 선택):" : "🎴 다음 이어질 카드 고르기:"}
+            🎴 다음 이어질 카드 고르기:
           </div>
-          ${equipAllBtnHtml}
           <div class="dock-choice-grid">${btnsHtml}</div>
         </div>
       `;
@@ -2591,24 +2943,49 @@
     nodeDetailContent.innerHTML = html;
 
     const equipComboBtn = document.getElementById("btn-dock-equip-l4-combo");
-    if (equipComboBtn) {
+    if (equipComboBtn && activeDxNode) {
       equipComboBtn.addEventListener("click", () => {
-        equipRecommendedL4Combo(node, branches, nodesMap);
+        equipRecommendedL4Combo(activeDxNode, dxL4Branches, nodesMap, {
+          stayOnDx: currentLayer === "L3",
+          allowToggleOff: true,
+        });
       });
     }
 
-    nodeDetailContent.querySelectorAll(".l4-sibling-pill").forEach((pill) => {
-      pill.addEventListener("click", () => {
-        const sid = pill.getAttribute("data-sibling-id");
-        if (!sid || !nodesMap[sid]) return;
-        if (!currentPath.includes(sid)) {
-          currentPath.push(sid);
-        }
-        activeNodeId = sid;
-        renderClinicBoardMode();
-        triggerSmoothEnter(nodeDetailContent, "dock-morph-enter");
+    nodeDetailContent.querySelectorAll("[data-toggle-l4]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const tid = btn.getAttribute("data-toggle-l4");
+        toggleL4CardInPath(tid, nodesMap, { keepCurrentFocus: true });
       });
     });
+
+    nodeDetailContent.querySelectorAll("[data-inspect-l4]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const tid = btn.getAttribute("data-inspect-l4");
+        if (!tid || !nodesMap[tid]) return;
+        if (!currentPath.includes(tid)) {
+          toggleL4CardInPath(tid, nodesMap, { keepCurrentFocus: false });
+        } else {
+          activeNodeId = tid;
+          renderClinicBoardMode();
+        }
+      });
+    });
+
+    const focusSelectedL4Btn = document.getElementById("btn-focus-selected-l4");
+    if (focusSelectedL4Btn) {
+      focusSelectedL4Btn.addEventListener("click", () => {
+        const fid = focusSelectedL4Btn.getAttribute("data-focus-id");
+        if (!fid || !nodesMap[fid]) return;
+        if (!currentPath.includes(fid)) {
+          currentPath.push(fid);
+        }
+        activeNodeId = fid;
+        renderClinicBoardMode();
+        triggerSmoothEnter(nodeDetailContent, "soft-fade-enter");
+        autoPanBoardToActiveLayer();
+      });
+    }
 
     nodeDetailContent.querySelectorAll(".btn-dock-branch").forEach((btn) => {
       btn.addEventListener("click", () => {

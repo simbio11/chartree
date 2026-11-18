@@ -3533,39 +3533,477 @@ body {
   gap: 0.45rem;
 }
 
-/* ==================== 루틴 덱 순차 점등(딱-딱-딱) 모션 & 루틴 이름 설정 모달 ==================== */
-@keyframes cardIgnitePulse {
+/* ==================== 루틴 덱 부드러운 스르륵 점등 모션 & 루틴 이름 설정 모달 ==================== */
+.tree-node-card {
+  transition: opacity 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tree-node-card.glide-pending {
+  opacity: 0.34 !important;
+  filter: grayscale(0.45);
+  border-color: #cbd5e1 !important;
+  background-color: #ffffff !important;
+  box-shadow: none !important;
+  transform: translateY(0) scale(0.992) !important;
+}
+
+.tree-node-card.glide-revealing {
+  opacity: 1;
+  filter: none;
+}
+
+.svg-edge {
+  transition: opacity 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+    stroke-width 0.34s ease;
+}
+
+.svg-edge.edge-glide-pending {
+  opacity: 0.14 !important;
+}
+
+@keyframes softFadeEnter {
   0% {
-    transform: translateY(-2px) scale(0.96);
-    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.85), 0 0 22px rgba(14, 165, 233, 0.65);
-    border-color: #38bdf8;
-    background-color: #e0f2fe;
-  }
-  55% {
-    transform: translateY(-4px) scale(1.03);
-    box-shadow: 0 0 0 6px rgba(56, 189, 248, 0.28), 0 12px 24px rgba(15, 82, 136, 0.25);
+    opacity: 0.45;
   }
   100% {
-    transform: translateY(-3px) scale(1.02);
+    opacity: 1;
   }
 }
 
-@keyframes stepIgnitePulse {
-  0% {
-    transform: scale(0.94);
-    box-shadow: 0 0 0 5px rgba(56, 189, 248, 0.55);
-  }
-  100% {
-    transform: scale(1);
-  }
+.soft-fade-enter {
+  animation: softFadeEnter 0.24s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.tree-node-card.card-igniting {
-  animation: cardIgnitePulse 0.34s cubic-bezier(0.16, 1, 0.3, 1) both;
+/* ==================== L4 치료(술기 계열별) vs 환자 티칭(단일 톤) 색상 시스템 ==================== */
+/*
+ * 1) 침·전침·약침 계열 (청록/시안/에메랄드 3톤 — 비슷한 계열 안에서 구분, 모든 침 치료법은 mod-acu로 통일)
+ * 2) 추나·수기·재활 계열 (인디고/블루/바이올렛 3톤 — 비슷한 계열 안에서 구분)
+ * 3) 한약·약물 계열 (앰버 골드/테라코타 2톤 — 비슷한 계열 안에서 구분)
+ * 4) 환자 티칭 (로즈-플럼 단일 톤 — 모든 티칭 통일, 치료와 확연히 구분)
+ */
+.mod-acu {
+  --mod-bg: #f0fdfa;
+  --mod-bg-strong: #ccfbf1;
+  --mod-border: #2dd4bf;
+  --mod-accent: #0f766e;
+  --mod-text: #115e59;
 }
 
-.stepper-node-card.step-igniting {
-  animation: stepIgnitePulse 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+.mod-ea {
+  --mod-bg: #ecfeff;
+  --mod-bg-strong: #cffafe;
+  --mod-border: #38bdf8;
+  --mod-accent: #0369a1;
+  --mod-text: #155e75;
+}
+
+.mod-pa {
+  --mod-bg: #f0fdf4;
+  --mod-bg-strong: #dcfce7;
+  --mod-border: #4ade80;
+  --mod-accent: #15803d;
+  --mod-text: #166534;
+}
+
+.mod-chuna {
+  --mod-bg: #eef2ff;
+  --mod-bg-strong: #e0e7ff;
+  --mod-border: #818cf8;
+  --mod-accent: #4338ca;
+  --mod-text: #3730a3;
+}
+
+.mod-manual {
+  --mod-bg: #eff6ff;
+  --mod-bg-strong: #dbeafe;
+  --mod-border: #60a5fa;
+  --mod-accent: #1d4ed8;
+  --mod-text: #1e40af;
+}
+
+.mod-rehab {
+  --mod-bg: #f5f3ff;
+  --mod-bg-strong: #ede9fe;
+  --mod-border: #a78bfa;
+  --mod-accent: #6d28d9;
+  --mod-text: #5b21b6;
+}
+
+.mod-herb {
+  --mod-bg: #fffbeb;
+  --mod-bg-strong: #fef3c7;
+  --mod-border: #f59e0b;
+  --mod-accent: #b45309;
+  --mod-text: #92400e;
+}
+
+.mod-drug {
+  --mod-bg: #fff7ed;
+  --mod-bg-strong: #ffedd5;
+  --mod-border: #fb923c;
+  --mod-accent: #c2410c;
+  --mod-text: #9a3412;
+}
+
+.mod-teach {
+  --mod-bg: #fdf2f8;
+  --mod-bg-strong: #fce7f3;
+  --mod-border: #f472b6;
+  --mod-accent: #be185d;
+  --mod-text: #9d174d;
+}
+
+/* L4 열 내부의 치료 술기 vs 환자 티칭 구분 헤더 */
+.l4-column-group-divider {
+  font-size: 0.72rem;
+  font-weight: 900;
+  padding: 0.32rem 0.6rem;
+  border-radius: 7px;
+  margin-top: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  letter-spacing: -0.01em;
+}
+
+.l4-column-group-divider.group-treat {
+  background: linear-gradient(90deg, #ecfdf5 0%, #eff6ff 100%);
+  color: #0f766e;
+  border: 1px solid #99f6e4;
+  border-left: 4px solid #0f766e;
+}
+
+.l4-column-group-divider.group-teach {
+  background: linear-gradient(90deg, #fdf2f8 0%, #fce7f3 100%);
+  color: #9d174d;
+  border: 1px solid #f9a8d4;
+  border-left: 4px solid #be185d;
+  margin-top: 0.45rem;
+}
+
+/* 보드 위의 L4 카드 계열별 색상 스타일 */
+.tree-node-card.l4-card-themed {
+  border-left: 5px solid var(--mod-accent, #0f766e);
+  background-color: var(--mod-bg, #ffffff);
+  border-color: var(--mod-border, #cbd5e1);
+}
+
+.tree-node-card.l4-card-themed.in-path,
+.tree-node-card.l4-card-themed.selected {
+  border-color: var(--mod-accent, #0f766e);
+  border-left: 6px solid var(--mod-accent, #0f766e);
+  background-color: var(--mod-bg, #ffffff);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.1), 0 0 0 2px var(--mod-border, #5eead4);
+}
+
+.node-type-badge.mod-acu,
+.node-type-badge.mod-ea,
+.node-type-badge.mod-pa,
+.node-type-badge.mod-chuna,
+.node-type-badge.mod-manual,
+.node-type-badge.mod-rehab,
+.node-type-badge.mod-herb,
+.node-type-badge.mod-drug,
+.node-type-badge.mod-teach,
+.modality-pill.mod-acu,
+.modality-pill.mod-ea,
+.modality-pill.mod-pa,
+.modality-pill.mod-chuna,
+.modality-pill.mod-manual,
+.modality-pill.mod-rehab,
+.modality-pill.mod-herb,
+.modality-pill.mod-drug,
+.modality-pill.mod-teach {
+  background-color: var(--mod-bg-strong);
+  color: var(--mod-text);
+  border: 1px solid var(--mod-border);
+  font-weight: 800;
+}
+
+.next-decision-ribbon.ribbon-l4-mod {
+  background-color: var(--mod-bg-strong, #e2e8f0);
+  color: var(--mod-text, #0f172a);
+  border: 1px solid var(--mod-border, #94a3b8);
+}
+
+.next-decision-ribbon.ribbon-l4-mod.is-checked {
+  background-color: var(--mod-accent, #0f766e);
+  color: #ffffff;
+  border-color: var(--mod-accent, #0f766e);
+}
+
+.btn-stack-l4.mod-acu,
+.btn-stack-l4.mod-ea,
+.btn-stack-l4.mod-pa,
+.btn-stack-l4.mod-chuna,
+.btn-stack-l4.mod-manual,
+.btn-stack-l4.mod-rehab,
+.btn-stack-l4.mod-herb,
+.btn-stack-l4.mod-drug,
+.btn-stack-l4.mod-teach {
+  border-color: var(--mod-border);
+  color: var(--mod-text);
+  background-color: rgba(255, 255, 255, 0.85);
+}
+
+.btn-stack-l4.stacked {
+  background-color: var(--mod-accent, #0f766e) !important;
+  color: #ffffff !important;
+  border-color: var(--mod-accent, #0f766e) !important;
+}
+
+/* 상단 스테퍼의 L4 카드도 계열별 색상 반영 */
+.stepper-node-card[data-mod-theme] {
+  border-color: var(--mod-border);
+  background-color: var(--mod-bg);
+}
+
+.stepper-node-card[data-mod-theme] .step-layer-tag {
+  background-color: var(--mod-accent);
+  color: #ffffff;
+}
+
+/* ==================== 우측 독: 치료(술기별 색상) vs 환자 티칭 분리형 멀티셀렉트 패널 ==================== */
+.l4-multiselect-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  background-color: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 0.8rem 0.85rem;
+}
+
+.l4-multiselect-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.l4-ms-title {
+  font-size: 0.84rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.l4-ms-sub {
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: #475569;
+  margin-top: 0.1rem;
+}
+
+.btn-ms-select-all {
+  background-color: #0f172a;
+  color: #ffffff;
+  border: 1px solid #0f172a;
+  border-radius: 8px;
+  padding: 0.34rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.btn-ms-select-all.all-checked {
+  background-color: #ffffff;
+  color: #334155;
+  border-color: #94a3b8;
+}
+
+.l4-ms-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border-radius: 10px;
+  padding: 0.55rem 0.6rem;
+}
+
+.l4-ms-section.section-treat {
+  background-color: #ffffff;
+  border: 1.5px solid #99f6e4;
+}
+
+.l4-ms-section.section-teach {
+  background-color: #fff5f9;
+  border: 1.5px solid #f9a8d4;
+}
+
+.l4-ms-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 900;
+  padding-bottom: 0.3rem;
+}
+
+.l4-ms-section-head.head-treat {
+  color: #0f766e;
+  border-bottom: 1px dashed #99f6e4;
+}
+
+.l4-ms-section-head.head-teach {
+  color: #9d174d;
+  border-bottom: 1px dashed #f9a8d4;
+}
+
+.l4-ms-count-badge {
+  background-color: #ccfbf1;
+  color: #115e59;
+  padding: 0.1rem 0.48rem;
+  border-radius: 999px;
+  font-size: 0.71rem;
+  font-weight: 800;
+}
+
+.l4-ms-count-badge.teach-count {
+  background-color: #fce7f3;
+  color: #9d174d;
+}
+
+.l4-ms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.38rem;
+}
+
+.l4-multi-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0.35rem;
+  border-radius: 9px;
+  border: 1.5px solid var(--mod-border, #cbd5e1);
+  border-left: 5px solid var(--mod-accent, #0f766e);
+  background-color: var(--mod-bg, #ffffff);
+  padding: 0.38rem 0.45rem;
+  transition: all 0.15s ease;
+}
+
+.l4-multi-row.is-checked {
+  border-color: var(--mod-accent, #0f766e);
+  border-left-width: 6px;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
+}
+
+.l4-multi-row.is-focused {
+  outline: 2px solid #0f172a;
+  outline-offset: 1px;
+}
+
+.l4-multi-toggle-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.38rem;
+  padding: 0.1rem 0.15rem;
+  color: #0f172a;
+}
+
+.l4-multi-checkbox {
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--mod-accent, #0f766e);
+  line-height: 1;
+}
+
+.l4-multi-mod-badge {
+  background-color: var(--mod-bg-strong, #e2e8f0);
+  color: var(--mod-text, #0f172a);
+  border: 1px solid var(--mod-border, #94a3b8);
+  border-radius: 6px;
+  padding: 0.12rem 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.l4-multi-row.is-checked .l4-multi-mod-badge {
+  background-color: var(--mod-accent, #0f766e);
+  color: #ffffff;
+  border-color: var(--mod-accent, #0f766e);
+}
+
+.l4-multi-title {
+  flex: 1 1 140px;
+  font-size: 0.81rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.l4-multi-id {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #64748b;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.l4-multi-inspect-btn {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0.24rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  align-self: center;
+}
+
+.l4-multi-inspect-btn:hover {
+  background-color: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+}
+
+.l4-ms-footer-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.38rem;
+  padding-top: 0.25rem;
+}
+
+.btn-ms-action-primary {
+  width: 100%;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 9px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.81rem;
+  font-weight: 900;
+  cursor: pointer;
+  text-align: center;
+}
+
+.btn-ms-action-l5 {
+  width: 100%;
+  background-color: #ffffff;
+  color: #0f5288;
+  border: 1.5px solid #93c5fd;
+  border-radius: 9px;
+  padding: 0.52rem 0.8rem;
+  font-size: 0.79rem;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: center;
 }
 
 .btn-ctrl-routine {
